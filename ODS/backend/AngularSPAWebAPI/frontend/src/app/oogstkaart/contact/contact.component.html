@@ -1,0 +1,77 @@
+<div role="main" class="main">
+  <section class="page-header mb-0">
+    <div class="container">
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <form id="shopCheckout">
+            <div class="row mb-5">
+              <div class="col">
+                <h2 class="font-weight-bold mb-3">Aanvraag product</h2>
+                <p class="mb-3">Wanneer u uw aanvraag plaatst, wordt u zo snel mogelijk gecontacteerd.</p>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label class="text-color-dark font-weight-semibold" for="billing_name">Naam:</label>
+                    <input [(ngModel)]="request.name" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_name" id="billing_name" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label class="text-color-dark font-weight-semibold" for="billing_company">Bedrijfsnaam:</label>
+                    <input [(ngModel)]="request.company.companyName" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_company" id="billing_company" required>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-9">
+                    <label class="text-color-dark font-weight-semibold" for="billing_address">Adres:</label>
+                    <input [(ngModel)]="request.company.address.street" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_address" id="billing_address" required>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label class="text-color-dark font-weight-semibold" for="billing_address">Huisnummer:</label>
+                    <input [(ngModel)]="request.company.address.number" type="text" value="" class="form-control line-height-1 bg-light-5" name="huisnummer" id="billing_address" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-9">
+                    <label class="text-color-dark font-weight-semibold" for="billing_city">Stad:</label>
+                    <input [(ngModel)]="request.company.address.city" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_city" id="billing_city" required>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label class="text-color-dark font-weight-semibold" for="billing_city">Postcode:</label>
+                    <input [(ngModel)]="request.company.address.zipcode" type="text" value="" class="form-control line-height-1 bg-light-5" name="zipcode" id="zipcode" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label class="text-color-dark font-weight-semibold" for="billing_email">E-mail:</label>
+                    <input [(ngModel)]="request.company.email" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_email" id="billing_email" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label class="text-color-dark font-weight-semibold" for="billing_phone">Telefoon:</label>
+                    <input [(ngModel)]="request.company.phone" type="text" value="" class="form-control line-height-1 bg-light-5" name="billing_phone" id="billing_phone" required>
+                  </div>
+
+
+                </div>
+                <div class="form-row">
+                  <label class="text-color-dark font-weight-semibold" for="shipping_notes">Bericht:</label>
+                  <textarea [(ngModel)]="request.messages[0].messageString" class="form-control line-height-1 bg-light-5" name="shipping_notes" id="shipping_notes" rows="7" required></textarea>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col text-right">
+                <button (click)="postRequest()" class="btn btn-primary btn-rounded font-weight-bold btn-h-2 btn-v-3" type="submit">Plaats uw aanvraag</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
