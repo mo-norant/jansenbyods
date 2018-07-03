@@ -29,7 +29,7 @@ export class ThemeComponent implements OnInit {
         this._router.events.subscribe((route) => {
             if (route instanceof NavigationStart) {
                 (<any>mLayout).closeMobileAsideMenuOffcanvas();
-              //  (<any>mLayout).closeMobileHorMenuOffcanvas();
+                //  (<any>mLayout).closeMobileHorMenuOffcanvas();
                 (<any>mApp).scrollTop();
                 Helpers.setLoading(true);
                 // hide visible popover

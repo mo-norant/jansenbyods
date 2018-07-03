@@ -3,17 +3,17 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GeneralService {
 
-  private role : string
+    private role: string
 
-  constructor() { }
+    constructor() { }
 
 
-  public getRole(){
-    return this.role;
-  }
+    public getRole() {
+        return this.role;
+    }
 
-  public setRole(role : string){
-    this.role  = role;
-  }
+    public setRole(role: string) {
+        this.role = role;
+    }
 
 }

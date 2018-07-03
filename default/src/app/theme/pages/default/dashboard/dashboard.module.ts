@@ -9,28 +9,28 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptorService } from '../../../../_services/token-interceptor.service';
 
 const routes: Routes = [
-  {
-      'path': '',
-      'component': DefaultComponent,
-      'children': [
-          {
-              'path': 'index',
-              'component': DashboardComponent,
-          },
-      ],
-  },
+    {
+        'path': '',
+        'component': DefaultComponent,
+        'children': [
+            {
+                'path': 'index',
+                'component': DashboardComponent,
+            },
+        ],
+    },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule, RouterModule.forChild(routes), LayoutModule,
-  ],
-  declarations: [ DashboardComponent],
-  exports: [DashboardComponent],
-  providers:[{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptorService,
-    multi: true
-  }]
+    imports: [
+        CommonModule, RouterModule.forChild(routes), LayoutModule,
+    ],
+    declarations: [DashboardComponent],
+    exports: [DashboardComponent],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: TokenInterceptorService,
+        multi: true
+    }]
 })
 export class DashboardModule { }

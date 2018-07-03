@@ -32,7 +32,7 @@ export class AuthenticationService {
         return this.http.post<JWTToken>(Utils.getRoot().replace("/api", "") + this.connectlink, body.toString(), {
             headers: new HttpHeaders()
                 .set('Content-Type', 'application/x-www-form-urlencoded')
-                //.append("")
+            //.append("")
         })
 
     }
@@ -99,13 +99,13 @@ export class AuthenticationService {
     }
 
     logout() {
-        
-        this.removeToken();       
+
+        this.removeToken();
         this.router.navigate(['/login']);
     }
 
 
-    public register(user: CreateUser){
-        return this.http.post(Utils.getRoot() + 'identity/create', user );
+    public register(user: CreateUser) {
+        return this.http.post(Utils.getRoot() + 'identity/create', user);
     }
 }

@@ -3,34 +3,34 @@ import { OogstKaartItem } from './../../../../../auth/_models/models';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-admin-oogstkaart-item',
-  templateUrl: './admin-oogstkaart-item.component.html',
-  styles: []
+    selector: 'app-admin-oogstkaart-item',
+    templateUrl: './admin-oogstkaart-item.component.html',
+    styles: []
 })
 export class AdminOogstkaartItemComponent implements OnInit {
 
-  item : OogstKaartItem;
-  constructor(private router: Router) { }
+    item: OogstKaartItem;
+    constructor(private router: Router) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  onRowSelect($event){
-    console.log($event);
-  }
+    onRowSelect($event) {
+        console.log($event);
+    }
 
 
-  itemupdatet(){}
+    itemupdatet() { }
 
-  delete(){
+    delete() {
 
-  }
-  update(){
+    }
+    update() {
 
-  }
+    }
 
-  cancel(){
-    this.router.navigate(['admin'])
-  }
+    cancel() {
+        this.router.navigate(['admin'])
+    }
 
 }

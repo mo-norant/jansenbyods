@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutModule } from '../../../layouts/layout.module';
 import { DefaultComponent } from '../default.component';
-import {  AdminComponent } from './admin.component';
+import { AdminComponent } from './admin.component';
 import { AdminOogstkaartListComponent } from './admin-oogstkaart-list/admin-oogstkaart-list.component';
 import { AdminAanvragenComponent } from './admin-aanvragen/admin-aanvragen.component';
 import { UsermanagerComponent } from './usermanager/usermanager.component';
@@ -17,7 +17,7 @@ import { AdminOogstkaartItemComponent } from './admin-oogstkaart-item/admin-oogs
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { AdminRequestItemComponent } from './admin-request-item/admin-request-item.component';
 import { ToastrService } from 'ngx-toastr';
 
@@ -25,7 +25,7 @@ const routes: Routes = [
     {
         path: '',
         component: DefaultComponent,
-        canActivate :[RoleService],
+        canActivate: [RoleService],
         children: [
             {
                 path: '',
@@ -34,27 +34,27 @@ const routes: Routes = [
             {
                 path: 'aanvragen',
                 component: AdminAanvragenComponent,
-                
+
             },
             {
                 path: 'aanvragen/:id',
                 component: AdminRequestItemComponent,
-                
+
             },
             {
                 path: 'oogstkaart',
                 component: AdminOogstkaartListComponent,
-                
+
             },
             {
                 path: 'oogstkaart/:id',
                 component: AdminOogstkaartItemComponent,
-                
+
             },
             {
                 path: 'usermanager',
                 component: UsermanagerComponent,
-                
+
             },
         ],
     },
@@ -79,9 +79,9 @@ const routes: Routes = [
         AdminOogstkaartListComponent,
         UsermanagerComponent,
         AdminOogstkaartItemComponent,
-        AdminRequestItemComponent 
-       ],
-        providers: [AdminService, ConfirmationService, ToastrService]
+        AdminRequestItemComponent
+    ],
+    providers: [AdminService, ConfirmationService, ToastrService]
 })
 export class AdminModule {
 }

@@ -24,8 +24,8 @@ export class HeaderNavComponent implements OnInit, AfterViewInit {
 
     }
 
-    signOut(){
-            this.router.navigate(['logout']);
+    signOut() {
+        this.router.navigate(['logout']);
     }
 
 }

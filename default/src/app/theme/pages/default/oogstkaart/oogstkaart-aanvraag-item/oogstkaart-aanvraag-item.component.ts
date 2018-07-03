@@ -6,40 +6,40 @@ import { ToastrService } from 'ngx-toastr';
 import { Utils } from '../../../../../auth/_helpers/Utils';
 
 @Component({
-  selector: 'app-oogstkaart-aanvraag-item',
-  templateUrl: './oogstkaart-aanvraag-item.component.html',
-  styles: []
+    selector: 'app-oogstkaart-aanvraag-item',
+    templateUrl: './oogstkaart-aanvraag-item.component.html',
+    styles: []
 })
 export class OogstkaartAanvraagItemComponent implements OnInit {
 
-  root
-  request: Request;
-  item : OogstKaartItem;
+    root
+    request: Request;
+    item: OogstKaartItem;
 
-  constructor(private oogstkaartservice: OogstkaartService, private route : ActivatedRoute,     private toastr: ToastrService
-  ) { }
-  ngOnInit() {
+    constructor(private oogstkaartservice: OogstkaartService, private route: ActivatedRoute, private toastr: ToastrService
+    ) { }
+    ngOnInit() {
 
-    this.root = Utils.getRoot().replace("/api", "");
+        this.root = Utils.getRoot().replace("/api", "");
 
-    this.route.params.subscribe( data => {
-      this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(data =>{
-        this.request = data;
-        this.oogstkaartservice.getOogstkaartItem(data.oogstkaartID).subscribe(res => {
-          this.item = res;
-          this.oogstkaartservice.OpenRequest(this.item.oogstkaartItemID).subscribe(res => {
+        this.route.params.subscribe(data => {
+            this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(data => {
+                this.request = data;
+                this.oogstkaartservice.getOogstkaartItem(data.oogstkaartID).subscribe(res => {
+                    this.item = res;
+                    this.oogstkaartservice.OpenRequest(this.item.oogstkaartItemID).subscribe(res =>  {
 
-          })
+                    })
+                })
+            })
         })
-      })
-    })
 
 
-  }
+    }
 
-  showSuccess(message: string) {
-    this.toastr.success('Succes', message);
-  }
+    showSuccess(message: string) {
+        this.toastr.success('Succes', message);
+    }
 
 }
 ;

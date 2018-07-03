@@ -20,30 +20,30 @@ import { AuthenticationService } from './auth/_services';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
-  declarations: [ThemeComponent, AppComponent],
-  imports: [
-    HttpClientModule,
-    LayoutModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ThemeRoutingModule,
-    AuthModule,
-    AgmCoreModule.forRoot({
-      apiKey: "AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0"
-    }),
-    ToastrModule.forRoot()
-  ],
-  providers: [
-    
-    ScriptLoaderService,
-    GeneralService,
-    AuthenticationService,
-    RoleService,
-    UserguardService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [ThemeComponent, AppComponent],
+    imports: [
+        HttpClientModule,
+        LayoutModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ThemeRoutingModule,
+        AuthModule,
+        AgmCoreModule.forRoot({
+            apiKey: "AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0"
+        }),
+        ToastrModule.forRoot()
+    ],
+    providers: [
+
+        ScriptLoaderService,
+        GeneralService,
+        AuthenticationService,
+        RoleService,
+        UserguardService
+    ],
+    bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

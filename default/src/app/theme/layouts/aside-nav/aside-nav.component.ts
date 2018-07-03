@@ -13,14 +13,14 @@ declare let mLayout: any;
 })
 export class AsideNavComponent implements OnInit, AfterViewInit {
 
-    
-    menu : Menu ;
+
+    menu: Menu;
     role: string;
     openrequests: number = 0;
 
     constructor(private auth: AuthenticationService, private oogstkaartservice: OogstkaartService) {
-      this.role = this.auth.role;
-      console.log(this.role)
+        this.role = this.auth.role;
+        console.log(this.role)
     }
     ngOnInit() {
         this.oogstkaartservice.GetNewRequests().subscribe(res => {
@@ -33,19 +33,19 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
 
     }
 
-    administratorMenu ()  : Menu{
-        let menu : Menu = new Menu();
+    administratorMenu(): Menu {
+        let menu: Menu = new Menu();
         menu.menuitems = [];
 
-        let dashboarditem : MenuItem = new MenuItem();
+        let dashboarditem: MenuItem = new MenuItem();
         dashboarditem.class = 'm-menu__item';
         dashboarditem.route = '/index';
         dashboarditem.name = 'Dashboard';
         dashboarditem.logo = 'm-menu__link-icon flaticon-line-graph'
-    
+
         menu.menuitems.push(dashboarditem);
 
-        let productenbeheren : MenuItem = new MenuItem();
+        let productenbeheren: MenuItem = new MenuItem();
         productenbeheren.class = 'm-menu__item';
         productenbeheren.route = '/oogstkaart';
         productenbeheren.name = 'Producten beheren';
@@ -53,8 +53,8 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
 
         menu.menuitems.push(productenbeheren);
 
-        
-        let productenaanbieden : MenuItem = new MenuItem();
+
+        let productenaanbieden: MenuItem = new MenuItem();
         productenaanbieden.class = 'm-menu__item';
         productenaanbieden.route = '/oogstkaart/nieuwproduct';
         productenaanbieden.name = 'Producten aanbieden';
@@ -65,6 +65,6 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
         return menu;
     }
 
-    
+
 
 }

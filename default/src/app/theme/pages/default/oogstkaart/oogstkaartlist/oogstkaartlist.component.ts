@@ -5,43 +5,43 @@ import { Component, OnInit } from "@angular/core";
 
 
 @Component({
-  selector: "app-oogstkaartlist",
-  templateUrl: "./oogstkaartlist.component.html",
-  styles: []
+    selector: "app-oogstkaartlist",
+    templateUrl: "./oogstkaartlist.component.html",
+    styles: []
 })
 export class OogstkaartlistComponent implements OnInit {
-  items: OogstKaartItem[];
-  cols: any[];
-  selecteditem: OogstKaartItem;
+    items: OogstKaartItem[];
+    cols: any[];
+    selecteditem: OogstKaartItem;
 
-  constructor(private oogstkaartservice: OogstkaartService, private router: Router) {}
+    constructor(private oogstkaartservice: OogstkaartService, private router: Router) { }
 
-  ngOnInit() {
-    this.cols = [
-      { field: "oogstkaartItemID", header: "ID" },
-      { field: "artikelnaam", header: "Naam" },
-      { field: "jansenserie", header: "Serie" },
-      { field: "views", header: "Aantal keer bekeken" },
-      { field: "localdatestring", header: "Aangemaakt op" }
+    ngOnInit() {
+        this.cols = [
+            { field: "oogstkaartItemID", header: "ID" },
+            { field: "artikelnaam", header: "Naam" },
+            { field: "jansenserie", header: "Serie" },
+            { field: "views", header: "Aantal keer bekeken" },
+            { field: "localdatestring", header: "Aangemaakt op" }
 
-    ];
+        ];
 
-    
-    this.oogstkaartservice.GetOogstkaartitems().subscribe(data => {
 
-      data.forEach(i => {
-        i.localdatestring = new Date(i.createDate).toLocaleString();
-      });
-      this.items = data;
+        this.oogstkaartservice.GetOogstkaartitems().subscribe(data => {
+
+            data.forEach(i => {
+                i.localdatestring = new Date(i.createDate).toLocaleString();
+            });
+            this.items = data;
+        }
+
+
+        );
     }
-    
-    
-    );
-  }
 
-  onRowSelect(event) {
-    this.router.navigate(['oogstkaart', event.data.oogstkaartItemID]);
-  }
+    onRowSelect(event) {
+        this.router.navigate(['oogstkaart', event.data.oogstkaartItemID]);
+    }
 
-  
+
 }

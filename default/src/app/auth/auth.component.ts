@@ -70,10 +70,10 @@ export class AuthComponent implements OnInit {
 
             this._authService.role = this._authService.decodeToken().role;
 
-            if(this._authService.role === 'administrator'){
+            if (this._authService.role === 'administrator') {
                 this.router.navigate(['admin'])
             }
-            else{
+            else {
                 this.router.navigate(['']);
 
             }
@@ -89,7 +89,7 @@ export class AuthComponent implements OnInit {
     }
 
 
-   
+
 
 
     showAlert(target) {
@@ -224,10 +224,10 @@ export class AuthComponent implements OnInit {
     }
 
 
-    signout(){
-        
+    signout() {
+
     }
 
-   
+
 
 }

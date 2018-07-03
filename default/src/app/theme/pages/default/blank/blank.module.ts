@@ -30,12 +30,12 @@ const routes: Routes = [
     ], declarations: [
         BlankComponent,
     ],
-    providers:[
+    providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptorService,
             multi: true
-          }
+        }
     ]
 })
 export class BlankModule {

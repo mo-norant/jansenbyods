@@ -111,7 +111,7 @@
                 </div>
                 <div class="m-portlet__foot m-portlet__foot--fit">
                   <div class="m-form__actions m-form__actions">
-                    <button type="reset" (click)="addAccount()" class="btn btn-primary">
+                    <button [class.disabled]="!registerform.valid" type="reset" (click)="addAccount()" class="btn btn-primary">
                       Bevestigen
                     </button>
                     <button routerLink='login' type="reset" class="btn btn-secondary">

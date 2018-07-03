@@ -47,7 +47,7 @@ const routes: Routes = [
         provide: HTTP_INTERCEPTORS,
         useClass: TokenInterceptorService,
         multi: true
-      }],
+    }],
     exports: [RouterModule],
 })
 export class ThemeRoutingModule { }
