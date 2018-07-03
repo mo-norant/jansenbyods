@@ -1,0 +1,195 @@
+<!-- BEGIN: Subheader -->
+<div class="m-subheader" appunwraptag="">
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <h3 class="m-subheader__title ">
+          Product aanpassen
+        </h3>
+  
+      </div>
+      <div>
+  
+      </div>
+    </div>
+  </div>
+  <!-- END: Subheader -->
+  <div class="m-content">
+  
+    <div class="row" *ngIf="item">
+      <div class="col-lg-12">
+  
+        <div class="m-portlet">
+          <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+              <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                  <i class="la la-gear"></i>
+                </span>
+                <h3 class="m-portlet__head-text">
+                  {{item?.artikelnaam}}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <!--begin::Form-->
+          <form class="m-form m-form--fit m-form--label-align-right m-form--group-seperator">
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group row">
+                <label class="col-lg-2 col-form-label">
+                  Artikelnaam:
+                </label>
+                <div class="col-lg-6">
+                  <input  (ngModelChange)="itemupdatet()" [(ngModel)]="item.artikelnaam" name="artikelnaam" class="form-control m-input">
+  
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group row">
+                <label class="col-xl-3 col-lg-3 col-form-label">
+                  Categorie:
+                </label>
+                <div class="col-xl-9 col-lg-9">
+                  <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.category" name="category" class="form-control m-input">
+                    <option value="jansenprofiel">
+                      Jansenprofiel
+                    </option>
+                    <option value="constructieprofiel">
+                      Constructieprofiel
+                    </option>
+                    <option value="deur">
+                      Deur
+                    </option>
+                    <option value="raam">
+                      Raam
+                    </option>
+                    <option value="geveldeel">
+                      Geveldeel
+                    </option>
+                    <option value="overige">
+                      Overige
+                    </option>
+  
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group row">
+                <label class="col-xl-3 col-lg-3 col-form-label">
+                  Serie:
+                </label>
+                <div class="col-xl-9 col-lg-9">
+                  <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.jansenserie" name="serie" class="form-control m-input">
+                    <option value="ART15">
+                      ART-15
+                    </option>
+                    <option value="janisolARTE">
+                      Janisol ARTE
+                    </option>
+                    <option value="economy">
+                      Economy
+                    </option>
+                    <option value="janisol">
+                      Janisol
+                    </option>
+                    <option value="janisolHI">
+                      Janisol HI
+                    </option>
+                    <option value="janisol2">
+                      Janisol 2
+                    </option>
+                    <option value="JanisolC4">
+                      Janisol C4
+                    </option>
+                    <option value="JansenViss">
+                      Jansen Viss
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group">
+                <label>
+                  Prijs per eenheid
+                </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon2">
+                      €
+                    </span>
+                  </div>
+                  <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsPerEenheid" name="vraagprijspereenheid" type="text" class="form-control m-input" placeholder="prijs">
+                </div>
+              </div>
+              <div class="form-group m-form__group">
+                <label>
+                  Totaalprijs
+                </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon2">
+                      €
+                    </span>
+                  </div>
+                  <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsTotaal" name="vraagprijstotaal" type="text" class="form-control m-input" placeholder="prijs">
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group">
+                <label>
+                  Hoeveelheid
+                </label>
+                <div class="input-group">
+                  <input (ngModelChange)="itemupdatet()" type="text" [(ngModel)]="item.hoeveelheid" name="hoeveelheid" class="form-control m-input" placeholder="">
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__body">
+              <div class="form-group m-form__group row">
+                <label class="col-xl-3 col-lg-3 col-form-label">
+                  Concept:
+                </label>
+                <div class="col-xl-9 col-lg-9">
+                  <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.concept" name="concept" class="form-control m-input">
+                    <option value="Te koop">Te koop
+                    </option>
+                    <option value="Te huur">Te huur
+                    </option>
+                    <option value="Te Koop of Te huur">Te koop of te huur</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
+              <div class="m-form__actions m-form__actions--solid">
+                <div class="row">
+                  <div class="col-lg-2"></div>
+                  <div class="col-lg-6">
+                    <button [disabled]="!updated" (click)="update()" class="btn btn-success">
+                      Aanpassen
+                    </button>
+                    <button (click)="delete()" class="btn btn-danger">
+                      Verwijderen
+                    </button>
+                    <button (click)="cancel()" class="btn btn-warning">
+                      Annuleren
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!--end::Form-->
+        </div>
+        <!--end::Portlet-->
+        <!--begin::Portlet-->
+  
+      </div>
+    </div>
+  </div>
+  
+  <p-confirmDialog header="Bevestigen" acceptLabel="Ok" rejectLabel="Annuleren" header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+  

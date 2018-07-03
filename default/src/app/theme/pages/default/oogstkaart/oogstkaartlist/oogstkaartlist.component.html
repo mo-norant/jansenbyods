@@ -1,0 +1,73 @@
+<!-- BEGIN: Subheader -->
+<div class="m-subheader" appunwraptag="">
+	<div class="d-flex align-items-center">
+		<div class="mr-auto">
+			<h3 class="m-subheader__title ">
+				Oogstkaartproducten
+			</h3>
+		</div>
+		<div>
+			
+		</div>
+	</div>
+</div>
+<!-- END: Subheader -->
+<div class="m-content">
+
+	<div class="m-portlet m-portlet--mobile">
+		
+		<div class="m-portlet__body">
+			<!--begin: Search Form -->
+			<div class="m-form m-form--label-align-right m--margin-top-20 m--margin-bottom-30">
+				<div class="row align-items-center">
+					<div class="col-xl-8 order-2 order-xl-1">
+						
+					</div>
+					<div class="col-xl-4 order-1 order-xl-2 m--align-right">
+						<a routerLink="nieuwproduct" class="btn btn-primary m-btn m-btn--custom m-btn--icon m-btn--air m-btn--pill">
+							<span>
+								<i class="la la-cart-plus"></i>
+								<span>
+									Nieuw product
+								</span>
+							</span>
+						</a>
+						<div class="m-separator m-separator--dashed d-xl-none"></div>
+					</div>
+				</div>
+			</div>
+			<!--end: Search Form -->  		<!--begin: Datatable -->
+			<div class="m_datatable" id="ajax_data">
+				<p-progressBar *ngIf="!items" mode="indeterminate"></p-progressBar>
+					<p-table #data [columns]="cols" [value]="items" selectionMode="single" [(selection)]="selecteditem" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="10">
+						<ng-template pTemplate="caption">
+							<div style="text-align: right">        
+								<i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+								<input type="text" pInputText size="50" placeholder="Zoeken" (input)="data.filterGlobal($event.target.value, 'contains')" style="width:auto">
+							</div>
+						</ng-template>
+						<ng-template pTemplate="header" let-columns>
+							
+								<tr>
+									
+									<th  *ngFor="let col of columns" [pSortableColumn]="col.field">
+										{{col.header}}
+										<p-sortIcon [field]="col.field"></p-sortIcon>
+
+									</th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-rowData let-columns="columns">
+								<tr [pSelectableRow]="rowData">
+									<td *ngFor="let col of columns">
+										{{rowData[col.field]}}
+									</td>
+								</tr>
+							</ng-template>
+						</p-table>
+
+      </div>
+			<!--end: Datatable -->
+		</div>
+	</div>
+</div>

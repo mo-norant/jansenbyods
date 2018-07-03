@@ -1,0 +1,129 @@
+<!-- BEGIN: Left Aside -->
+<button class="m-aside-left-close  m-aside-left-close--skin-dark" id="m_aside_left_close_btn" appunwraptag="">
+	<i class="la la-close"></i>
+</button>
+<div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark">
+	<!-- BEGIN: Aside Menu -->
+	<div *ngIf="role === 'administrator'" id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark"
+	    m-menu-vertical="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500">
+		<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow">
+			<li class="m-menu__item  " routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/admin" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-line-graph"></i>
+					<span class="m-menu__link-title">
+						<span class="m-menu__link-wrap">
+							<span class="m-menu__link-text">
+								Dashboard Administrator
+							</span>
+						
+						</span>
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__section">
+				<h4 class="m-menu__section-text">
+					Oogstkaartaanvragen
+				</h4>
+				<i class="m-menu__section-icon flaticon-more-v3"></i>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/admin/oogstkaart" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-settings"></i>
+					<span class="m-menu__link-text">
+						Producten beheren
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/admin/aanvragen" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-settings"></i>
+					<span class="m-menu__link-text">
+						Aanvragen beheren
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__section">
+				<h4 class="m-menu__section-text">
+					Gebruikers
+				</h4>
+				<i class="m-menu__section-icon flaticon-more-v3"></i>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/admin/usermanager" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-settings"></i>
+					<span class="m-menu__link-text">
+						Gebruikers beheren
+					</span>
+				</a>
+			</li>
+
+
+
+
+
+		</ul>
+	</div>
+	<!-- END: Aside Menu -->
+
+	<div *ngIf="role === 'user'" id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark"
+	    m-menu-vertical="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500">
+		<ul class="m-menu__nav  m-menu__nav--dropdown-submenu-arrow">
+			<li class="m-menu__item  " routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/index" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-line-graph"></i>
+					<span class="m-menu__link-title">
+						<span class="m-menu__link-wrap">
+							<span class="m-menu__link-text">
+								Dashboard
+							</span>
+							
+						</span>
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__section">
+				<h4 class="m-menu__section-text">
+					Oogstkaart
+				</h4>
+				<i class="m-menu__section-icon flaticon-more-v3"></i>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/oogstkaart" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-settings"></i>
+					<span class="m-menu__link-text">
+						Producten beheren
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+				<a routerLink="/oogstkaart/nieuwproduct" class="m-menu__link">
+					<i class="m-menu__link-icon flaticon-settings"></i>
+					<span class="m-menu__link-text">
+						Product aanbieden
+					</span>
+				</a>
+			</li>
+			<li class="m-menu__item" routerLinkActive="m-menu__item--active" routerLinkActiveOptions="{ exact: true }" aria-haspopup="true">
+					<a routerLink="/oogstkaart/aanvragen" class="m-menu__link">
+						<i class="m-menu__link-icon flaticon-settings"></i>
+						<span class="m-menu__link-wrap">
+							<span class="m-menu__link-text">
+								Aanvragen
+							</span>
+							<span *ngIf="openrequests != 0" class="m-menu__link-badge">
+								<span class="m-badge m-badge--danger">
+									{{openrequests}}
+								</span>
+							</span>
+						
+						</span>
+						
+					</a>
+				</li>
+
+
+
+		</ul>
+	</div>
+</div>
+<!-- END: Left Aside -->
