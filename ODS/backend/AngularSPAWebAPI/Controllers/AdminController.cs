@@ -21,6 +21,7 @@ namespace AngularSPAWebAPI.Controllers
   [Produces("application/json")]
   [Route("api/[controller]")]
   [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Policy = "Manage Accounts")]
+
     public class AdminController : Controller
     {
 

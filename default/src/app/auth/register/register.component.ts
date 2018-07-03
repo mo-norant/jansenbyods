@@ -45,6 +45,8 @@ export class RegisterComponent implements OnInit {
             country: ["", Validators.required],
             city: ["", Validators.required]
         });
+
+        this.registerform.getError
     }
 
 

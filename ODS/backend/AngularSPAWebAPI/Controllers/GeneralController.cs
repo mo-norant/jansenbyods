@@ -16,8 +16,8 @@ using Microsoft.AspNetCore.Cors;
 
 namespace AngularSPAWebAPI.Controllers
 {
-      [Produces("application/json")]
-      [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Policy = "Access Resources")]
     public class GeneralController : Controller
     {

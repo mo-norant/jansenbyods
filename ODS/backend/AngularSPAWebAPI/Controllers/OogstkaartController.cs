@@ -371,34 +371,23 @@ namespace AngularSPAWebAPI.Controllers
 
     [HttpGet("acceptedrequests")]
     public async Task<IActionResult> GetAcceptedRequests(){
-      var user = await _usermanager.GetUserAsync(User);
+      var userreq = await _usermanager.GetUserAsync(User);
 
-      if(user == null){
-        return NotFound();
+      if(userreq == null){
+        return NotFound("User not found");
       }
 
-      /*
-      var oogstkaartitems = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(ir => ir.Requests).ToListAsync();
-      List<Request> reqs = new List<Request>();
+      var result = from requests in _context.Requests
+                   join oogstkaartitems in _context.OogstkaartItems on requests.OogstkaartID equals oogstkaartitems.OogstkaartItemID
+                   join users in _context.Users on oogstkaartitems.UserID equals users.Id
+                   where requests.Status == "accepted"
+                   where users.Id == userreq.Id
+                   select requests;
 
-      foreach(var item in oogstkaartitems){
-        foreach(var r in item.Requests){
-          if(r.Status == "accepted"){
-            reqs.Add(r);
-          }
-        }
-      }
+      return Ok(result);
 
-      return Ok(reqs);
-       */      
+                           
 
-      var requests = await _context.Requests.Where(r => r.Status == "accepted").Include(ir => ir.Messages).Include(ic => ic.Company).ToListAsync();
-
-      if(requests == null){
-        return NotFound();
-      }
-
-      return Ok(requests);
 
     }
 
