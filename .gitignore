@@ -5,6 +5,7 @@
 ## Angular ##
 # compiled output
 /dist
+**/dist
 /tmp
 /app/**/*.js
 /app/**/*.js.map
@@ -556,6 +557,8 @@ ServiceFabricBackup/
 
 # OpenCover UI analysis results
 OpenCover/
+
+
 
 # Azure Stream Analytics local run output
 ASALocalRun/
