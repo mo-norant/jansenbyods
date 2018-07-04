@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { OogstkaartModule } from './oogstkaart/oogstkaart.module';
 import { HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 const appRoutes: Routes = [
   {
@@ -29,6 +31,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     OogstkaartModule,
     HttpClientModule,
+
     RouterModule.forRoot(appRoutes)    ],
   providers: [],
   bootstrap: [AppComponent]

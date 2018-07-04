@@ -29,7 +29,7 @@ export class ShopComponent implements OnInit {
 
   ngOnInit() {
     this.service.getOogstkaartItems().subscribe(data => {
-      this.items = _.uniqBy(data, "oogstkaartItemID")
+      this.items = _.uniqBy(data, "oogstkaartItemID");
       this.getcategories(this.items);
       this.setMarkers(this.items);
      });

@@ -5,9 +5,9 @@ import { CommonModule } from '@angular/common';
 import { ShopComponent } from './shop/shop.component';
 import { Route, RouterModule } from '@angular/router';
 import { ItemComponent } from './item/item.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ContactComponent } from './contact/contact.component';
 import { SuccesComponent } from './succes/succes.component'
 
@@ -39,6 +39,7 @@ const routes: Route[] = [
     RouterModule.forChild(routes),
     ProgressSpinnerModule,
     FormsModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(),
   ],
   providers:[OogstkaartService],
