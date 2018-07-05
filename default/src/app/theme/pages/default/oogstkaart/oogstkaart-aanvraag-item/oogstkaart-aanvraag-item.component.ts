@@ -23,15 +23,12 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
         this.root = Utils.getRoot().replace("/api", "");
 
         this.route.params.subscribe(data => {
-            this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(data => {
-                this.request = data;
-                this.oogstkaartservice.getOogstkaartItem(data.oogstkaartID).subscribe(res => {
-                    this.item = res;
-                    this.oogstkaartservice.OpenRequest(this.item.oogstkaartItemID).subscribe(res =>  {
-
-                    })
+            this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(res => {
+                this.request = res;
+                this.oogstkaartservice.getOogstkaartItem(this.request.oogstkaartID).subscribe(data =>{
+                    this.item = data;
                 })
-            })
+            });
         })
 
 

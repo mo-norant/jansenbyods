@@ -275,6 +275,8 @@ namespace AngularSPAWebAPI.Migrations
 
                     b.Property<bool>("OnlineStatus");
 
+                    b.Property<bool>("Sold");
+
                     b.Property<bool>("TransportInbegrepen");
 
                     b.Property<string>("UserID");

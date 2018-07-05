@@ -17,7 +17,7 @@ import { OogstkaartformComponent } from "./oogstkaartform/oogstkaartform.compone
 import { OogstkaartitemComponent } from "./oogstkaartitem/oogstkaartitem.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GrowlModule } from 'primeng/growl';
-
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from "primeng/components/common/messageservice";
@@ -65,14 +65,16 @@ const routes: Routes = [
         ProgressBarModule,
         CalendarModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0'
+            apiKey: 'AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0',
+            libraries: ["places"]
         }),
         FormsModule,
         ReactiveFormsModule,
         FileUploadModule,
         ConfirmDialogModule,
         GrowlModule,
-        KeyFilterModule
+        KeyFilterModule,
+        Ng4GeoautocompleteModule.forRoot()
 
     ],
     providers: [OogstkaartService, ConfirmationService, MessageService, ToastrService, {

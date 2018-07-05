@@ -4,14 +4,13 @@ import {
     LocationOogstKaartItem,
     Specificatie
 } from "./../../../../../auth/_models/models";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject,  } from "@angular/core";
 import { ScriptLoaderService } from "../../../../../_services/script-loader.service";
 import { DOCUMENT } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
-
-
+import { ConfirmationService } from "primeng/api";
 
 declare var google: any;
 
@@ -30,23 +29,37 @@ export class OogstkaartformComponent implements OnInit {
     uploadloading: boolean;
     selectedlocation: LocationOogstKaartItem;
     returnedid: number;
+    zoom : number = 7;
+    photouploaded: boolean = false;
 
+    prijsovereentekomen: boolean = false;
     files = {
         mainpicture: [],
         supportfiles: [],
         photogallery: []
     };
 
+    userSettings = {
+        inputString : "adres"
+    }
+	autoCompleteCallback1(selectedData:any) {
+		if(selectedData.response){
+            if (this.selectedlocation == null) {
+                this.selectedlocation = new LocationOogstKaartItem();
+            }
+            this.selectedlocation.latitude = selectedData.data.geometry.location.lat;
+            this.selectedlocation.longtitude = selectedData.data.geometry.location.lng;
 
-
-
+        }
+	}
     constructor(
         private _script: ScriptLoaderService,
         @Inject(DOCUMENT) private document: Document,
         private oogstkaartservice: OogstkaartService,
         private router: Router,
         private toastr: ToastrService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private dialogservice: ConfirmationService
     ) {
         this.today = new Date();
 
@@ -66,31 +79,76 @@ export class OogstkaartformComponent implements OnInit {
             omschrijving: new FormControl(""),
             jansenserie: new FormControl("", Validators.required),
             vraagPrijsPerEenheid: new FormControl(""),
-            vraagPrijsTotaal: new FormControl("", [Validators.required]),
+            vraagPrijsTotaal: new FormControl(""),
             hoeveelheid: new FormControl("", [Validators.required]),
+            prijsovereentekomen: new FormControl(""),
             transportInbegrepen: new FormControl("", Validators.required),
             concept: new FormControl("", Validators.required),
             datumBeschikbaar: new FormControl("", Validators.required),
         });
-        window.scrollTo(0, 0);
+
+        
+        
+
 
     }
 
     next() {
 
-        if (this.wizardcounter + 1 == 2) {
-            this.postItem();
-        }
-        else {
+        let p1 = Number(this.firstform.value.vraagPrijsTotaal);
+        let p2 = Number(this.firstform.value.vraagPrijsPerEenheid);
+
+      /*  if(this.firstform.value.prijsovereentekomen && p1 === 0 || p2 ===0){
+
+            alert("U hebt gekozen voor een vaste prijs. Voer die in.")
+                
+         return
+            
+        }*/
+        
+        if(this.wizardcounter == 0 ){
             this.wizardcounter++;
         }
+        else if (this.wizardcounter + 1  == 2) {
+            
+            if(this.selectedlocation !== undefined){
+                this.dialogservice.confirm({
+                    message: "Bent u niets vergeten?",
+                    accept: () => {
+                        this.postItem();
 
-        if (this.wizardcounter == 3) {
-            this.router.navigate(['oogstkaart']);
+                    }
+                });
+            }
+            else{
+                alert("Voeg een locatie toe aub.")
+                return
+            }
+            
         }
+      
 
         window.scrollTo(0, 0);
 
+    }
+
+    toUpload(){
+        this.wizardcounter = 2;
+            if(this.photouploaded){
+                this.dialogservice.confirm({
+                    message: "Wilt uw product bekijken op de website?",
+                    accept: () => {
+                        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.returnedid;
+
+                    },
+                    reject: () => {
+                        this.router.navigate(['oogstkaart']);
+
+                    }
+                });
+            }
+            
+        
     }
 
     setLocation($event) {
@@ -100,6 +158,7 @@ export class OogstkaartformComponent implements OnInit {
 
         this.selectedlocation.latitude = $event.coords.lat;
         this.selectedlocation.longtitude = $event.coords.lng;
+        
     }
 
     addSpecificatie() {
@@ -119,6 +178,7 @@ export class OogstkaartformComponent implements OnInit {
         this.oogstkaartservice.PostProductPhoto(event.files[0], this.returnedid).subscribe(i => {
             this.showSuccess("Hoofdfoto werd succesvol geupload")
             this.uploadloading = false;
+            this.photouploaded = true;
         }, err => {
             this.uploadloading = false
         });
@@ -155,17 +215,22 @@ export class OogstkaartformComponent implements OnInit {
     postItem() {
         if (!this.uploadloading) {
             this.uploadloading = true;
-            console.log(this.firstform.value);
-            //cast to number
-            this.firstform.value.vraagPrijsPerEenheid = + this.firstform.value.vraagPrijsPerEenheid;
+            if(this.firstform.value.prijsovereentekomen){
+                this.firstform.value.vraagPrijsPerEenheid = 0;
+                this.firstform.value.vraagPrijsTotaal = 0;
+
+            }else{
+                this.firstform.value.vraagPrijsTotaal = + this.firstform.value.vraagPrijsTotaal;
+                this.firstform.value.vraagPrijsPerEenheid = + this.firstform.value.vraagPrijsPerEenheid;
+
+            }
             this.firstform.value.hoeveelheid = + this.firstform.value.hoeveelheid;
-            this.firstform.value.vraagPrijsTotaal = + this.firstform.value.vraagPrijsTotaal;
             this.item = this.firstform.value;
             this.item.location = this.selectedlocation;
             this.item.specificaties = this.specificaties;
             this.oogstkaartservice.postOogstkaartItem(this.item).subscribe(data => {
                 this.returnedid = data;
-                this.wizardcounter++;
+                this.wizardcounter = 2;
                 this.uploadloading = false;
             }, err => {
                 this.uploadloading = false;
@@ -183,4 +248,5 @@ export class OogstkaartformComponent implements OnInit {
     showSuccess(message: string) {
         this.toastr.success('Succes', message);
     }
+
 }

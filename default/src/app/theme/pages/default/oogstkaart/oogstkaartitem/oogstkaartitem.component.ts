@@ -26,12 +26,12 @@ export class OogstkaartitemComponent implements OnInit {
     ngOnInit() {
         this.route.params.subscribe(data => {
             this.oogstkaartservice.getOogstkaartItem(data["id"]).subscribe(
-                item => {
-                    this.item = item;
-                    this.item.createDate = item.createDate;
+                data => {
+                    this.item = data;
+                    this.item.createDate = data.createDate;
                 },
                 err => {
-                    this.router.navigate(["oogstkaart"]);
+                          //    this.router.navigate(["oogstkaart"]);
                 }
             );
         });
@@ -76,4 +76,40 @@ export class OogstkaartitemComponent implements OnInit {
     itemupdatet() {
         this.updated = true;
     }
+
+    sold(){
+        this.dialogservice.confirm({
+            message: "Verkoopstatus wijzigen?",
+            accept: () => {
+                this.oogstkaartservice
+                    .ProductSold(this.item.oogstkaartItemID)
+                    .subscribe(res => {
+                        this.item.sold = res
+                        if(this.item.sold){
+                            this.msgs.push({
+                                severity: "success",
+                                summary: "Product",
+                                detail: "Product werd verkocht."
+                            });
+                        }else{
+                            this.msgs.push({
+                                severity: "warning",
+                                summary: "Product",
+                                detail: "Product wordt terug verkocht."
+                            });
+                        }
+                       
+                    });
+            }
+        });
+
+        
+    }
+
+    goToProduct(){
+        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
+
+    }
+
+
 }

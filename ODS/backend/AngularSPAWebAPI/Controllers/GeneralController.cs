@@ -18,8 +18,9 @@ namespace AngularSPAWebAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Policy = "Access Resources")]
-    public class GeneralController : Controller
+    [Authorize(Roles = "administrator, user")]
+
+  public class GeneralController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _usermanager;

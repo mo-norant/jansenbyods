@@ -4,7 +4,6 @@ using System.Linq;
 using AngularSPAWebAPI.Data;
 using AngularSPAWebAPI.Models;
 using AngularSPAWebAPI.Services;
-using AngularSPAWebAPI.Services.Email;
 using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
@@ -20,16 +19,17 @@ namespace AngularSPAWebAPI
 {
     public class Startup
     {
-        private readonly IHostingEnvironment currentEnvironment;
+    private readonly IHostingEnvironment currentEnvironment;
     private readonly ILoggerFactory _loggerFactory;
-        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    public IConfiguration Configuration { get; }
+
+    public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
             currentEnvironment = env;
             _loggerFactory = loggerFactory;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -45,7 +45,7 @@ namespace AngularSPAWebAPI
         }
         else
         {
-          options.UseMySql("Server=192.168.64.2 ;Port=3306;Database=ods;Uid=mo; ");
+          options.UseMySql("Server=server10.exacthost.nl ;Port=3306;Database=odsbe_;Uid=odsuser;Pwd = Catharina2018*;  ");
 
         }
       });
@@ -116,7 +116,7 @@ namespace AngularSPAWebAPI
         services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                    .AddIdentityServerAuthentication(options =>
                    {
-                     options.Authority = "http://localhost:5000";
+                     options.Authority = "http://localhost:55646";
                      options.RequireHttpsMetadata = false;
                      options.ApiName = "WebAPI";
                    });
@@ -159,8 +159,7 @@ namespace AngularSPAWebAPI
 
         
       services.AddMvc();
-     // services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
-     // services.AddTransient<IEmailService, EmailService>();
+
 
 
 

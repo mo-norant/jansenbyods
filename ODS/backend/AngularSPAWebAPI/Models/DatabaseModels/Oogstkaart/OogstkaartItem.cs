@@ -22,6 +22,7 @@ namespace AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart
         public float VraagPrijsTotaal { get; set; }
         public string Concept { get; set; }
         public bool OnlineStatus { get; set; }
+        public bool Sold { get; set; }
         public bool TransportInbegrepen { get; set; }
         public string UserID { get; set; }
         public int Views { get; set; }

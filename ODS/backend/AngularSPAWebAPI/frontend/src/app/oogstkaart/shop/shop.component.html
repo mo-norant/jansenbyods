@@ -22,7 +22,6 @@
         <div class="row align-items-center justify-content-between mb-4">
 
           <div class="col-auto mb-3 mb-sm-0" >
-              <p-progressSpinner *ngIf="!items" strokeWidth = 5></p-progressSpinner>
               <div class="custom-select-1" *ngIf="isListview">
                 <select [(ngModel)]="sorting" (change)="sort($event)" class="form-control border" >
                   <option value="alphabetic">Sorteer alfabetisch</option>
@@ -34,9 +33,9 @@
           </div>
           <div class="col-auto">
             <div class="d-flex align-items-center">
-              <span>{{items?.length}} resultaten</span>
-              <a (click)='mapview(false)' class="text-color-dark text-3 ml-2" data-toggle="tooltip" data-placement="top" title="Map"><i class="fas fa-map"></i></a>
-              <a (click)='mapview(true)' class="text-color-dark text-3 ml-2" data-toggle="tooltip" data-placement="top" title="Grid"><i class="fas fa-th"></i></a>
+              <h5> <strong> {{items?.length}} </strong> resultaten</h5>
+              <a (click)='mapview(false)' class="text-color-dark text-10 ml-2" data-toggle="tooltip" data-placement="top" title="Map"><i class="fas fa-map"></i></a>
+              <a (click)='mapview(true)' class="text-color-dark text-10 ml-2" data-toggle="tooltip" data-placement="top" title="Grid"><i class="fas fa-th"></i></a>
             </div>
           </div>
         </div>
@@ -45,7 +44,7 @@
             <div class="col-md-12">
               <div class="text-center">
                 <h3>
-                  <div #gmap style="width:100%;height:400px"></div>
+                  <div #gmap style="width:100%;height:500px"></div>
                 </h3>
               </div>
             </div>
@@ -68,8 +67,9 @@
               <div class="product-info d-flex flex-column flex-lg-row justify-content-between">
                 <div class="product-info-title">
                   <h3 class="text-color-default text-2 line-height-1 mb-1"><a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a></h3>
-                  <span *ngIf="item.vraagPrijsTotaal != 0 " class="price font-primary text-4"><strong class="text-color-dark">€ {{item.vraagPrijsTotaal}} </strong></span>
-                  <span *ngIf="item.vraagPrijsPerEenheid != 0 " class="old-price font-primary text-1"><strong class="text-color-default">€ {{item.vraagPrijsPerEenheid}} / stuk</strong></span>
+                  <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4"><strong> Prijs overeen te komen</strong></span>
+                  <span *ngIf="item.vraagPrijsTotaal !== 0 " class="price font-primary text-4"><strong class="text-color-dark">€ {{item.vraagPrijsTotaal}} </strong></span>
+                  <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1"><strong class="text-color-default">€ {{item.vraagPrijsPerEenheid}} / stuk</strong></span>
                 </div>
 
               </div>
@@ -115,3 +115,6 @@
     </div>
   </section>
  </div>
+
+ <div *ngIf="!items" class="loading">Loading&#8230;</div>
+

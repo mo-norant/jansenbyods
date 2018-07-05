@@ -7,6 +7,7 @@ import { DefaultComponent } from '../default.component';
 import { BlankComponent } from './blank.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptorService } from '../../../../_services/token-interceptor.service';
+import { StatisticsService } from '../../../../_services/statistics.service';
 
 const routes: Routes = [
     {
@@ -35,7 +36,8 @@ const routes: Routes = [
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptorService,
             multi: true
-        }
+        },
+        StatisticsService
     ]
 })
 export class BlankModule {

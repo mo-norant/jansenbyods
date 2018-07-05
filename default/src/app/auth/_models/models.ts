@@ -43,10 +43,11 @@ export class OogstKaartItem {
     vraagPrijsPerEenheid: number;
     vraagPrijsTotaal: number;
     onlineStatus: boolean;
+    sold: boolean;
     concept: string;
     transportInbegrepen: boolean;
     userID: string;
-    Views: number;
+    views: number;
     avatar: Afbeelding;
     specificaties: Specificatie[];
     gallery: Afbeelding[];

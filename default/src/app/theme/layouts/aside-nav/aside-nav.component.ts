@@ -23,9 +23,7 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
         console.log(this.role)
     }
     ngOnInit() {
-        this.oogstkaartservice.GetNewRequests().subscribe(res => {
-            this.openrequests = res;
-        })
+       
     }
     ngAfterViewInit() {
 

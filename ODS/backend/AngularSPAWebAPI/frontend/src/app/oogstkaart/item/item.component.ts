@@ -1,12 +1,9 @@
-import { element } from 'protractor';
 import { OogstkaartService } from './../oogstkaart.service';
-import { OogstKaartItem } from './../../Utils/Models/models';
+import { OogstKaartItem, Afbeelding } from './../../Utils/Models/models';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Utils } from '../../Utils/Util';
-import { NgxGalleryAnimation } from 'ngx-gallery';
-import { GALLERY_IMAGE } from 'ngx-image-gallery';
-import { GALLERY_CONF } from 'ngx-image-gallery';
+
 
 @Component({
   selector: 'app-item',
@@ -20,7 +17,7 @@ export class ItemComponent implements OnInit {
   root: string;
 
 
-  images: Array<string>;
+  images: Afbeelding[] = [];
 
 
 
@@ -42,6 +39,7 @@ export class ItemComponent implements OnInit {
         this.item = data;
 
         this.item.gallery.forEach(element => {
+          this.images.push(element);
         });
 
         this.createView();

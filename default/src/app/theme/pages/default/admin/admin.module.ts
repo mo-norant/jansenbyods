@@ -20,6 +20,8 @@ import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdia
 import { DropdownModule } from 'primeng/dropdown';
 import { AdminRequestItemComponent } from './admin-request-item/admin-request-item.component';
 import { ToastrService } from 'ngx-toastr';
+import { AdminStatisticsService } from '../../../../_services/adminstatistics.service';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 const routes: Routes = [
     {
@@ -71,6 +73,7 @@ const routes: Routes = [
         ConfirmDialogModule,
         GrowlModule,
         DropdownModule,
+        NgxChartsModule
     ], exports: [
         RouterModule,
     ], declarations: [
@@ -81,7 +84,7 @@ const routes: Routes = [
         AdminOogstkaartItemComponent,
         AdminRequestItemComponent
     ],
-    providers: [AdminService, ConfirmationService, ToastrService]
+    providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService]
 })
 export class AdminModule {
 }

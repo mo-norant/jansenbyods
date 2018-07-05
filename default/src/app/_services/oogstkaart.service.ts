@@ -58,6 +58,11 @@ export class OogstkaartService {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + 'Oogstkaart/delete/' + id, {});
     }
 
+    public ProductSold(id: number) {
+        return this.http.post<boolean>(Utils.getRoot() + 'Oogstkaart/sold/' + id, {});
+    }
+
+
     public UpdateOogstkaartitem(item: OogstKaartItem) {
         return this.http.post(Utils.getRoot() + "Oogstkaart/update", item)
     }

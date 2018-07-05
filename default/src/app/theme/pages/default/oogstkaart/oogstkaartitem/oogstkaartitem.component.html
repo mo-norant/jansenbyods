@@ -162,22 +162,29 @@
                 </select>
               </div>
             </div>
+            <div class="form-group m-form__group row">
+              <h3>Dit product is <div *ngIf="!item.sold">niet</div> verkocht</h3>
+            </div>
           </div>
           <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
             <div class="m-form__actions m-form__actions--solid">
               <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-6">
-                  <button [disabled]="!updated" (click)="update()" class="btn btn-success">
+                  <button [disabled]="!updated" (click)="update()" class="btn btn-success mr-2">
                     Aanpassen
                   </button>
-                  <button (click)="delete()" class="btn btn-danger">
+                  <button (click)="sold()" class="btn btn-primary mr-2">
+                    <span *ngIf="!item.sold">Verkocht</span>
+                    <span *ngIf="item.sold">Niet verkocht</span>
+                  </button>
+                  <button (click)="delete()" class="btn btn-danger mr-2">
                     Verwijderen
                   </button>
-                  <button (click)="cancel()" class="btn btn-warning">
+                  <button (click)="cancel()" class="btn btn-warning mr-2">
                     Annuleren
                   </button>
-                </div>
+                  <button (click)="goToProduct()" class="btn btn-secondary mr-2">
+                    Product bekijken
+                  </button>
               </div>
             </div>
           </div>

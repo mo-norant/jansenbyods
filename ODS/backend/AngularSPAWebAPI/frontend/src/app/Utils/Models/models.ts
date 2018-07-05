@@ -45,6 +45,7 @@
         onlineStatus: boolean;
         concept: string;
         transportInbegrepen: boolean;
+        sold: boolean;
         userID: string;
         Views: number;
         avatar : Afbeelding;

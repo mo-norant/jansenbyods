@@ -101,7 +101,15 @@ export class AuthenticationService {
     logout() {
 
         this.removeToken();
-        this.router.navigate(['/login']);
+        this.http.post(Utils.getRoot() + 'general/signout', null).subscribe(res => {
+            this.router.navigate(['/login']);
+
+        }, err => {
+            console.log("niet correct uitgelogd");
+            this.router.navigate(['/login']);
+
+        })
+        
     }
 
 

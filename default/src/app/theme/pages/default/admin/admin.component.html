@@ -2,15 +2,78 @@
     <div class="d-flex align-items-center">
         <div class="mr-auto">
             <h3 class="m-subheader__title">
-            Administrator Dashboard
+                Administrator Dashboard
             </h3>
-         
+
         </div>
     </div>
 </div>
 <!-- END: Subheader -->
 <div class="m-content">
-    <div>
-        Skeleton page
+    <div class="m-portlet">
+        <div class="m-portlet__body  m-portlet__body--no-padding">
+            <div class="row m-row--no-padding m-row--col-separator-xl">
+                <div class="col-xl-4">
+                    <!--begin:: Widgets/Stats2-1 -->
+                    <div class="m-widget1">
+                        <div class="m-widget1__item">
+                            <div class="row m-row--no-padding align-items-center">
+                                 
+                                <div class="col">
+                                    <h3 class="m-widget1__title">
+                                        Nieuwste aanvragen deze maand
+                                    </h3>
+                                
+                                </div>
+                                
+                            </div>
+                        </div>
+                    
+                        <div *ngFor="let item of periodrequests; let i = index"   class="m-widget1__item">
+                            <div class="row m-row--no-padding align-items-center">
+                                <div class="col">
+                                    <h3 class="m-widget1__title">
+                                        {{item.company.companyName}}
+                                    </h3>
+                                    <span class="m-widget1__desc">
+                                            {{item.name}}
+                                    </span>
+                                </div>
+                                <div class="col m--align-right">
+                                    <span class="m-widget1__number m--font-success">
+                                            {{item.create | date}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-8">
+                    <div class="m-widget14">
+                        <div class="m-widget14__header m--margin-bottom-30">
+                            <h3 class="m-widget14__title">
+                                Aantal oogstkaartproducten
+                            </h3>
+                            <span class="m-widget14__desc">
+                                per categorie
+                            </span>
+                        </div>
+                        <div class="m-widget14__chart" style="height:120px;">
+                                <ngx-charts-pie-chart
+                                [view]="view"
+                                [scheme]="colorScheme"
+                                [results]="single"
+                                [legend]="showLegend"
+                                [explodeSlices]="explodeSlices"
+                                [labels]="showLabels"
+                                [doughnut]="doughnut">
+                              </ngx-charts-pie-chart>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </div>

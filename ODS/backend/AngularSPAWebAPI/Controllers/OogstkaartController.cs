@@ -8,15 +8,16 @@ using AngularSPAWebAPI.Models;
 using AngularSPAWebAPI.Models.DatabaseModels.Communication;
 using AngularSPAWebAPI.Models.DatabaseModels.General;
 using AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart;
-using AngularSPAWebAPI.Services;
-using AngularSPAWebAPI.Services.Email;
 using IdentityServer4.AccessTokenValidation;
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 using File = AngularSPAWebAPI.Models.DatabaseModels.General.File;
 
 namespace AngularSPAWebAPI.Controllers
@@ -24,6 +25,7 @@ namespace AngularSPAWebAPI.Controllers
   [Route("api/[controller]")]
   [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme,
     Policy = "Access Resources")]
+
   public class OogstkaartController : Controller
   {
     private readonly ApplicationDbContext _context;
@@ -32,15 +34,16 @@ namespace AngularSPAWebAPI.Controllers
     private readonly RoleManager<IdentityRole> _rolemanager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _usermanager;
- //   private readonly IEmailService _emailservice;
+    public IConfiguration Configuration { get; }
+
     public OogstkaartController(
       UserManager<ApplicationUser> usermanager,
       RoleManager<IdentityRole> rolemanager,
       SignInManager<ApplicationUser> signInManager,
-    //  IEmailService emailservice,
       IHostingEnvironment appEnvironment,
       ILogger<IdentityController> logger,
-      ApplicationDbContext context)
+      ApplicationDbContext context,
+      IConfiguration configuration)
     {
       this._usermanager = usermanager;
       this._rolemanager = rolemanager;
@@ -48,7 +51,7 @@ namespace AngularSPAWebAPI.Controllers
       _env = appEnvironment;
       _logger = logger;
       this._context = context;
-   //   _emailservice = emailservice;
+      Configuration = configuration;
     }
 
 
@@ -100,8 +103,8 @@ namespace AngularSPAWebAPI.Controllers
       if (user == null) return NotFound();
 
       var allitems = await _context.OogstkaartItems.Where(c => c.UserID == user.Id).Include(c => c.Specificaties)
-        .Include(i => i.Location).ToListAsync();
-      var filtereditems = allitems.Where(i => i.Location != null).ToList();
+        .Include(i => i.Location).Include(i => i.Avatar).ToListAsync();
+      var filtereditems = allitems.Where(i => i.Location != null).Where(i => i.Avatar != null).ToList();
       return Ok(filtereditems);
     }
 
@@ -109,14 +112,12 @@ namespace AngularSPAWebAPI.Controllers
     public async Task<IActionResult> Get([FromRoute] int id)
     {
       var tempuser = await _usermanager.GetUserAsync(User);
-      if (tempuser == null) return NotFound("User not found");
-      var items = await _context.OogstkaartItems.Where(i => i.UserID == tempuser.Id).Include(i => i.Gallery)
-        .Include(i => i.Avatar).Include(i => i.Location).Include(i => i.Specificaties).Include(i => i.Files).ToListAsync();
-      if (!items.Any()) return NotFound("user has no items");
-      var item = items.FirstOrDefault(i => i.OogstkaartItemID == id);
-      if (item == null) return NotFound("user has no item with provided ID");
-
-      return Ok(item);
+      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => i.UserID == tempuser.Id).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+      if(product == null)
+      {
+        return NotFound("Product niet gevonden");
+      }
+      return Json(product);
     }
 
     [HttpPost("productstatus/{id}")]
@@ -137,6 +138,29 @@ namespace AngularSPAWebAPI.Controllers
 
       return BadRequest();
     }
+
+
+    [HttpPost("sold/{id}")]
+    public async Task<IActionResult> OogstkaartitemSold([FromRoute] int id)
+    {
+      var user = await _usermanager.GetUserAsync(User);
+      if (user != null)
+      {
+        var item = await _context.OogstkaartItems.Where(o => o.UserID == user.Id).Where(o => o.OogstkaartItemID == id)
+          .FirstOrDefaultAsync();
+        if (item != null)
+        {
+          item.Sold = !item.Sold;
+          await _context.SaveChangesAsync();
+          return Ok(item.Sold);
+        }
+      }
+
+      return BadRequest();
+    }
+
+
+
 
     [HttpPost("oogstkaartavatar/{id}")]
     public async Task<IActionResult> Oogstkaartavatar([FromRoute] int id)
@@ -178,6 +202,7 @@ namespace AngularSPAWebAPI.Controllers
 
       return BadRequest();
     }
+
 
 
     [HttpPost("gallery/{id}")]
@@ -287,16 +312,17 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => user.Id == i.UserID)
-          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).SingleAsync();
+          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
 
         if (item != null)
         {
-          foreach (var specificatie in item.Specificaties) _context.Specificaties.Remove(specificatie);
 
-          foreach (var foto in item.Gallery) _context.Afbeeldingen.Remove(foto);
-
+          _context.Files.RemoveRange(item.Files);
+          _context.Afbeeldingen.Remove(item.Avatar);
+          _context.Specificaties.RemoveRange(item.Specificaties);
+          _context.Afbeeldingen.RemoveRange(item.Gallery);
+          _context.Requests.RemoveRange(item.Requests);
           _context.Locations.Remove(item.Location);
-
           _context.OogstkaartItems.Remove(item);
           await _context.SaveChangesAsync();
           return Ok();
@@ -377,19 +403,21 @@ namespace AngularSPAWebAPI.Controllers
         return NotFound("User not found");
       }
 
-      var result = from requests in _context.Requests
+
+      
+      var r = from requests in _context.Requests
                    join oogstkaartitems in _context.OogstkaartItems on requests.OogstkaartID equals oogstkaartitems.OogstkaartItemID
                    join users in _context.Users on oogstkaartitems.UserID equals users.Id
                    where requests.Status == "accepted"
                    where users.Id == userreq.Id
                    select requests;
 
+      var result = await r.ToListAsync();
+
+
       return Ok(result);
-
-                           
-
-
     }
+
 
     [HttpGet("acceptedrequests/{id}")]
     public async Task<IActionResult> GetAcceptedRequest( [FromRoute] int id )
@@ -442,7 +470,7 @@ namespace AngularSPAWebAPI.Controllers
       }
 
      
-      var requestcount =  _context.Requests.Where(r => r.Status == "accepted").Where(req => req.UserViewed == false).Include(ir => ir.Messages).Include(ic => ic.Company).ThenInclude(i => i.Address).Count();
+      var requestcount =  _context.Requests.Where(r => r.Status == "accepted").Include(ir => ir.Messages).Include(ic => ic.Company).ThenInclude(i => i.Address).Count();
 
       return Ok(requestcount);
     }
@@ -466,30 +494,7 @@ namespace AngularSPAWebAPI.Controllers
       request.OogstkaartID = item.OogstkaartItemID;
       item.Requests.Add(request);
       await _context.SaveChangesAsync();
-
-      var emailaddress = new EmailAddress
-      {
-        Address = request.Company.Email,
-        Name = request.Company.CompanyName
-      };
-
-      var to = new EmailAddress
-      {
-        Address = "info@jansenbyods.com",
-        Name = "Ods Oogstkaart"
-      };
-
-
-      var mail = new EmailMessage
-      {
-        Content = item.Artikelnaam,
-        Subject = "Nieuwe aanvraag voor " + item.Artikelnaam  
-      };
-
-      mail.FromAddresses.Add(emailaddress);
-      mail.ToAddresses.Add(to);
-   //   _emailservice.Send(mail);
-      
+      await SendMessage(request.Company.Email, "info@jansenbyods.com", @"Nieuwe aanvraag voor product: """ + item.Artikelnaam + @""".", @"Nieuwe aanvraag voor product: " + item.Artikelnaam);
       return Ok();
 
     }
@@ -554,5 +559,38 @@ namespace AngularSPAWebAPI.Controllers
 
       return Ok(suggesteditems);
     }
+
+ 
+    private async Task SendMessage(string sender, string receiver, string subject, string messagebody)
+    {
+      var message = new MimeMessage();
+      message.From.Add(new MailboxAddress(sender, sender));
+      message.To.Add(new MailboxAddress(receiver, receiver));
+      message.Subject = subject;
+
+      message.Body = new TextPart("plain")
+      {
+        Text = messagebody
+      };
+
+      using (var client = new SmtpClient())
+      {
+        // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+        client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+        await client.ConnectAsync("mail.jansenbyods.com", 25, false);
+
+        // Note: only needed if the SMTP server requires authentication
+        await client.AuthenticateAsync("info@jansenbyods.com", "Catharina2018*");
+
+        await client.SendAsync(message);
+        await client.DisconnectAsync(true);
+      }
+    }
+
+    
+
+  
   }
+
 }

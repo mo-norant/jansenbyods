@@ -12,12 +12,8 @@ const routes: Routes = [
         'canActivate': [AuthGuard],
         'children': [
             {
-                'path': 'blank',
-                'loadChildren': '.\/pages\/default\/blank\/blank.module#BlankModule',
-            },
-            {
                 'path': 'index',
-                'loadChildren': '.\/pages\/default\/dashboard\/dashboard.module#DashboardModule',
+                'loadChildren': '.\/pages\/default\/blank\/blank.module#BlankModule',
             },
             {
                 'path': 'oogstkaart',
