@@ -35,7 +35,8 @@ export class ShopComponent implements OnInit {
      });
 
     this.root = Utils.getRoot().replace("/api", "");
-  }
+    window.scroll(0, 0);
+    }
 
   mapview(toggle: boolean) {
     this.isListview = toggle;

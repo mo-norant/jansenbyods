@@ -121,3 +121,17 @@
       transform: rotate(360deg);
     }
   }
+
+  .container {
+    position: relative;
+}
+
+.text-block {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color:#00ccff;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+

@@ -121,3 +121,8 @@
       transform: rotate(360deg);
     }
   }
+
+  img.resize {
+    width:auto;
+    height: 300px;
+}

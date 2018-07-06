@@ -16,11 +16,14 @@
 
     <div class="row mb-5">
 
-      <div *ngIf="item" class="col-md-5 mb-5 mb-md-0">
+      <div class="col-md-5 mb-5 mb-md-0">
         <div>
-       
-         <img class="img-fluid"  [src]="root + '/uploads/images/' + item.avatar.uri" [style.width.px]="width" [style.height.px]="height">
-
+            <div class="container">
+                <img class="img-fluid" [src]="root + '/uploads/images/' + item.avatar.uri">
+                <div  *ngIf="item.sold" class="text-block">
+                  <h4>Verkocht</h4>
+                </div>
+              </div>
         </div>
         <br>
 
@@ -46,13 +49,22 @@
           <span *ngIf="item.vraagPrijsTotaal !== 0 " class="price font-primary text-4">
             <strong class="text-color-dark">€ {{item?.vraagPrijsTotaal}} </strong>
           </span>
-          <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1">
-            <strong class="text-color-default">€ {{item?.vraagPrijsPerEenheid}} / stuk</strong>
-          </span>
+
+          <div *ngIf="!item.sold"> 
+
+            <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1">
+              <strong class="text-color-default">€ {{item?.vraagPrijsPerEenheid}} / stuk</strong>
+            </span>
+            <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4">
+              <strong class="text-color-dark">Prijs overeen te komen </strong>
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="item.sold">
           <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4">
-            <strong class="text-color-dark">Prijs overeen te komen </strong>
+            <strong class="text-color-dark">Dit product werd verkocht. </strong>
           </span>
-          
         </div>
         <p class="mt-4">
 
@@ -80,10 +92,12 @@
 
 
         </ul>
-        <hr class="my-4">
-        <form class="shop-cart d-flex align-items-center" method="post" enctype="multipart/form-data">
-          <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
-        </form>
+        <div *ngIf="!item.sold">
+          <hr class="my-4">
+          <form class="shop-cart d-flex align-items-center">
+            <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
+          </form>
+        </div>
         <hr class="my-4">
         <div *ngIf="item?.files !== undefined && item?.files.length > 0">
           <h5>Nuttige bestanden</h5>

@@ -57,7 +57,7 @@
               <div class="image-frame image-frame-style-1 image-frame-effect-2 mb-3">
                 <span class="image-frame-wrapper image-frame-wrapper-overlay-bottom image-frame-wrapper-overlay-light image-frame-wrapper-align-end">
                   <a [routerLink]=" item.oogstkaartItemID">
-                    <img [src]="root + '/uploads/images/' + item.avatar?.uri" class="img-fluid" alt="">
+                    <img [src]="root + '/uploads/images/' + item.avatar?.uri" class="img-fluid resize" alt="">
                   </a>
                   <span class="image-frame-action">
                     <a [routerLink]=" item.oogstkaartItemID" class="btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-fs-2">Bekijk product</a>
@@ -65,13 +65,16 @@
                 </span>
               </div>
               <div class="product-info d-flex flex-column flex-lg-row justify-content-between">
-                <div class="product-info-title">
+                <div *ngIf="!item.sold" class="product-info-title">
                   <h3 class="text-color-default text-2 line-height-1 mb-1"><a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a></h3>
                   <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4"><strong> Prijs overeen te komen</strong></span>
                   <span *ngIf="item.vraagPrijsTotaal !== 0 " class="price font-primary text-4"><strong class="text-color-dark">€ {{item.vraagPrijsTotaal}} </strong></span>
                   <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1"><strong class="text-color-default">€ {{item.vraagPrijsPerEenheid}} / stuk</strong></span>
                 </div>
-
+                <div *ngIf="item.sold" class="product-info-title">
+                  <h3 class="text-color-default text-2 line-height-1 mb-1"><a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a></h3>
+                  <span class="price font-primary text-4 red"><strong> Product verkocht</strong></span>
+                </div>
               </div>
             </div>
           </div>
