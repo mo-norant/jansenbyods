@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
 
 
         this.auth.register(this.user).subscribe(data => {
-            this.showSuccess('Uw account werd aangemaakt');
+            this.showSuccess('Uw account werd aangemaakt. Activeer je account via uw email.');
             this.router.navigate(['login']);
         }, err => {
             this.showError("Fout")
