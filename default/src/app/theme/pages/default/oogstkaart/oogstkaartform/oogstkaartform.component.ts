@@ -4,7 +4,7 @@ import {
     LocationOogstKaartItem,
     Specificatie
 } from "./../../../../../auth/_models/models";
-import { Component, OnInit, Inject,  } from "@angular/core";
+import { Component, OnInit, Inject, } from "@angular/core";
 import { ScriptLoaderService } from "../../../../../_services/script-loader.service";
 import { DOCUMENT } from "@angular/platform-browser";
 import { Router } from "@angular/router";
@@ -29,7 +29,7 @@ export class OogstkaartformComponent implements OnInit {
     uploadloading: boolean;
     selectedlocation: LocationOogstKaartItem;
     returnedid: number;
-    zoom : number = 7;
+    zoom: number = 7;
     photouploaded: boolean = false;
 
     prijsovereentekomen: boolean = false;
@@ -40,10 +40,10 @@ export class OogstkaartformComponent implements OnInit {
     };
 
     userSettings = {
-        inputString : "adres"
+        inputString: "adres"
     }
-	autoCompleteCallback1(selectedData:any) {
-		if(selectedData.response){
+    autoCompleteCallback1(selectedData: any) {
+        if (selectedData.response) {
             if (this.selectedlocation == null) {
                 this.selectedlocation = new LocationOogstKaartItem();
             }
@@ -51,7 +51,7 @@ export class OogstkaartformComponent implements OnInit {
             this.selectedlocation.longtitude = selectedData.data.geometry.location.lng;
 
         }
-	}
+    }
     constructor(
         private _script: ScriptLoaderService,
         @Inject(DOCUMENT) private document: Document,
@@ -87,31 +87,24 @@ export class OogstkaartformComponent implements OnInit {
             datumBeschikbaar: new FormControl("", Validators.required),
         });
 
-        
-        
+
+
 
 
     }
 
     next() {
 
-        let p1 = Number(this.firstform.value.vraagPrijsTotaal);
-        let p2 = Number(this.firstform.value.vraagPrijsPerEenheid);
 
-      /*  if(this.firstform.value.prijsovereentekomen && p1 === 0 || p2 ===0){
 
-            alert("U hebt gekozen voor een vaste prijs. Voer die in.")
-                
-         return
-            
-        }*/
-        
-        if(this.wizardcounter == 0 ){
+
+
+        if (this.wizardcounter == 0) {
             this.wizardcounter++;
         }
-        else if (this.wizardcounter + 1  == 2) {
-            
-            if(this.selectedlocation !== undefined){
+        else if (this.wizardcounter + 1 == 2) {
+
+            if (this.selectedlocation !== undefined) {
                 this.dialogservice.confirm({
                     message: "Bent u niets vergeten?",
                     accept: () => {
@@ -120,35 +113,49 @@ export class OogstkaartformComponent implements OnInit {
                     }
                 });
             }
-            else{
+            else {
                 alert("Voeg een locatie toe aub.")
                 return
             }
-            
+
         }
-      
+
 
         window.scrollTo(0, 0);
 
     }
 
-    toUpload(){
+    toUpload() {
         this.wizardcounter = 2;
-            if(this.photouploaded){
-                this.dialogservice.confirm({
-                    message: "Wilt uw product bekijken op de website?",
-                    accept: () => {
-                        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.returnedid;
+        if (this.photouploaded) {
 
-                    },
-                    reject: () => {
-                        this.router.navigate(['oogstkaart']);
 
-                    }
-                });
+            this.dialogservice.confirm({
+                message: "Hebt u al foto's en bestanden geüpload?",
+                accept: () => {
+                    setTimeout(() => {
+                        this.oogstkaartservice.NotifyAdmin(this.returnedid).subscribe();
+                        this.secondquestion();
+                    }, 100);
+                },
+            });
+        }
+
+
+     
+    }
+
+    secondquestion(){
+        this.dialogservice.confirm({
+            message: "Wilt uw product bekijken op de website?",
+            key: "second",
+            accept: () => {
+                window.location.href = "http://jansenbyods.com/oogstkaart/" + this.returnedid;
+            },
+            reject: () => {
+                this.router.navigate(['oogstkaart']);
             }
-            
-        
+        });
     }
 
     setLocation($event) {
@@ -158,7 +165,7 @@ export class OogstkaartformComponent implements OnInit {
 
         this.selectedlocation.latitude = $event.coords.lat;
         this.selectedlocation.longtitude = $event.coords.lng;
-        
+
     }
 
     addSpecificatie() {
@@ -215,14 +222,13 @@ export class OogstkaartformComponent implements OnInit {
     postItem() {
         if (!this.uploadloading) {
             this.uploadloading = true;
-            if(this.firstform.value.prijsovereentekomen){
+            if (this.firstform.value.prijsovereentekomen) {
                 this.firstform.value.vraagPrijsPerEenheid = 0;
                 this.firstform.value.vraagPrijsTotaal = 0;
 
-            }else{
+            } else {
                 this.firstform.value.vraagPrijsTotaal = + this.firstform.value.vraagPrijsTotaal;
                 this.firstform.value.vraagPrijsPerEenheid = + this.firstform.value.vraagPrijsPerEenheid;
-
             }
             this.firstform.value.hoeveelheid = + this.firstform.value.hoeveelheid;
             this.item = this.firstform.value;

@@ -33,23 +33,20 @@
         </div>
         <!--begin::Form-->
         <form *ngIf="item" class="m-form m-form--fit m-form--label-align-right m-form--group-seperator">
-          <div class="m-portlet__body">
             <div class="form-group m-form__group row">
-              <label class="col-lg-2 col-form-label">
+              <label class="Constructieprofiel">
                 Artikelnaam:
               </label>
-              <div class="col-lg-6">
+              <div class="col-lg-4">
                 <input  (ngModelChange)="itemupdatet()" [(ngModel)]="item.artikelnaam" name="artikelnaam" class="form-control m-input">
 
               </div>
-            </div>
           </div>
-          <div class="m-portlet__body">
             <div class="form-group m-form__group row">
-              <label class="col-xl-3 col-lg-3 col-form-label">
+              <label class="Constructieprofiel">
                 Categorie:
               </label>
-              <div class="col-xl-9 col-lg-9">
+              <div class="col-lg-4">
                 <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.category" name="category" class="form-control m-input">
                   <option value="jansenprofiel">
                     Jansenprofiel
@@ -73,13 +70,11 @@
                 </select>
               </div>
             </div>
-          </div>
-          <div class="m-portlet__body">
             <div class="form-group m-form__group row">
-              <label class="col-xl-3 col-lg-3 col-form-label">
+              <label class="Constructieprofiel">
                 Serie:
               </label>
-              <div class="col-xl-9 col-lg-9">
+              <div class="col-lg-4">
                 <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.jansenserie" name="serie" class="form-control m-input">
                   <option value="ART15">
                     ART-15
@@ -108,8 +103,6 @@
                 </select>
               </div>
             </div>
-          </div>
-          <div class="m-portlet__body">
             <div class="form-group m-form__group">
               <label>
                 Prijs per eenheid
@@ -120,7 +113,7 @@
                     €
                   </span>
                 </div>
-                <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsPerEenheid" name="vraagprijspereenheid" type="text" class="form-control m-input" placeholder="prijs">
+                <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsPerEenheid" name="vraagprijspereenheid" type="text" class="form-control m-input col-lg-4" placeholder="prijs">
               </div>
             </div>
             <div class="form-group m-form__group">
@@ -133,26 +126,22 @@
                     €
                   </span>
                 </div>
-                <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsTotaal" name="vraagprijstotaal" type="text" class="form-control m-input" placeholder="prijs">
+                <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsTotaal" name="vraagprijstotaal" type="text" class="form-control m-input col-lg-4" placeholder="prijs">
               </div>
             </div>
-          </div>
-          <div class="m-portlet__body">
             <div class="form-group m-form__group">
               <label>
                 Hoeveelheid
               </label>
               <div class="input-group">
-                <input (ngModelChange)="itemupdatet()" type="text" [(ngModel)]="item.hoeveelheid" name="hoeveelheid" class="form-control m-input" placeholder="">
+                <input (ngModelChange)="itemupdatet()" type="text" [(ngModel)]="item.hoeveelheid" name="hoeveelheid" class="form-control m-input col-lg-4" placeholder="">
               </div>
             </div>
-          </div>
-          <div class="m-portlet__body">
             <div class="form-group m-form__group row">
-              <label class="col-xl-3 col-lg-3 col-form-label">
+              <label class="  col-form-label">
                 Concept:
               </label>
-              <div class="col-xl-9 col-lg-9">
+              <div class="col-lg-4">
                 <select (ngModelChange)="itemupdatet()" [(ngModel)]="item.concept" name="concept" class="form-control m-input">
                   <option value="Te koop">Te koop
                   </option>
@@ -162,10 +151,13 @@
                 </select>
               </div>
             </div>
-            <div class="form-group m-form__group row">
-              <h3>Dit product is <div *ngIf="!item.sold">niet</div> verkocht</h3>
+            <div class="row">
+              <div class="col m-5">
+                  <h3>Verkoopstatus: Dit product is <span *ngIf="!item.sold">niet</span> verkocht</h3>
+
+
+              </div>
             </div>
-          </div>
           <div class="m-portlet__foot m-portlet__no-border m-portlet__foot--fit">
             <div class="m-form__actions m-form__actions--solid">
               <div class="row">

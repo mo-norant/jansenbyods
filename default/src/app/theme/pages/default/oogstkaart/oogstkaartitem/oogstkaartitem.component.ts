@@ -107,8 +107,7 @@ export class OogstkaartitemComponent implements OnInit {
     }
 
     goToProduct(){
-        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
-
+        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID ;
     }
 
 

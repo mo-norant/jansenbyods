@@ -1,5 +1,5 @@
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Utils } from '../auth/_helpers/Utils';
 import { OogstKaartItem, Request } from '../auth/_models/models';
@@ -29,7 +29,7 @@ export class OogstkaartService {
 
         console.log(file)
         let formData: FormData = new FormData();
-        formData.append('uploadFile', file);
+        formData.append(file.name, file);
         return this.http.post(Utils.getRoot() + "Oogstkaart/oogstkaartavatar/" + id, formData);
     }
 
@@ -37,7 +37,7 @@ export class OogstkaartService {
         console.log(files);
         let formData: FormData = new FormData();
         files.forEach(file => {
-            formData.append('file', file);
+            formData.append(file.name, file);
         });
         return this.http.post(Utils.getRoot() + "Oogstkaart/gallery/" + id, formData);
     }
@@ -46,9 +46,13 @@ export class OogstkaartService {
         console.log(files);
         let formData: FormData = new FormData();
         files.forEach(file => {
-            formData.append('fileUpload', file);
+            formData.append(file.name, file);
         });
         return this.http.post(Utils.getRoot() + "Oogstkaart/files/" + id, formData);
+    }
+
+    public NotifyAdmin(id: number){
+        return this.http.post(Utils.getRoot() + "Oogstkaart/notify/" + id, null);
     }
 
     /**
@@ -56,6 +60,22 @@ export class OogstkaartService {
     */
     public DeleteItem(id: number) {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + 'Oogstkaart/delete/' + id, {});
+    }
+
+    public DeleteRange(ids: number[]) {
+
+        let url = ""
+
+        for (let index = 0; index < ids.length; index++) {
+        
+                let t = "&ids=" + ids[index]
+                url+= t 
+            
+            
+        }
+
+        
+        return this.http.post<OogstKaartItem[]>(Utils.getRoot() + 'Oogstkaart/delete/range?'+url, null);
     }
 
     public ProductSold(id: number) {
