@@ -53,53 +53,11 @@ namespace AngularSPAWebAPI.Controllers
             return Ok(tempuser);
         }
 
-        [HttpGet("hascompany")]
-        public async Task<IActionResult> HasCompany()
-    {
-
-      var user = await  _usermanager.GetUserAsync(User);
-
-      var tempuser = await _context.Users.Where(i => i.Id == user.Id).Include(i => i.Company).SingleAsync();
-
-      if(tempuser.Company != null)
+      [HttpGet("isactive")]
+      public async Task<IActionResult> IsActive()
       {
-        return Ok(true);
+           return Ok();
       }
-
-      else
-      {
-        return Ok(false);
-      }
-
-      
-    }
-
-        [HttpPost("registercompany")]
-        public async Task<IActionResult> PostCompany([FromBody] Company company )
-        {
-            var user = await _usermanager.GetUserAsync(User);
-
-            if(user == null)
-            {
-                return NotFound();
-            }
-
-            user.Company = company;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-
-            return Ok();
-
-        }
-
 
       [HttpPost("signout")]
       public async Task<IActionResult> SignOut()

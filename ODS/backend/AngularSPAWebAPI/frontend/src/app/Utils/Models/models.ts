@@ -62,6 +62,7 @@
       name: string;
       omschrijving: string;
       uri: string;
+      extension: string;
     }
 
     export class Afbeelding {
@@ -70,6 +71,8 @@
         create: Date;
         name: string;
         omschrijving: string;
+        extension: string;
+
     }
 
     export class Specificatie {

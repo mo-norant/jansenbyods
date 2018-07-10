@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AngularSPAWebAPI.Models.DatabaseModels.Users;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace AngularSPAWebAPI.Controllers
 {
@@ -31,18 +32,20 @@ namespace AngularSPAWebAPI.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
-
+    private readonly IEmailService _emailService;
         public IdentityController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<IdentityController> logger, ApplicationDbContext context)
+            ILogger<IdentityController> logger, ApplicationDbContext context,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
-            this._context = context;
+            _context = context;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -69,6 +72,9 @@ namespace AngularSPAWebAPI.Controllers
         public async Task<IActionResult> Create([FromBody]CreateViewModel model)
         {
 
+      if (ModelState.IsValid)
+      {
+
             var user = new ApplicationUser
             {
                 AccessFailedCount = 0,
@@ -81,8 +87,7 @@ namespace AngularSPAWebAPI.Controllers
                 UserName = model.email,
                 CreateDate = DateTime.Now,
                 Name = model.name,
-              Company = model.Company
-                
+                Company = model.Company
                 
             };
 
@@ -97,21 +102,61 @@ namespace AngularSPAWebAPI.Controllers
             {
                 await addToRole(model.email, "user");
                 await addClaims(model.email);
-                return new JsonResult(user.Id);
+
+          string confirmationToken = _userManager.
+               GenerateEmailConfirmationTokenAsync(user).Result;
+
+          string confirmationLink = Url.Action("ConfirmEmail",
+            "Account", new
+            {
+              userid = user.Id,
+              token = confirmationToken
+            },
+             protocol: HttpContext.Request.Scheme);
+
+
+          var message = new EmailMessage();
+          message.FromAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = "info@jansenbyods.com" });
+          message.ToAddresses.Add(new EmailAddress{ Name = model.name, Address = model.email });
+
+          message.Subject = "Bevestig uw JansenByODSaccount.";
+          message.Content = string.Format("<a href='{0}'>Gelieve deze link te bevestigen om uw account te activeren.</a>", confirmationLink );
+
+          await _emailService.Send(message);
+          return Ok();
             }
-
-            return BadRequest(result);
-
             
-        }
-       
+            return BadRequest(result);
+      }
+      return BadRequest();
 
-        /// <summary>
-        /// Deletes a user.
-        /// </summary>
-        /// <returns>IdentityResult</returns>
-        // POST: api/identity/Delete
-        [HttpPost("Delete")]
+    }
+
+    [HttpPost("confirmmail")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string code)
+    {
+      if (userId == null || code == null)
+        return BadRequest();
+
+      var user = await _userManager.FindByIdAsync(userId);
+      if (user == null)
+        throw new ApplicationException($"Unable to load user with ID '{userId}'.");
+
+      var result = await _userManager.ConfirmEmailAsync(user, code);
+      if (result.Succeeded)
+      {
+        return Ok();
+      }
+
+      return BadRequest();
+    }
+
+    /// <summary>
+    /// Deletes a user.
+    /// </summary>
+    /// <returns>IdentityResult</returns>
+    // POST: api/identity/Delete
+    [HttpPost("Delete")]
         public async Task<IActionResult> Delete([FromBody]string username)
         {
             var user = await _userManager.FindByNameAsync(username);

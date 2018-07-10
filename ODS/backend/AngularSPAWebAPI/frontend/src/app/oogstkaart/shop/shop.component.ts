@@ -14,10 +14,18 @@ declare var MarkerClusterer: any;
   styleUrls: ["./shop.component.css"]
 })
 export class ShopComponent implements OnInit {
+  
+  root: string;
+
   items: OogstKaartItem[];
   filtereditems: OogstKaartItem[];
-  root: string;
+
   categories = [];
+  catsortmodel = "alles";
+
+  series = [];
+  seriesortmodel = "alles";
+
   isListview: boolean;
   sorting = 'popularity';
 
@@ -30,6 +38,7 @@ export class ShopComponent implements OnInit {
   ngOnInit() {
     this.service.getOogstkaartItems().subscribe(data => {
       this.items = _.uniqBy(data, "oogstkaartItemID");
+      this.filtereditems = this.items;
       this.getcategories(this.items);
       this.setMarkers(this.items);
      });
@@ -45,10 +54,11 @@ export class ShopComponent implements OnInit {
   getcategories(items: OogstKaartItem[]) {
     items.forEach(item => {
       if (!this.categories.includes(item.category)) {
-        this.categories.push({category : item.category , active : true});
+        this.categories.push(item.category);
       }
     });
   }
+
 
   sort($event){
     if(this.items.length > 0){
@@ -80,6 +90,21 @@ export class ShopComponent implements OnInit {
 
   }
 
+  sortCategory($event){
+      if(this.catsortmodel === "alles"){
+        this.filtereditems = this.items;
+        this.setMarkers(this.items);
+
+      }
+      else{
+        this.filtereditems = this.items.filter(i => i.category === this.catsortmodel);
+        this.setMarkers(this.filtereditems);
+      }
+
+  }
+
+
+
 
   setMarkers(oogstkaartmarkers : OogstKaartItem[]){
     var mapProp = {
@@ -97,7 +122,8 @@ export class ShopComponent implements OnInit {
           element.location.latitude,
           element.location.longtitude
         ),
-        animation:google.maps.Animation.DROP
+        animation:google.maps.Animation.DROP,
+        icon: ""
 
       },
     );
@@ -117,23 +143,8 @@ export class ShopComponent implements OnInit {
 
   }
 
-  filter(item){
+  fillCategories(){
 
-    this.filtereditems = [];
-    this.categories.forEach(element => {
-      if(element.active){
-        let temp = this.items.filter(i => i.category == element.category);
-
-        temp.forEach(e => {
-          this.filtereditems.push(e);
-        });
-
-        this.setMarkers(this.filtereditems);
-
-      }
-    });
-
-    console.log(this.filtereditems)
   }
 
   private getTime(date?: Date) {

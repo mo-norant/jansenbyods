@@ -8,6 +8,7 @@ using AngularSPAWebAPI.Models;
 using AngularSPAWebAPI.Models.DatabaseModels.Communication;
 using AngularSPAWebAPI.Models.DatabaseModels.General;
 using AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart;
+using AngularSPAWebAPI.Services;
 using IdentityServer4.AccessTokenValidation;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
@@ -34,24 +35,24 @@ namespace AngularSPAWebAPI.Controllers
     private readonly RoleManager<IdentityRole> _rolemanager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _usermanager;
-    public IConfiguration Configuration { get; }
-
+    private readonly IEmailService _emailservice;
     public OogstkaartController(
       UserManager<ApplicationUser> usermanager,
       RoleManager<IdentityRole> rolemanager,
       SignInManager<ApplicationUser> signInManager,
       IHostingEnvironment appEnvironment,
       ILogger<IdentityController> logger,
-      ApplicationDbContext context,
-      IConfiguration configuration)
+      ApplicationDbContext context, 
+      IEmailService emailservice
+      )
     {
-      this._usermanager = usermanager;
-      this._rolemanager = rolemanager;
+      _usermanager = usermanager;
+      _rolemanager = rolemanager;
       _signInManager = signInManager;
       _env = appEnvironment;
       _logger = logger;
-      this._context = context;
-      Configuration = configuration;
+      _context = context;
+      _emailservice = emailservice;
     }
 
 
@@ -190,7 +191,8 @@ namespace AngularSPAWebAPI.Controllers
                 {
                   Create = DateTime.Now,
                   URI = fileName,
-                  Name = file.Name
+                  Name = file.Name,
+                  Extension = Path.GetExtension(fileName)
                 };
               }
             }
@@ -238,10 +240,9 @@ namespace AngularSPAWebAPI.Controllers
                 {
                   Create = DateTime.Now,
                   URI = fileName,
-                  Name = file.Name
+                  Name = file.Name,
+                  Extension = Path.GetExtension(fileName)
                 };
-
-
                 item.Gallery.Add(afbeelding);
               }
             }
@@ -288,7 +289,8 @@ namespace AngularSPAWebAPI.Controllers
                 {
                   Create = DateTime.Now,
                   URI = fileName,
-                  Name = file.Name
+                  Name = file.Name,
+                  Extension = Path.GetExtension(fileName)
                 };
 
 
@@ -304,6 +306,52 @@ namespace AngularSPAWebAPI.Controllers
       return BadRequest();
     }
 
+    [HttpPost("notify/{id}")]
+    public async Task<IActionResult> Notify([FromRoute] int id)
+    {
+
+      if (!ModelState.IsValid) {
+        return BadRequest();
+      }
+      
+      var user = await _usermanager.GetUserAsync(User);
+      if (user != null)
+      {
+        var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => i.UserID == user.Id)
+          .Include(i => i.Files).Include(i => i.Gallery).SingleOrDefaultAsync();
+
+        if (item == null)
+        {
+          BadRequest();
+
+        }
+
+        //Stuur bevestiging naar admin dat er een nieuw product is.
+        EmailMessage mail = new EmailMessage();
+        mail.FromAddresses.Add(new EmailAddress { Address = user.Email });
+        mail.Subject = string.Format("Er is een nieuw product aangemaakt op de oogstkaart: {0} ", item.Artikelnaam);
+        mail.ToAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+        mail.Content = string.Format("Er is een nieuw product ({0}) aangemaakt op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
+        await _emailservice.Send(mail);
+
+        //Stuur bevestiging naar klant dat product werd gepubliceerd.
+
+        EmailMessage responseack = new EmailMessage();
+        responseack.FromAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+        responseack.Subject = string.Format("Uw product ' {0} ' werd succesvol op de oogstkaart gepubliceerd. ", item.Artikelnaam);
+        responseack.ToAddresses.Add(new EmailAddress { Address = user.Email });
+        responseack.Content = string.Format("U hebt succesvol een product ('{0}') op de oogstkaart gepubliceerd. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk uw product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
+        await _emailservice.Send(responseack);
+
+
+        return Ok();
+
+      }
+
+      
+      return BadRequest();
+      
+    }
 
     [HttpPost("delete/{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
@@ -326,6 +374,42 @@ namespace AngularSPAWebAPI.Controllers
           _context.OogstkaartItems.Remove(item);
           await _context.SaveChangesAsync();
           return Ok();
+        }
+      }
+
+      return BadRequest();
+    }
+
+    [HttpPost("delete/range")]
+    public async Task<IActionResult> DeleteRange([FromQuery] int[] ids)
+    {
+      var user = await _usermanager.GetUserAsync(User);
+      if (user != null)
+      {
+        List<OogstkaartItem> items = new List<OogstkaartItem>();
+
+        foreach (var id in ids)
+        {
+          items.Add( await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => user.Id == i.UserID)
+          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync());
+        }
+
+        foreach (var oi in items)
+        {
+          _context.Files.RemoveRange(oi.Files);
+          _context.Afbeeldingen.Remove(oi.Avatar);
+          _context.Specificaties.RemoveRange(oi.Specificaties);
+          _context.Afbeeldingen.RemoveRange(oi.Gallery);
+          _context.Requests.RemoveRange(oi.Requests);
+          _context.Locations.Remove(oi.Location);
+          _context.OogstkaartItems.Remove(oi);
+          await _context.SaveChangesAsync();
+
+          var allitems = await _context.OogstkaartItems.Where(c => c.UserID == user.Id).Include(c => c.Specificaties)
+        .Include(i => i.Location).Include(i => i.Avatar).ToListAsync();
+          var filtereditems = allitems.Where(i => i.Location != null).Where(i => i.Avatar != null).ToList();
+
+          return Ok(filtereditems);
         }
       }
 
@@ -403,8 +487,6 @@ namespace AngularSPAWebAPI.Controllers
         return NotFound("User not found");
       }
 
-
-      
       var r = from requests in _context.Requests
                    join oogstkaartitems in _context.OogstkaartItems on requests.OogstkaartID equals oogstkaartitems.OogstkaartItemID
                    join users in _context.Users on oogstkaartitems.UserID equals users.Id
@@ -476,7 +558,19 @@ namespace AngularSPAWebAPI.Controllers
     }
 
 
+    [AllowAnonymous]
+    [HttpPost("mail")]
+    public async Task<IActionResult> TestMail()
+    {
 
+      EmailMessage mail = new EmailMessage();
+      mail.FromAddresses.Add(new EmailAddress { Address = "mo.bouzim@live.be" });
+      mail.Subject = string.Format("Er is een nieuw product aangemaakt op de oogstkaart: {0} ", "test");
+      mail.ToAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+      mail.Content = string.Format("Er is een nieuw product (é) aangemaakt op de oogstkaart. Bekijk product op: é");
+      await _emailservice.Send(mail);
+      return Ok();
+    }
 
     [AllowAnonymous]
     [HttpPost("request/{id}")]
@@ -494,7 +588,13 @@ namespace AngularSPAWebAPI.Controllers
       request.OogstkaartID = item.OogstkaartItemID;
       item.Requests.Add(request);
       await _context.SaveChangesAsync();
-      await SendMessage(request.Company.Email, "info@jansenbyods.com", @"Nieuwe aanvraag voor product: """ + item.Artikelnaam + @""".", @"Nieuwe aanvraag voor product: " + item.Artikelnaam);
+
+      EmailMessage mail = new EmailMessage();
+      mail.FromAddresses.Add(new EmailAddress { Address = request.Company.Email });
+      mail.Subject = string.Format("Er is een nieuwe aanvraag voor {0} ", item.Artikelnaam);
+      mail.ToAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+      mail.Content = string.Format("Er is een nieuwe aanvraag ({0}) aangemaakt voor de oogstkaart." + item.OogstkaartItemID.ToString(), item.Artikelnaam);
+      await _emailservice.Send(mail);
       return Ok();
 
     }
@@ -561,36 +661,10 @@ namespace AngularSPAWebAPI.Controllers
     }
 
  
-    private async Task SendMessage(string sender, string receiver, string subject, string messagebody)
-    {
-      var message = new MimeMessage();
-      message.From.Add(new MailboxAddress(sender, sender));
-      message.To.Add(new MailboxAddress(receiver, receiver));
-      message.Subject = subject;
-
-      message.Body = new TextPart("plain")
-      {
-        Text = messagebody
-      };
-
-      using (var client = new SmtpClient())
-      {
-        // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-        client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-        await client.ConnectAsync("mail.jansenbyods.com", 25, false);
-
-        // Note: only needed if the SMTP server requires authentication
-        await client.AuthenticateAsync("info@jansenbyods.com", "Catharina2018*");
-
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
-      }
-    }
-
     
 
-  
+
+
   }
 
 }

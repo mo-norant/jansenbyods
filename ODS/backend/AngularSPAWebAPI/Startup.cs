@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -50,7 +51,7 @@ namespace AngularSPAWebAPI
         }
       });
 
-      
+     
 
       services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -59,6 +60,7 @@ namespace AngularSPAWebAPI
             // Identity options.
             services.Configure<IdentityOptions>(options =>
             {
+              options.SignIn.RequireConfirmedEmail = false;
                 // Password settings.
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 6;
@@ -70,31 +72,21 @@ namespace AngularSPAWebAPI
               options.Lockout.MaxFailedAccessAttempts = 20;
             });
 
-            // Role based Authorization: policy based role checks.
             services.AddAuthorization(options =>
             {
-                // Policy for dashboard: only administrator role.
                 options.AddPolicy("Manage Accounts", policy => policy.RequireRole("administrator"));
-                // Policy for resources: user or administrator roles. 
                 options.AddPolicy("Access Resources", policy => policy.RequireRole("administrator", "user"));
             });
 
-            // Adds application services.
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            // Adds IdentityServer.
             services.AddIdentityServer()
-                // The AddDeveloperSigningCredential extension creates temporary key material for signing tokens.
-                // This might be useful to get started, but needs to be replaced by some persistent key material for production scenarios.
-                // See http://docs.identityserver.io/en/release/topics/crypto.html#refcrypto for more information.
                 .AddDeveloperSigningCredential()
                 .AddInMemoryPersistedGrants()
-                // To configure IdentityServer to use EntityFramework (EF) as the storage mechanism for configuration data (rather than using the in-memory implementations),
-                // see https://identityserver4.readthedocs.io/en/release/quickstarts/8_entity_framework.html
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddAspNetIdentity<ApplicationUser>(); // IdentityServer4.AspNetIdentity.
+                .AddAspNetIdentity<ApplicationUser>();
 
 
       if (currentEnvironment.IsProduction())
@@ -127,9 +119,13 @@ namespace AngularSPAWebAPI
 
       var cors = new DefaultCorsPolicyService(_loggerFactory.CreateLogger<DefaultCorsPolicyService>())
       {
-        AllowedOrigins = { "http://admin.jansenbyods.com", "http://jansenbyods.com", "http://localhost:4200", "http://localhost:4201"  }
+        AllowedOrigins = { "http://admin.jansenbyods.com", "http://jansenbyods.com", "http://localhost:4200", "http://localhost:4201" , "http://localhost:55646" }
       };
       services.AddSingleton<ICorsPolicyService>(cors);
+
+      services.AddSingleton<IFileProvider>(
+               new PhysicalFileProvider(
+                   Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
 
 
       services.AddCors(options =>
@@ -137,12 +133,12 @@ namespace AngularSPAWebAPI
         options.AddPolicy("MyCorsPolicy",
    builder => builder
       .SetIsOriginAllowedToAllowWildcardSubdomains()
-                          .WithOrigins("http://*.jansenbyods.com", "http://localhost:4200", "http://jansenbyods.com", "http://admin.jansenbyods.com", "http://localhost:4201")
+      .WithOrigins("http://*.jansenbyods.com", "http://localhost:4200", "http://jansenbyods.com", "http://admin.jansenbyods.com", "http://localhost:4201", "http://localhost:55646")
       .AllowAnyMethod()
       .AllowCredentials()
       .AllowAnyHeader()
       .Build()
-   );
+         );
       });
 
 
@@ -159,6 +155,8 @@ namespace AngularSPAWebAPI
 
         
       services.AddMvc();
+      services.AddSingleton<IEmailConfiguration>(new EmailConfiguration());
+      services.AddTransient<IEmailService, EmailService>();
 
 
 
