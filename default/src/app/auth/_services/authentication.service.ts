@@ -6,6 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Utils } from '../_helpers/Utils';
 import { JWTToken } from '../_helpers/Models';
 import { isUndefined } from 'util';
+import { ForgotPassword } from '../_models';
 
 @Injectable()
 export class AuthenticationService {
@@ -115,5 +116,13 @@ export class AuthenticationService {
 
     public register(user: CreateUser) {
         return this.http.post(Utils.getRoot() + 'identity/create', user);
+    }
+
+    public passwordrequest(mail: string) {
+        return this.http.post(Utils.getRoot() + 'identity/forgotpassword?email=' + mail, null);
+    }
+
+    public passwordVeranderen(passwordview: ForgotPassword, userid: string, code : string) {
+        return this.http.post(Utils.getRoot() + 'identity/ResetPassword?userid=' + userid + "&code=" + code, passwordview);
     }
 }

@@ -1,4 +1,5 @@
-<div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin" id="m_login">
+<div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin"
+ id="m_login">
 	<div class="m-grid__item m-grid__item--order-tablet-and-mobile-2 m-login__aside">
 		<div class="m-stack m-stack--hor m-stack--desktop">
 			<div class="m-stack__item m-stack__item--fluid">
@@ -8,70 +9,49 @@
 							<img src="../../../assets/logos/logo-simple.png">
 						</a>
 					</div>
-					
-					<div  class="m-login__signin">
+
+					<div class="m-login__signin">
 						<div class="m-login__head">
 							<h3 class="m-login__title">
 								Login
 							</h3>
-						
+
 						</div>
 						<form (ngSubmit)="f.form.valid && signin()" #f="ngForm" class="m-login__form m-form" action="">
-							<ng-template #alertSignin></ng-template>
-							<div class="form-group m-form__group">
-								<input class="form-control m-input" type="text" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="off">
-							</div>
-							<div class="form-group m-form__group">
-								<input class="form-control m-input m-login__form-input--last" type="password" placeholder="Wachtwoord" name="password" [(ngModel)]="model.password" #password="ngModel">
-							</div>
+							
+								<ng-template #alertSignin></ng-template>
+								<div class="form-group m-form__group">
+									<input class="form-control m-input" type="text" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel"
+									 autocomplete="off">
+								</div>
+								<div class="form-group m-form__group">
+									<input class="form-control m-input m-login__form-input--last" type="password" placeholder="Wachtwoord" name="password" [(ngModel)]="model.password"
+									 #password="ngModel">
+								</div>
 							<div class="row m-login__form-sub">
 								<div class="col m--align-left">
 									<label class="m-checkbox m-checkbox--focus">
-										<input type="checkbox" name="remember" [(ngModel)]="model.remember" #remember="ngModel">
-										Onthou mij
+										<input type="checkbox" name="remember" [(ngModel)]="model.remember" #remember="ngModel"> Onthou mij
 										<span></span>
 									</label>
 								</div>
-								<!--
+
 								<div class="col m--align-right">
-									<a href="javascript:;" id="m_login_forget_password" class="m-link">
-										Forget Password ?
+									<a routerLink='./forgotpassword' id="m_login_forget_password" class="m-link">
+										Wachtwoord vergeten
 									</a>
-								</div>-->
+								</div>
 							</div>
 							<div class="m-login__form-action">
-								<button [disabled]="loading" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
+								<button [disabled]="loading" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_signin_submit"
+								 class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
 									Login
 								</button>
 							</div>
 						</form>
 					</div>
-					<!--
-					<div class="m-login__forget-password">
-						<div class="m-login__head">
-							<h3 class="m-login__title">
-								Forgotten Password ?
-							</h3>
-							<div class="m-login__desc">
-								Enter your email to reset your password:
-							</div>
-						</div>
-						<form (ngSubmit)="f.form.valid && forgotPass()" #f="ngForm" class="m-login__form m-form" action="">
-							<ng-template #alertForgotPass></ng-template>
-							<div class="form-group m-form__group">
-								<input class="form-control m-input" type="text" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" id="m_email" autocomplete="off">
-							</div>
-							<div class="m-login__form-action">
-								<button [disabled]="loading" [ngClass]="{'m-loader m-loader--right m-loader--light': loading}" id="m_login_forget_password_submit" class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air">
-									Request
-								</button>
-								<button [disabled]="loading"  id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn--pill m-btn--custom">
-									Cancel
-								</button>
-							</div>
-						</form>
-					</div>
-				-->
+
+
 				</div>
 			</div>
 			<div class="m-stack__item m-stack__item--center">
@@ -87,7 +67,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content" style="background-image: url(./assets/app/media/img//bg/bg-4.jpg)">
+	<div class="m-grid__item m-grid__item--fluid m-grid m-grid--center m-grid--hor m-grid__item--order-tablet-and-mobile-1	m-login__content"
+	 style="background-image: url(./assets/app/media/img//bg/bg-4.jpg)">
 		<div class="m-grid__item m-grid__item--middle">
 			<h3 class="m-login__welcome">
 				Welkom bij ODS
@@ -95,7 +76,7 @@
 			<p class="m-login__msg">
 				U kan met een ODS-profiel uw oogstkaartproducten toevoegen en beheren.
 				<br>
-				
+
 			</p>
 		</div>
 	</div>

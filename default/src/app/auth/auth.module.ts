@@ -14,6 +14,10 @@ import { AuthenticationService } from './_services/authentication.service';
 import { UserService } from './_services/user.service';
 import { fakeBackendProvider } from './_helpers/index';
 import { RegisterComponent } from './register/register.component';
+import { RegistersuccesComponent } from './register/registersucces/registersucces.component';
+import { ConfirmmailComponent } from './register/confirmmail/confirmmail.component';
+import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+import { ResetpasswordsComponent } from './resetpasswords/resetpasswords.component';
 
 @NgModule({
     declarations: [
@@ -21,6 +25,10 @@ import { RegisterComponent } from './register/register.component';
         AlertComponent,
         LogoutComponent,
         RegisterComponent,
+        RegistersuccesComponent,
+        ConfirmmailComponent,
+        ForgotpasswordComponent,
+        ResetpasswordsComponent,
     ],
     imports: [
         CommonModule,

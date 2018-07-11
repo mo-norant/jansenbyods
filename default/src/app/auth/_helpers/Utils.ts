@@ -8,7 +8,6 @@ export class Utils {
     static getRoot(): any {
 
         if (this.inDevelopment) {
-
             return this.devlink
         }
 

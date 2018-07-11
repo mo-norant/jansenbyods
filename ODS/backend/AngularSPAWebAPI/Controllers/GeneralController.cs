@@ -49,15 +49,9 @@ namespace AngularSPAWebAPI.Controllers
                 Name = user.Name,
                 Email = user.Email
             };
-
             return Ok(tempuser);
         }
 
-      [HttpGet("isactive")]
-      public async Task<IActionResult> IsActive()
-      {
-           return Ok();
-      }
 
       [HttpPost("signout")]
       public async Task<IActionResult> SignOut()
@@ -66,8 +60,5 @@ namespace AngularSPAWebAPI.Controllers
         return Ok();
 
       }
-
-
-
     }
 }

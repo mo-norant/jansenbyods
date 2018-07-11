@@ -101,11 +101,7 @@ namespace AngularSPAWebAPI.Controllers
       return Ok();
 
     }
-
-
-
-
-
+    
     [HttpGet("oogstkaart")]
     public async Task<IActionResult> GetOogstkaarProducten()
     {
@@ -115,8 +111,6 @@ namespace AngularSPAWebAPI.Controllers
       return Ok(items);
 
     }
-
-
 
     [HttpGet("oogstkaart/{id}")]
     public async Task<IActionResult> GetOogstkaarProducten([FromRoute] int id)

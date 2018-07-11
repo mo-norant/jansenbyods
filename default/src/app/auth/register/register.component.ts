@@ -46,13 +46,14 @@ export class RegisterComponent implements OnInit {
             city: ["", Validators.required]
         });
 
-        this.registerform.getError
+        
     }
 
 
 
 
     addAccount() {
+        this.loading = true;
         this.user.name = this.registerform.value.name;
         this.user.email = this.registerform.value.email;
         this.user.password = this.registerform.value.password;
@@ -68,10 +69,13 @@ export class RegisterComponent implements OnInit {
 
 
         this.auth.register(this.user).subscribe(data => {
+            this.loading = false;
             this.showSuccess('Uw account werd aangemaakt. Activeer je account via uw email.');
-            this.router.navigate(['login']);
+            this.router.navigate(['/login/confirmmail'])
+          
         }, err => {
-            this.showError("Fout")
+            this.showError("Fout");
+            this.loading = false;
         }
 
         )
