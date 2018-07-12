@@ -15,8 +15,8 @@ export class AdminStatisticsService {
 
 
 
-    public GetRequestsFromPeriod(period : string){
-        return this.http.get<Request[]>(Utils.getRoot() + this.link + "/requestsfromperiod?period="+period);
+    public GetRequestsFromPeriod(period: string) {
+        return this.http.get<Request[]>(Utils.getRoot() + this.link + "/requestsfromperiod?period=" + period);
     }
 
 }

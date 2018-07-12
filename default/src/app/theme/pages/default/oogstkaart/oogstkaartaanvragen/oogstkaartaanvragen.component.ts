@@ -34,7 +34,7 @@ export class OogstkaartaanvragenComponent implements OnInit {
             res.forEach(i => {
                 i.create = new Date(i.create).toLocaleString()
             });
-           
+
             this.requests = res;
         })
     }

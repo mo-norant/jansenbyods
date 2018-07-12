@@ -151,6 +151,56 @@
                 </select>
               </div>
             </div>
+
+            <div class="m-form__section">
+              <div class="m-form__heading">
+                <h3 class="m-form__heading-title">
+                  Specificaties
+                </h3>
+              </div>
+              <div class="form-group m-form__group row">
+                <div class=" m-form__group-sub">
+                  <label class="form-control-label">
+                    <div class="m-demo__preview m-demo__preview--btn">
+                      <a (click)="addSpecificatie()" class="btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--pill">
+                        <i class="fa fa-plus-circle"></i>
+                      </a>
+                    </div>
+                  </label>
+                  <div *ngFor="let spec of item.specificaties; let i = index " class="form-group m-form__group row">
+                    <div class="col-1">
+                      <div class="m-demo__preview m-demo__preview--btn">
+                        <a (click)="removeItem(i)" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill">
+                          <i class="fa fa-minus-circle"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-3">
+                      <input type="text" [name]="spec.specificatieSleutel + '_' + i" [(ngModel)]="spec.specificatieSleutel" class="form-control m-input" 
+                         required>
+                      <span class="m-form__help">
+                        Specificatie-eenheid
+                      </span>
+                    </div>
+                    <div class="col-3">
+                      <input type="text" [name]="spec.specificatieValue + '_' + i" [(ngModel)]="spec.specificatieValue" class="form-control m-input" [value]="spec.specificatieValue"
+                         required>
+                      <span class="m-form__help">
+                        Waarde
+                      </span>
+                    </div>
+                    <div class="col-3">
+                      <input type="text" [name]="spec.specificatieOmschrijving + '_' + i" [(ngModel)]="spec.specificatieOmschrijving" class="form-control m-input">
+                      <span class="m-form__help">
+                        Omschrijving
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="m-separator m-separator--dashed m-separator--lg"></div>
             <div class="row">
               <div class="col m-5">
                   <h3>Verkoopstatus: Dit product is <span *ngIf="!item.sold">niet</span> verkocht</h3>

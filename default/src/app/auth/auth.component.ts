@@ -52,7 +52,7 @@ export class AuthComponent implements OnInit {
             'assets/vendors/base/vendors.bundle.js',
             'assets/demo/default/base/scripts.bundle.js'], true).then(() => {
                 Helpers.setLoading(false);
-             
+
             });
 
 

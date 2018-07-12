@@ -41,6 +41,7 @@ import { OogstkaartService } from '../../_services/oogstkaart.service';
     imports: [
         CommonModule,
         RouterModule,
+
     ],
     providers: [OogstkaartService]
 })

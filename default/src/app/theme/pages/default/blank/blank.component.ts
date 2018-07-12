@@ -10,8 +10,8 @@ import { StatisticsService } from '../../../../_services/statistics.service';
 export class BlankComponent implements OnInit {
 
 
-    mostpopularproduct : OogstKaartItem
-    unreadreq : number;
+    mostpopularproduct: OogstKaartItem
+    unreadreq: number;
     reviewaccepted: number;
 
     constructor(private statistics: StatisticsService) {

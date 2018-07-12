@@ -25,7 +25,7 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
         this.route.params.subscribe(data => {
             this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(res => {
                 this.request = res;
-                this.oogstkaartservice.getOogstkaartItem(this.request.oogstkaartID).subscribe(data =>{
+                this.oogstkaartservice.getOogstkaartItem(this.request.oogstkaartID).subscribe(data => {
                     this.item = data;
                 })
             });

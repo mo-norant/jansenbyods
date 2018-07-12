@@ -51,7 +51,7 @@ export class OogstkaartService {
         return this.http.post(Utils.getRoot() + "Oogstkaart/files/" + id, formData);
     }
 
-    public NotifyAdmin(id: number){
+    public NotifyAdmin(id: number) {
         return this.http.post(Utils.getRoot() + "Oogstkaart/notify/" + id, null);
     }
 
@@ -67,15 +67,15 @@ export class OogstkaartService {
         let url = ""
 
         for (let index = 0; index < ids.length; index++) {
-        
-                let t = "&ids=" + ids[index]
-                url+= t 
-            
-            
+
+            let t = "&ids=" + ids[index]
+            url += t
+
+
         }
 
-        
-        return this.http.post<OogstKaartItem[]>(Utils.getRoot() + 'Oogstkaart/delete/range?'+url, null);
+
+        return this.http.post<OogstKaartItem[]>(Utils.getRoot() + 'Oogstkaart/delete/range?' + url, null);
     }
 
     public ProductSold(id: number) {

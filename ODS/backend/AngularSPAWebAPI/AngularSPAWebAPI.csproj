@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="uploads\NewFolder\**" />
+    <Compile Remove="wwwroot\**" />
     <Content Remove="uploads\NewFolder\**" />
+    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="uploads\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="uploads\NewFolder\**" />
+    <None Remove="wwwroot\**" />
     <Compile Remove="Migrations\20180619093647_init.cs" />
   </ItemGroup>
 
@@ -24,9 +28,9 @@
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.0.0" />
     <PackageReference Include="MailKit" Version="2.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.2.0" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
@@ -41,8 +45,6 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="wwwroot\uploads\images\" />
-    <Folder Include="wwwroot\uploads\files\" />
   </ItemGroup>
 
   <ItemGroup>

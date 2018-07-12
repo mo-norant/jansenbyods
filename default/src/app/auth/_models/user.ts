@@ -5,7 +5,7 @@ export class User {
     fullName: string;
 }
 
-export class ForgotPassword{
+export class ForgotPassword {
     password: string;
-    password1:string;
+    password1: string;
 }

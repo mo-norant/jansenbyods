@@ -21,7 +21,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AdminRequestItemComponent } from './admin-request-item/admin-request-item.component';
 import { ToastrService } from 'ngx-toastr';
 import { AdminStatisticsService } from '../../../../_services/adminstatistics.service';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const routes: Routes = [
     {

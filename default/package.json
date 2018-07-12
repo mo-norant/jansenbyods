@@ -37,6 +37,7 @@
         "ng-recaptcha": "^3.0.0",
         "ng2-page-scroll": "^4.0.0-beta.12",
         "ng4-geoautocomplete": "^0.1.0",
+        "ngx-bootstrap": "^3.0.1",
         "ngx-toastr": "^8.7.3",
         "primeng": "^5.2.0",
         "rxjs": "^5.5.11",

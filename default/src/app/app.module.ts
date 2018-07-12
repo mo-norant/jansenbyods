@@ -13,12 +13,10 @@ import { ScriptLoaderService } from "./_services/script-loader.service";
 import { ThemeRoutingModule } from "./theme/theme-routing.module";
 import { AuthModule } from "./auth/auth.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { TokenInterceptorService } from "./_services/token-interceptor.service";
 import { AgmCoreModule } from "@agm/core";
 import { GeneralService } from './_services/general.service';
 import { AuthenticationService } from './auth/_services';
 import { ToastrModule } from 'ngx-toastr';
-
 @NgModule({
     declarations: [ThemeComponent, AppComponent],
     imports: [
@@ -34,10 +32,10 @@ import { ToastrModule } from 'ngx-toastr';
         AgmCoreModule.forRoot({
             apiKey: "AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0"
         }),
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+
     ],
     providers: [
-
         ScriptLoaderService,
         GeneralService,
         AuthenticationService,

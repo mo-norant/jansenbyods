@@ -142,10 +142,10 @@ export class OogstkaartformComponent implements OnInit {
         }
 
 
-     
+
     }
 
-    secondquestion(){
+    secondquestion() {
         this.dialogservice.confirm({
             message: "Wilt uw product bekijken op de website?",
             key: "second",

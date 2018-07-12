@@ -167,7 +167,7 @@ namespace AngularSPAWebAPI.Controllers
       }
     }
 
-
+    
     
     [HttpGet("requestsfromperiod")]
     public async Task<IActionResult> RequestsfromPeriod([FromQuery] string period)

@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
             city: ["", Validators.required]
         });
 
-        
+
     }
 
 
@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit {
             this.loading = false;
             this.showSuccess('Uw account werd aangemaakt. Activeer je account via uw email.');
             this.router.navigate(['/login/confirmmail'])
-          
+
         }, err => {
             this.showError("Fout");
             this.loading = false;

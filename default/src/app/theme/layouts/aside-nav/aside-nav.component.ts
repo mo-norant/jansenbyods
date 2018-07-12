@@ -23,7 +23,7 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
         console.log(this.role)
     }
     ngOnInit() {
-       
+
     }
     ngAfterViewInit() {
 

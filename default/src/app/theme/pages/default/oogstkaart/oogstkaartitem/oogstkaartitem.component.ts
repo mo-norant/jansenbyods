@@ -1,5 +1,5 @@
 import { MessageService } from "primeng/components/common/messageservice";
-import { OogstKaartItem } from "./../../../../../auth/_models/models";
+import { OogstKaartItem, Specificatie } from "./../../../../../auth/_models/models";
 import { OogstkaartService } from "./../../../../../_services/oogstkaart.service";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -31,7 +31,7 @@ export class OogstkaartitemComponent implements OnInit {
                     this.item.createDate = data.createDate;
                 },
                 err => {
-                          //    this.router.navigate(["oogstkaart"]);
+                    //    this.router.navigate(["oogstkaart"]);
                 }
             );
         });
@@ -77,7 +77,7 @@ export class OogstkaartitemComponent implements OnInit {
         this.updated = true;
     }
 
-    sold(){
+    sold() {
         this.dialogservice.confirm({
             message: "Verkoopstatus wijzigen?",
             accept: () => {
@@ -85,30 +85,46 @@ export class OogstkaartitemComponent implements OnInit {
                     .ProductSold(this.item.oogstkaartItemID)
                     .subscribe(res => {
                         this.item.sold = res
-                        if(this.item.sold){
+                        if (this.item.sold) {
                             this.msgs.push({
                                 severity: "success",
                                 summary: "Product",
                                 detail: "Product werd verkocht."
                             });
-                        }else{
+                        } else {
                             this.msgs.push({
                                 severity: "warning",
                                 summary: "Product",
                                 detail: "Product wordt terug verkocht."
                             });
                         }
-                       
+
                     });
             }
         });
 
-        
+
     }
 
-    goToProduct(){
-        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID ;
+    goToProduct() {
+        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
     }
 
+
+    addSpecificatie() {
+
+        let spec = new Specificatie();
+        this.item.specificaties.push(spec);
+
+        this.itemupdatet();
+    }
+
+    removeItem(index) {
+        if (index > -1) {
+            this.item.specificaties.splice(index, 1);
+            this.itemupdatet();
+
+        }
+    }
 
 }

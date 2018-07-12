@@ -429,12 +429,10 @@ namespace AngularSPAWebAPI.Controllers
 
 
         item.Artikelnaam = updatingitem.Artikelnaam;
-        item.Avatar = updatingitem.Avatar;
         item.Category = updatingitem.Category;
         item.Concept = updatingitem.Concept;
         item.CreateDate = updatingitem.CreateDate;
         item.DatumBeschikbaar = updatingitem.DatumBeschikbaar;
-        item.Gallery = updatingitem.Gallery;
         item.Hoeveelheid = updatingitem.Hoeveelheid;
         item.Jansenserie = updatingitem.Jansenserie;
 
@@ -446,33 +444,41 @@ namespace AngularSPAWebAPI.Controllers
         item.Location.Longtitude = updatingitem.Location.Longtitude;
 
 
-        if (updatingitem.Specificaties.Any())
-          foreach (var specificatie in updatingitem.Specificaties)
+        //bekijk alle specificaties dat wel in de lijst voorkomen en update die
+
+        foreach (var tempspec in updatingitem.Specificaties)
+        {
+          var spec = await _context.Specificaties.FirstOrDefaultAsync(i => i.SpecificatieID == tempspec.SpecificatieID);
+
+          if(spec == null)
           {
-            if (specificatie.SpecificatieID == 0 && specificatie.SpecificatieSleutel != null &&
-                specificatie.SpecificatieValue != null) item.Specificaties.Add(specificatie);
+            item.Specificaties.Add(tempspec);
 
-
-            foreach (var existingChild in item.Specificaties.ToList())
-              if (updatingitem.Specificaties.All(c => c.SpecificatieID != existingChild.SpecificatieID))
-                _context.Specificaties.Remove(existingChild);
-
-            var temp = await _context.Specificaties.Where(i => i.SpecificatieID == specificatie.SpecificatieID)
-              .FirstOrDefaultAsync();
-
-            if (temp != null)
-            {
-              temp.SpecificatieOmschrijving = specificatie.SpecificatieOmschrijving;
-              temp.SpecificatieSleutel = specificatie.SpecificatieSleutel;
-              temp.SpecificatieEenheid = specificatie.SpecificatieEenheid;
-            }
           }
-        else{
-          foreach (var specificatie in item.Specificaties)
-            _context.Specificaties.Remove(specificatie);
+          else
+          {
+            spec.SpecificatieSleutel = tempspec.SpecificatieSleutel;
+            spec.SpecificatieEenheid = tempspec.SpecificatieEenheid;
+            spec.SpecificatieValue = tempspec.SpecificatieValue;
+            spec.SpecificatieOmschrijving = tempspec.SpecificatieOmschrijving;
+          }
+
+          
+        }
+
+
+        //bekijk of er zaken verwijderd moeten worden die niet in de geüpdate lijst voorkomen
+        foreach (var spec in item.Specificaties)
+        {
+          var sp = updatingitem.Specificaties.FirstOrDefault(i => i.SpecificatieID == spec.SpecificatieID);
+          if(sp == null)
+          {
+            _context.Specificaties.Remove(spec);
+          }
         }
         _context.OogstkaartItems.Update(item);
         await _context.SaveChangesAsync();
+
         return Ok();
       }
 

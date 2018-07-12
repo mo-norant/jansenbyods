@@ -15,15 +15,15 @@ export class StatisticsService {
 
 
 
-    public GetMostViewedProduct(){
+    public GetMostViewedProduct() {
         return this.http.get<OogstKaartItem>(Utils.getRoot() + this.link + "/mostviewedproduct");
     }
 
-    public RequestinReview(){
+    public RequestinReview() {
         return this.http.get<number>(Utils.getRoot() + this.link + "/requestinreview");
     }
 
-    public requestaccepted(){
+    public requestaccepted() {
         return this.http.get<number>(Utils.getRoot() + this.link + "/reviewaccepted");
     }
 

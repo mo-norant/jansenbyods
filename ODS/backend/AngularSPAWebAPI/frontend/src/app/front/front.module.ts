@@ -28,6 +28,10 @@ const routes: Route[] = [
     path: 'faq',
     component: FaqComponent,
   },
+  {
+    path : "**",
+    redirectTo: ""
+  }
 
 ];
 

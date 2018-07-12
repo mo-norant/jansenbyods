@@ -110,7 +110,7 @@ export class AuthenticationService {
             this.router.navigate(['/login']);
 
         })
-        
+
     }
 
 
@@ -122,7 +122,7 @@ export class AuthenticationService {
         return this.http.post(Utils.getRoot() + 'identity/forgotpassword?email=' + mail, null);
     }
 
-    public passwordVeranderen(passwordview: ForgotPassword, userid: string, code : string) {
+    public passwordVeranderen(passwordview: ForgotPassword, userid: string, code: string) {
         return this.http.post(Utils.getRoot() + 'identity/ResetPassword?userid=' + userid + "&code=" + code, passwordview);
     }
 }

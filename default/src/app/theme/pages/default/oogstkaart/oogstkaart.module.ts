@@ -26,6 +26,8 @@ import { TokenInterceptorService } from "../../../../_services/token-interceptor
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { OogstkaartaanvragenComponent } from './oogstkaartaanvragen/oogstkaartaanvragen.component';
 import { OogstkaartAanvraagItemComponent } from './oogstkaart-aanvraag-item/oogstkaart-aanvraag-item.component';
+
+
 const routes: Routes = [
     {
         path: "",
@@ -74,7 +76,8 @@ const routes: Routes = [
         ConfirmDialogModule,
         GrowlModule,
         KeyFilterModule,
-        Ng4GeoautocompleteModule.forRoot()
+        Ng4GeoautocompleteModule.forRoot(),
+
 
     ],
     providers: [OogstkaartService, ConfirmationService, MessageService, ToastrService, {
