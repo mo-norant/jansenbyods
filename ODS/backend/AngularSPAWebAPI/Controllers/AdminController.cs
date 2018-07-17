@@ -32,18 +32,20 @@ namespace AngularSPAWebAPI.Controllers
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IEmailService _emailService;
 
     public AdminController(
       UserManager<ApplicationUser> userManager,
       RoleManager<IdentityRole> roleManager,
       SignInManager<ApplicationUser> signInManager,
-      ILogger<IdentityController> logger, ApplicationDbContext context)
+      ILogger<IdentityController> logger, ApplicationDbContext context, IEmailService emailService)
     {
       _userManager = userManager;
       _roleManager = roleManager;
       _signInManager = signInManager;
       _logger = logger;
       _context = context;
+      _emailService = emailService;
     }
 
 
@@ -91,19 +93,30 @@ namespace AngularSPAWebAPI.Controllers
       if (user == null) return BadRequest();
       var request = await _context.Requests.FirstOrDefaultAsync(i => i.RequestID == id);
       request.Status = status;
+
+     // var product = await _context.OogstkaartIte
+
       await _context.SaveChangesAsync();
 
-      if (status == "accepted")
-      {
-        await SendMessage("info@jansenbyods.com", "mo.bouzim@live.be", "Er werd een vraag voor uw product goedgekeurd.", "Er werd een aanvraag voor uw product goedgekeurd");
+        //mail naar klant sturen dat status over een bepaald product werd goedgekeurd.
+        var message = new EmailMessage();
+        message.Subject = String.Format("Er werd een status voor een aanvraag van uw product ({0}) gewijzigd.", "productnaam");
+        message.Content = string.Format("Geachte, " +
+          "U hebt een aanvraag voor product {0} dat naar status {1} is gewijzigd. Als uw product niet werd goedgekeurd, gelieve ons dan te contacteren. " +
+          "met vriendelijke groeten," +
+          "Jansen By ODS", "product", status);
+
+        message.ToAddresses.Add(new EmailAddress { Name = request.Name, Address = request.Company.Email });
+        message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+        await _emailService.Send(message);
+        return Ok();
       }
 
-      return Ok();
-
-    }
+      
     
     [HttpGet("oogstkaart")]
-    public async Task<IActionResult> GetOogstkaarProducten()
+    public async Task<IActionResult> GetOogstkaartProducten()
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
@@ -113,7 +126,7 @@ namespace AngularSPAWebAPI.Controllers
     }
 
     [HttpGet("oogstkaart/{id}")]
-    public async Task<IActionResult> GetOogstkaarProducten([FromRoute] int id)
+    public async Task<IActionResult> GetOogstkaartProducten([FromRoute] int id)
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
@@ -125,19 +138,7 @@ namespace AngularSPAWebAPI.Controllers
 
     }
 
-    [HttpPost("delete/oogstkaart/{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
-    {
-      var user = await _userManager.GetUserAsync(User);
-      if (user == null) return BadRequest();
-      var item = await _context.OogstkaartItems.FirstOrDefaultAsync(i => i.OogstkaartItemID == id);
-      if (item == null) return NotFound();
-      _context.Remove(item);
-      await _context.SaveChangesAsync();
-      return Ok();
-    }
-
-
+   
     [HttpGet("requests")]
     public async Task<IActionResult> GetRequests([FromQuery] string status)
     {
@@ -195,38 +196,244 @@ namespace AngularSPAWebAPI.Controllers
       }
 
     }
-    
+
+    //Usermanager
+
+    [HttpGet("user")]
+    public async Task<IActionResult> GetUsers()
+    {
+
+      //verwijder administrator accounts
+      var users = await _context.Users.Include(i => i.Company).ThenInclude(i => i.Address).ToListAsync();
+      List<ApplicationUser> temp = new List<ApplicationUser>();
+      foreach (var user in users)
+      {
+        var roles = await _userManager.GetRolesAsync(user);
+        var adminrole = roles.FirstOrDefault( i => i == "administrator");
+
+        if(adminrole != null)
+        {
+          temp.Add(user);
+        }
+        
+      }
+
+      foreach (var user in temp)
+      {
+        users.Remove(user);
+      }
+
+      if(users == null || users.Count == 0){
+        return NotFound("Geen gebruikers");
+      }
+
+      if(users.Count > 0)
+      {
+        return Ok(users);
+      }
+
+      return BadRequest();
+    }
+
+    [HttpGet("user/{id}")]
+    public async Task<IActionResult> GetUsers([FromRoute] string id)
+    {
+
+      if (ModelState.IsValid)
+      {
+        
+        if (id == null)
+        {
+          return BadRequest("Userid is not correct");
+        }
+
+        var user = await _context.Users.Where(i => i.Id == id).Include(i => i.Company).ThenInclude(i => i.Address).FirstOrDefaultAsync();
+
+        if(user != null)
+        {
+          user.PasswordHash = "";
+          return Ok(user);
+        }
+
+        return NotFound("Geen gebruiker gevonden.");
+
+      }
+
+      return BadRequest();
+    }
+
+    [HttpPost("user/lockoutstatus/{userid}")]
+    public async Task<IActionResult> ChangeLockoutStatus([FromRoute] string userid, bool lockstatusstatus)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest();
+      }
+      var user = await _userManager.FindByIdAsync(userid);
+      if(user == null)
+      {
+        return NotFound();
+      }
+
+      var result = await _userManager.SetLockoutEnabledAsync(user, lockstatusstatus);
+      if (result.Succeeded)
+      {
+        return Ok(lockstatusstatus);
+      }
+      return BadRequest();
+
+    }
+
+
+    [HttpPost("delete/user/{userid}")]
+    public async Task<IActionResult> DeleteUser ([FromRoute] string userid)
+     
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _context.Users.Where(i => i.Id == userid).Include(i => i.Company).ThenInclude(i => i.Address).FirstOrDefaultAsync();
+
+        if(user == null)
+        {
+          return NotFound();
+        }
+
+        var oogstkaartproducten = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i => i.Specificaties)
+        .Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Include(i => i.Location).ToListAsync();
+
+        _context.OogstkaartItems.RemoveRange(oogstkaartproducten);
+
+        _context.Addresses.Remove(user.Company.Address);
+        _context.Companies.Remove(user.Company);
+
+        await _context.SaveChangesAsync();
+
+        var message = new EmailMessage();
+        message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = user.Email });
+        message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+        message.Subject = String.Format("U werd account Jansen by ODS-account is verwijderd.");
+        message.Content = String.Format("Geachte," +
+          "uw Jansen By ODS werd verwijderd door de administrator.");
+        await _emailService.Send(message);
+
+        var result = await _userManager.DeleteAsync(user);
+        if(result.Succeeded)
+        {
+
+          //notify jansen by ods
+          message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS" , Address = "info@jansenbyods.com" });
+          message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+          message.Subject = String.Format("Gebruiker {0} werd verwijderd.", user.UserName);
+          message.Content = String.Format("Gebruiker {0} werd verwijderd.", user.UserName);
+          await _emailService.Send(message);
+
+          //notify klant
+          message = new EmailMessage();
+          message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = user.Email });
+          message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+          message.Subject = String.Format("U werd account Jansen by ODS-account is verwijderd.");
+          message.Content = String.Format("Geachte," +
+            "uw Jansen By ODS werd verwijderd door de administrator.");
+
+          await _emailService.Send(message);
+
+          return Ok();
+        }
+
+        return BadRequest(result.Errors);
+        
+      }
+      return BadRequest();
+    }
+
+    [HttpPost("lockenabled/{userid}")]
+    public async Task<IActionResult> LockoutEnabled([FromRoute] string userid)
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _context.Users.Where(i => i.Id == userid).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+          return NotFound();
+        }
+
+        user.LockoutEnabled = !user.LockoutEnabled;
+        await _context.SaveChangesAsync();
+        return Ok(user.LockoutEnabled);
+
+      }
+
+      return BadRequest();
+    }
+
+    [HttpPost("delete/file/{guid}")]
+    public async Task<IActionResult> RemoveFile([FromRoute] string guid)
+    {
+      if (ModelState.IsValid)
+      {
+        var afbeelding = await _context.Afbeeldingen.FirstAsync(i => i.URI == guid);
+
+        if (afbeelding != null)
+        {
+          _context.Afbeeldingen.Remove(afbeelding);
+          await _context.SaveChangesAsync();
+          return Ok();
+        }
+
+        var file = await _context.Files.FirstAsync(i => i.URI == guid);
+        if (file != null)
+        {
+          _context.Files.Remove(file);
+          await _context.SaveChangesAsync();
+          return Ok();
+        }
+        return NotFound();
+      }
+
+      return BadRequest();
+
+    }
+
+    [HttpPost("message/user/{userid}")]
+    public async Task<IActionResult> PostMessage([FromRoute] string userid, [FromQuery] string message, [FromQuery] string subject)
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _context.Users.Where(i => i.Id == userid).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+          return NotFound();
+        }
+
+        if (user != null)
+        {
+          var email = new EmailMessage();
+          email.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = user.Email });
+          email.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+          email.Subject = subject;
+          email.Content = message;
+
+          await _emailService.Send(email);
+
+          return Ok();
+        }
+      }
+      return BadRequest();
+    }
+
+
     private bool AreFallingInSameWeek(DateTime date1, DateTime date2)
     {
       return date1.AddDays(-(int)date1.DayOfWeek) == date2.AddDays(-(int)date2.DayOfWeek);
     }
 
-    private async Task SendMessage(string sender, string receiver, string subject, string messagebody)
-    {
-      var message = new MimeMessage();
-      message.From.Add(new MailboxAddress(sender, sender));
-      message.To.Add(new MailboxAddress(receiver, receiver));
-      message.Subject = subject;
-
-      message.Body = new TextPart("plain")
-      {
-        Text = messagebody
-      };
-
-      using (var client = new SmtpClient())
-      {
-        // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-        client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-        await client.ConnectAsync("mail.jansenbyods.com", 25, false);
-
-        // Note: only needed if the SMTP server requires authentication
-        await client.AuthenticateAsync("info@jansenbyods.com", "Catharina2018*");
-
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
-      }
-    }
+   
 
 
   }

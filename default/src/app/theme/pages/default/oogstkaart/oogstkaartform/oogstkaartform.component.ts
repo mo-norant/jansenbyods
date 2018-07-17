@@ -27,6 +27,7 @@ export class OogstkaartformComponent implements OnInit {
     options: any;
     specificaties: Specificatie[] = [];
     uploadloading: boolean;
+    loading: boolean;
     selectedlocation: LocationOogstKaartItem;
     returnedid: number;
     zoom: number = 7;
@@ -108,7 +109,11 @@ export class OogstkaartformComponent implements OnInit {
                 this.dialogservice.confirm({
                     message: "Bent u niets vergeten?",
                     accept: () => {
-                        this.postItem();
+                        if(!this.loading){
+                            this.loading = true;
+                            this.postItem();
+                        }
+                      
 
                     }
                 });
@@ -238,9 +243,12 @@ export class OogstkaartformComponent implements OnInit {
                 this.returnedid = data;
                 this.wizardcounter = 2;
                 this.uploadloading = false;
+                this.loading = false
             }, err => {
                 this.uploadloading = false;
                 this.wizardcounter = 1;
+                this.loading = false;
+
             });
         }
 

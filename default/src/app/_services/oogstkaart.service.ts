@@ -101,4 +101,8 @@ export class OogstkaartService {
     public GetNewRequests() {
         return this.http.get<number>(Utils.getRoot() + "Oogstkaart/openrequests")
     }
+
+    public RemoveFile(uri: string){
+        return this.http.post(Utils.getRoot() + "Oogstkaart/delete/file/" +uri, null)
+    }
 }

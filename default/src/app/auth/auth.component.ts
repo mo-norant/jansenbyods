@@ -72,8 +72,20 @@ export class AuthComponent implements OnInit {
                 this.router.navigate(['admin'])
             }
             else {
-                this.router.navigate(['']);
 
+                    this._authService.emailActivated(this.model.email).subscribe(res => {
+                        this.router.navigate(['']);
+    
+                    } , err => {
+                        if (err.error.code === "emailactivation") {
+                            this.router.navigate(['login/confirmmail'])
+                        } else if (err.error.code === "lockout") {
+                            this.router.navigate(['login/lockout'])
+                        }
+                    })
+                    
+    
+                
             }
 
 

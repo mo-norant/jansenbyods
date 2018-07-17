@@ -212,10 +212,8 @@ namespace AngularSPAWebAPI.Controllers
           var message = new EmailMessage();
           message.FromAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = "info@jansenbyods.com" });
           message.ToAddresses.Add(new EmailAddress { Name = user.UserName, Address = user.Email });
-
           message.Subject = "Uw wachtwoord van uw Jansen By ODS-account werd gereset.";
           message.Content = String.Format("Uw wachtwoord van uw Jansen By ODS-account werd op {0} gewijzigd. ", DateTime.Now.ToString());
-
           await _emailService.Send(message);
           return Ok();
         }

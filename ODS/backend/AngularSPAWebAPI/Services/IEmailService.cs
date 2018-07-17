@@ -1,3 +1,4 @@
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,5 +9,7 @@ namespace AngularSPAWebAPI.Services
     public interface IEmailService
   {
     Task Send(EmailMessage emailMessage);
+    Task Send(EmailMessage emailMessage, BodyBuilder bodyBuilder);
+
   }
 }

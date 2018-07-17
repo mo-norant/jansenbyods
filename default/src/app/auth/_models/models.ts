@@ -51,6 +51,16 @@ export class OogstKaartItem {
     avatar: Afbeelding;
     specificaties: Specificatie[];
     gallery: Afbeelding[];
+    files : File[];
+}
+
+export class File{
+    create: Date;
+    extension: string;
+    fileID: number;
+    name: string;
+    omschrijving: string;
+    uri : string;
 }
 
 export class Afbeelding {
@@ -97,6 +107,7 @@ export class Message {
     created: Date;
     messageString: string;
     opened: boolean;
+ 
 }
 
 export class Request {

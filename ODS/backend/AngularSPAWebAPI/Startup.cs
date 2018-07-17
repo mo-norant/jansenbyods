@@ -60,7 +60,6 @@ namespace AngularSPAWebAPI
             // Identity options.
             services.Configure<IdentityOptions>(options =>
             {
-              options.SignIn.RequireConfirmedEmail = true;
                 // Password settings.
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 6;

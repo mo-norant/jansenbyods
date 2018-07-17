@@ -127,4 +127,15 @@ export class OogstkaartitemComponent implements OnInit {
         }
     }
 
+    removeFile(uri){
+        this.dialogservice.confirm({
+            message: "Wilt u dit bestand verwijderen?",
+            accept: () => {
+                this.oogstkaartservice.RemoveFile(uri).subscribe(res => {
+                    this.router.navigate(["oogstkaart"])
+                })
+            }
+        });
+    }
+
 }

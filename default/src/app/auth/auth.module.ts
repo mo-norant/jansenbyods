@@ -18,6 +18,7 @@ import { RegistersuccesComponent } from './register/registersucces/registersucce
 import { ConfirmmailComponent } from './register/confirmmail/confirmmail.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { ResetpasswordsComponent } from './resetpasswords/resetpasswords.component';
+import { LockoutComponent } from './lockout/lockout.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { ResetpasswordsComponent } from './resetpasswords/resetpasswords.compone
         ConfirmmailComponent,
         ForgotpasswordComponent,
         ResetpasswordsComponent,
+        LockoutComponent
     ],
     imports: [
         CommonModule,

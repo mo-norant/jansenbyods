@@ -18,10 +18,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { DropdownModule } from 'primeng/dropdown';
+import {EditorModule} from 'primeng/editor';
 import { AdminRequestItemComponent } from './admin-request-item/admin-request-item.component';
 import { ToastrService } from 'ngx-toastr';
 import { AdminStatisticsService } from '../../../../_services/adminstatistics.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { UsermanagerdetailComponent } from './usermanager/usermanagerdetail/usermanagerdetail.component';
+import { NgxEditorModule } from 'ngx-editor';
 
 const routes: Routes = [
     {
@@ -58,6 +61,11 @@ const routes: Routes = [
                 component: UsermanagerComponent,
 
             },
+            {
+                path: 'usermanager/:id',
+                component: UsermanagerdetailComponent,
+
+            },
         ],
     },
 ];
@@ -73,7 +81,8 @@ const routes: Routes = [
         ConfirmDialogModule,
         GrowlModule,
         DropdownModule,
-        NgxChartsModule
+        NgxChartsModule,
+        NgxEditorModule
     ], exports: [
         RouterModule,
     ], declarations: [
@@ -82,7 +91,8 @@ const routes: Routes = [
         AdminOogstkaartListComponent,
         UsermanagerComponent,
         AdminOogstkaartItemComponent,
-        AdminRequestItemComponent
+        AdminRequestItemComponent,
+        UsermanagerdetailComponent
     ],
     providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService]
 })

@@ -6,6 +6,7 @@ import { AuthComponent } from './auth.component';
 import { RegisterComponent } from './register/register.component';
 import { RegistersuccesComponent } from './register/registersucces/registersucces.component';
 import { ConfirmmailComponent } from './register/confirmmail/confirmmail.component';
+import { LockoutComponent } from './lockout/lockout.component';
 
 const routes: Routes = [
     { path: '', component: AuthComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
     { path: 'confirmmail', component: ConfirmmailComponent },
     { path: 'forgotpassword', component: ForgotpasswordComponent },
     { path: 'resetpassword', component: ResetpasswordsComponent },
+    { path: 'lockout', component: LockoutComponent },
 
 ];
 

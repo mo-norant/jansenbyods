@@ -20,22 +20,23 @@ export class AuthenticationService {
     constructor(private http: HttpClient, private router: Router) { }
 
 
+
+
     public login(username: string, password: string) {
 
-        const body = new HttpParams()
-            .set('username', username)
-            .set('password', password)
-            .set('scope', this.scope)
-            .set('client_id', this.client_id)
-            .set('grant_type', this.grant_type)
+            const body = new HttpParams()
+                .set('username', username)
+                .set('password', password)
+                .set('scope', this.scope)
+                .set('client_id', this.client_id)
+                .set('grant_type', this.grant_type)
 
 
-        return this.http.post<JWTToken>(Utils.getRoot().replace("/api", "") + this.connectlink, body.toString(), {
-            headers: new HttpHeaders()
-                .set('Content-Type', 'application/x-www-form-urlencoded')
-            //.append("")
-        })
 
+            return this.http.post<JWTToken>(Utils.getRoot().replace("/api", "") + this.connectlink, body.toString(), {
+                headers: new HttpHeaders()
+                    .set('Content-Type', 'application/x-www-form-urlencoded')
+            })
     }
 
     public _role: string;
@@ -124,5 +125,9 @@ export class AuthenticationService {
 
     public passwordVeranderen(passwordview: ForgotPassword, userid: string, code: string) {
         return this.http.post(Utils.getRoot() + 'identity/ResetPassword?userid=' + userid + "&code=" + code, passwordview);
+    }
+
+    public emailActivated(username: string) {
+        return this.http.post(Utils.getRoot() + 'General/checkemail/' + username, null);
     }
 }

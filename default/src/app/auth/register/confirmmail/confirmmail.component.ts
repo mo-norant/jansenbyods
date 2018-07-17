@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../_services';
 
 @Component({
     selector: 'app-confirmmail',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfirmmailComponent implements OnInit {
 
-    constructor() { }
+    constructor(private _auth : AuthenticationService) { }
 
     ngOnInit() {
+        this._auth.removeToken();
     }
 
 }
