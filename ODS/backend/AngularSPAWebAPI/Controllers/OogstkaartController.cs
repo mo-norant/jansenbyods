@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using AngularSPAWebAPI.Data;
@@ -10,15 +11,14 @@ using AngularSPAWebAPI.Models.DatabaseModels.General;
 using AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart;
 using AngularSPAWebAPI.Services;
 using IdentityServer4.AccessTokenValidation;
-using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using File = AngularSPAWebAPI.Models.DatabaseModels.General.File;
 
 namespace AngularSPAWebAPI.Controllers
@@ -199,6 +199,8 @@ namespace AngularSPAWebAPI.Controllers
               var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
               using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
               {
+
+
                 await file.CopyToAsync(fileStream);
                 item.Avatar = new Afbeelding
                 {
@@ -269,8 +271,9 @@ namespace AngularSPAWebAPI.Controllers
     }
 
 
+    [AllowAnonymous]
     [HttpPost("files/{id}")]
-    [DisableRequestSizeLimit]
+    [RequestSizeLimit(25000000)]
     public async Task<IActionResult> PostFiles([FromRoute] int id)
     {
       if (!ModelState.IsValid) return BadRequest();
@@ -279,40 +282,69 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => i.UserID == user.Id)
-          .Include(i => i.Files).Include(i => i.Gallery).SingleOrDefaultAsync();
+          .Include(i => i.Files).SingleOrDefaultAsync();
 
-        if (item == null) return NotFound();
+       if (item == null) return NotFound();
 
         var files = HttpContext.Request.Form.Files;
 
-        if (item.Gallery == null) item.Gallery = new List<Afbeelding>();
-        foreach (var image in files)
-          if (image != null && image.Length > 0)
+        foreach (var file in files)
+          if (file != null && file.Length > 0)
           {
-            var file = image;
-            var uploads = Path.Combine(_env.WebRootPath, "uploads/files");
-            if (file.Length > 0)
-            {
+              var uploads = Path.Combine(_env.WebRootPath, "uploads\\files");
               var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-              using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+              var intermediarydirectory = Path.Combine(uploads, Path.GetFileNameWithoutExtension(fileName));
+
+             if (!Directory.Exists(uploads))
+             {
+                   Directory.CreateDirectory(uploads);
+               }
+
+
+          var temp = Path.Combine(intermediarydirectory, "temp");
+          Directory.CreateDirectory(temp);
+          var f = Path.Combine(temp, fileName);
+
+          using (var fileStream = new FileStream(f, FileMode.Create))
+          {
+
+            await file.CopyToAsync(fileStream);
+
+            var filesave = new File
+            {
+              Create = DateTime.Now,
+              URI = fileName,
+              Name = file.Name,
+              Extension = Path.GetExtension(fileName)
+            };
+
+              item.Files.Add(filesave);
+
+            }
+
+            ZipFile.CreateFromDirectory(temp, intermediarydirectory + ".zip");
+
+            using (FileStream zipToOpen = new FileStream(intermediarydirectory + ".zip", FileMode.Open))
+            {
+              using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
               {
-                await file.CopyToAsync(fileStream);
-
-                var filesave = new File
+                ZipArchiveEntry filetozip = archive.CreateEntry(fileName);
+                using (StreamWriter writer = new StreamWriter(filetozip.Open()))
                 {
-                  Create = DateTime.Now,
-                  URI = fileName,
-                  Name = file.Name,
-                  Extension = Path.GetExtension(fileName)
-                };
+                  writer.WriteLine("Fileziped");
+                  writer.WriteLine("========================");
 
-
-                item.Files.Add(filesave);
+                }
               }
             }
-          }
 
-        await _context.SaveChangesAsync();
+          Directory.Delete(intermediarydirectory, true);
+
+          
+
+        }
+
+       await _context.SaveChangesAsync();
         return Ok();
       }
 

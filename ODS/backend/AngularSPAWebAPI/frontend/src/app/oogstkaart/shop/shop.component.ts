@@ -123,7 +123,7 @@ export class ShopComponent implements OnInit {
           element.location.longtitude
         ),
         animation:google.maps.Animation.DROP,
-        icon: ""
+        icon: "assets/img/markers/people35.png"
 
       },
     );

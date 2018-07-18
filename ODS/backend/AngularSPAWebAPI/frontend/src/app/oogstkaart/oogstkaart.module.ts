@@ -15,9 +15,6 @@ const routes: Route[] = [
   {
     path: 'oogstkaart',
     component: ShopComponent,
-    children: [
-
-    ]
   },
   {
     path: 'oogstkaart/:id',

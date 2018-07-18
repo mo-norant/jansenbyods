@@ -17,6 +17,10 @@ const appRoutes: Routes = [
   {
     path: "oogstkaart",
     loadChildren: "./oogstkaart/oogstkaart.module#OogstkaartModule"
+  },
+  {
+    path : "**",
+    redirectTo: ""
   }
   
 
