@@ -180,13 +180,6 @@ namespace AngularSPAWebAPI
 
       app.UseAuthentication();
       app.UseIdentityServer();
-
-
-
-
-      // Microsoft.AspNetCore.StaticFiles: API for starting the application from wwwroot.
-      // Uses default files as index.html.
-
       app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -197,8 +190,6 @@ namespace AngularSPAWebAPI
 
 
       app.UseCors("MyCorsPolicy");
-
-
 
       app.Use(async (context, next) => {
                 await next();
@@ -211,9 +202,9 @@ namespace AngularSPAWebAPI
                 }
             });
 
-            app.UseDefaultFiles();
-            // Uses static file for the current path.
-            app.UseStaticFiles();
+      app.UseDefaultFiles();
+      app.UseStaticFiles();
+    
 
       app.UseMvcWithDefaultRoute();
       app.UseMvc();

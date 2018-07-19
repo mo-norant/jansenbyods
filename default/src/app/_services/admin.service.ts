@@ -31,7 +31,7 @@ export class AdminService {
     }
 
     public changeStatus(id: number, status: string) {
-        return this.http.post(Utils.getRoot() + 'admin/requests/update/' + id + '?status=' + status, null);
+        return this.http.post<string>(Utils.getRoot() + 'admin/requests/update/' + id + '?status=' + status, null);
 
     }
 

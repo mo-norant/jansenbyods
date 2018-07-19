@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { OogstKaartItem, Request } from './../../../../../auth/_models/models';
 import { AdminService } from './../../../../../_services/admin.service';
@@ -16,20 +17,26 @@ export class AdminRequestItemComponent implements OnInit {
     item: OogstKaartItem;
     request: Request;
     root: string;
-
+    loading: boolean;
 
     constructor(private admin: AdminService, private route: ActivatedRoute, private toastr: ToastrService
-    ) { }
+    , private router: Router) { }
 
     ngOnInit() {
+        this.loading = true;
         this.root = Utils.getRoot().replace("/api", "");
 
         this.route.params.subscribe(data => {
             this.admin.getRequest(data['id']).subscribe(data => {
                 this.request = data;
                 this.admin.getOogstkaartItem(data.oogstkaartID).subscribe(res => {
+                    this.loading = false;
                     this.item = res;
                     this.showSuccess("Aanvraag en product geladen");
+                }, err=> {
+                    alert("data niet geladen");
+                    this.loading = false;
+                    this.router.navigate(["admin"])
                 })
             })
         })
@@ -41,21 +48,40 @@ export class AdminRequestItemComponent implements OnInit {
         this.toastr.success('Succes', message);
     }
 
+    showError(message: string){
+        this.toastr.error('Error', message);
+    }
+
     declineRequest() {
+        this.loading = true;
         this.admin.changeStatus(this.request.requestID, "declined").subscribe(res => {
+            this.request.status = res;
+            this.loading = false;
             this.showSuccess("Aanvraag geweigerd");
+        }, err => {
+            this.showError("Aanvraag niet gewijzigd")
         });
     }
 
     acceptRequest() {
+        this.loading = true;
         this.admin.changeStatus(this.request.requestID, "accepted").subscribe(res => {
+            this.loading = false;
+            this.request.status = res;
             this.showSuccess("Aanvraag geaccepteerd");
+        }, err => {
+            this.showError("Aanvraag niet gewijzigd")
         });
     }
 
     reviewRequest() {
+        this.loading = true;
         this.admin.changeStatus(this.request.requestID, "tobereviewed").subscribe(res => {
+            this.loading = false;
+            this.request.status = res;
             this.showSuccess("Aanvraag in onderzoek");
+        }, err => {
+            this.showError("Aanvraag niet gewijzigd")
         });
     }
 

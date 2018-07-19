@@ -15,6 +15,7 @@ export class OogstkaartitemComponent implements OnInit {
     item: OogstKaartItem = new OogstKaartItem();
     updated: boolean;
     msgs: Message[] = [];
+    loading: boolean;
 
     constructor(
         private route: ActivatedRoute,
@@ -24,14 +25,17 @@ export class OogstkaartitemComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.loading = true;
         this.route.params.subscribe(data => {
             this.oogstkaartservice.getOogstkaartItem(data["id"]).subscribe(
                 data => {
                     this.item = data;
                     this.item.createDate = data.createDate;
+                    this.loading = false;
                 },
                 err => {
-                    //    this.router.navigate(["oogstkaart"]);
+                        alert("Data niet beschikbaar");
+                       this.router.navigate(["oogstkaart"]);
                 }
             );
         });
@@ -39,32 +43,44 @@ export class OogstkaartitemComponent implements OnInit {
 
     update() {
 
-
+        this.loading = true;
 
         this.dialogservice.confirm({
             message: "Wilt u dit product updaten?",
             accept: () => {
                 this.oogstkaartservice.UpdateOogstkaartitem(this.item).subscribe(data => {
-                    this.router.navigate(["oogstkaart"])
+                    this.router.navigate(["oogstkaart"]);
+                }, err => {
+                    this.loading = false;
+                    alert("data niet aangepast.")
                 });
+            }, reject : () => {
+                this.loading = false;
             }
         });
     }
 
     delete() {
+        this.loading = true
         this.dialogservice.confirm({
             message: "Wilt u dit product verwijderen?",
             accept: () => {
                 this.oogstkaartservice
                     .DeleteItem(this.item.oogstkaartItemID)
                     .subscribe(d => {
+                        this.loading = false;
                         this.msgs.push({
                             severity: "delete",
                             summary: "Verwijderd",
                             detail: "Product succesvol verwijderd"
                         });
                         this.router.navigate(["oogstkaart"]);
+                    }, err => {
+                        this.loading = false;
+                        alert("product niet verwijderd.")
                     });
+            }, reject : () => {
+                this.loading = false;
             }
         });
     }

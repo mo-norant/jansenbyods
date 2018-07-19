@@ -177,6 +177,7 @@ namespace AngularSPAWebAPI.Controllers
 
 
     [HttpPost("oogstkaartavatar/{id}")]
+    [RequestSizeLimit(2500000)]
     public async Task<IActionResult> Oogstkaartavatar([FromRoute] int id)
     {
       var user = await _usermanager.GetUserAsync(User);
@@ -223,7 +224,7 @@ namespace AngularSPAWebAPI.Controllers
 
 
     [HttpPost("gallery/{id}")]
-    [DisableRequestSizeLimit]
+    [RequestSizeLimit(2500000)]
     public async Task<IActionResult> PostImage([FromRoute] int id)
     {
       if (!ModelState.IsValid) return BadRequest();
@@ -271,7 +272,6 @@ namespace AngularSPAWebAPI.Controllers
     }
 
 
-    [AllowAnonymous]
     [HttpPost("files/{id}")]
     [RequestSizeLimit(25000000)]
     public async Task<IActionResult> PostFiles([FromRoute] int id)
@@ -313,7 +313,7 @@ namespace AngularSPAWebAPI.Controllers
             var filesave = new File
             {
               Create = DateTime.Now,
-              URI = fileName,
+              URI = intermediarydirectory + ".zip",
               Name = file.Name,
               Extension = Path.GetExtension(fileName)
             };

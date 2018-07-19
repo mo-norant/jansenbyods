@@ -92,6 +92,13 @@ namespace AngularSPAWebAPI.Controllers
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
       var request = await _context.Requests.FirstOrDefaultAsync(i => i.RequestID == id);
+
+      var item = await _context.OogstkaartItems.Where(o => o.OogstkaartItemID == request.OogstkaartID).FirstOrDefaultAsync();
+      var emailuser = await _context.Users.FirstOrDefaultAsync(i => item.UserID == i.Id);
+
+      
+
+
       request.Status = status;
 
      // var product = await _context.OogstkaartIte
@@ -100,17 +107,17 @@ namespace AngularSPAWebAPI.Controllers
 
         //mail naar klant sturen dat status over een bepaald product werd goedgekeurd.
         var message = new EmailMessage();
-        message.Subject = String.Format("Er werd een status voor een aanvraag van uw product ({0}) gewijzigd.", "productnaam");
+        message.Subject = String.Format("Er werd een status voor een aanvraag van uw product ({0}) gewijzigd.", item.Artikelnaam);
         message.Content = string.Format("Geachte, " +
-          "U hebt een aanvraag voor product {0} dat naar status {1} is gewijzigd. Als uw product niet werd goedgekeurd, gelieve ons dan te contacteren. " +
-          "met vriendelijke groeten," +
-          "Jansen By ODS", "product", status);
+          "U hebt een aanvraag voor product {0} dat naar status {1} is gewijzigd.{2} Als uw product niet werd goedgekeurd, gelieve ons dan te contacteren. " +
+          "{2}met vriendelijke groeten," +
+          "{2}Jansen By ODS", item.Artikelnaam, status , System.Environment.NewLine);
 
-        message.ToAddresses.Add(new EmailAddress { Name = request.Name, Address = request.Company.Email });
+        message.ToAddresses.Add(new EmailAddress { Name = request.Name, Address = emailuser.Email });
         message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
 
         await _emailService.Send(message);
-        return Ok();
+        return Ok(request.Status);
       }
 
       

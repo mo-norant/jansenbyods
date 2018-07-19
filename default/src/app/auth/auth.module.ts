@@ -44,9 +44,6 @@ import { LockoutComponent } from './lockout/lockout.component';
         AuthGuard,
         AlertService,
         UserService,
-        // api backend simulation
-        fakeBackendProvider,
-        MockBackend,
         BaseRequestOptions,
     ],
     entryComponents: [AlertComponent],

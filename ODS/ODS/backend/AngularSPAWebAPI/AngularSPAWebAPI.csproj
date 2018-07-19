@@ -11,13 +11,9 @@
 
   <ItemGroup>
     <Compile Remove="uploads\NewFolder\**" />
-    <Compile Remove="wwwroot\**" />
     <Content Remove="uploads\NewFolder\**" />
-    <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="uploads\NewFolder\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="uploads\NewFolder\**" />
-    <None Remove="wwwroot\**" />
     <Compile Remove="Migrations\20180619093647_init.cs" />
   </ItemGroup>
 
@@ -49,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 

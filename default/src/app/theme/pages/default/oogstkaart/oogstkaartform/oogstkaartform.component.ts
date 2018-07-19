@@ -87,19 +87,9 @@ export class OogstkaartformComponent implements OnInit {
             concept: new FormControl("", Validators.required),
             datumBeschikbaar: new FormControl("", Validators.required),
         });
-
-
-
-
-
     }
 
     next() {
-
-
-
-
-
         if (this.wizardcounter == 0) {
             this.wizardcounter++;
         }

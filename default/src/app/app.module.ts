@@ -17,6 +17,7 @@ import { AgmCoreModule } from "@agm/core";
 import { GeneralService } from './_services/general.service';
 import { AuthenticationService } from './auth/_services';
 import { ToastrModule } from 'ngx-toastr';
+import { TokenInterceptorService } from './_services/token-interceptor.service';
 @NgModule({
     declarations: [ThemeComponent, AppComponent],
     imports: [
@@ -41,6 +42,7 @@ import { ToastrModule } from 'ngx-toastr';
         AuthenticationService,
         RoleService,
         UserguardService
+
     ],
     bootstrap: [AppComponent]
 })

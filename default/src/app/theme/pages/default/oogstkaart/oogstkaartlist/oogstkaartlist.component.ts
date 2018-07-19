@@ -16,6 +16,7 @@ export class OogstkaartlistComponent implements OnInit {
     cols: any[];
     selecteditem: OogstKaartItem;
     msgs: Message[] = [];
+    loading: boolean;
 
     selectionitems: number[] = [];
 
@@ -32,13 +33,19 @@ export class OogstkaartlistComponent implements OnInit {
 
         ];
 
+        this.loading = true;
 
         this.oogstkaartservice.GetOogstkaartitems().subscribe(data => {
+            
 
             data.forEach(i => {
                 i.localdatestring = new Date(i.createDate).toLocaleString();
             });
             this.items = data;
+            this.loading = false;
+        }, err => {
+            this.loading = false;
+            alert("Data niet beschikbaar");
         }
 
 
@@ -69,6 +76,7 @@ export class OogstkaartlistComponent implements OnInit {
     }
 
     productDelete() {
+        this.loading = true;
         this.dialogservice.confirm({
             message: "Product verwijderen?",
             key: "delete",
@@ -80,9 +88,13 @@ export class OogstkaartlistComponent implements OnInit {
                             i.localdatestring = new Date(i.createDate).toLocaleString();
                         });
                         this.items = data;
+                        this.loading = false;
                     });
                 });
             },
+            reject: () => {
+                this.loading = false
+            }
         });
     }
 

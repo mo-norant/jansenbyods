@@ -40,16 +40,16 @@ namespace AngularSPAWebAPI.Services
             var user = new ApplicationUser
             {
                 AccessFailedCount = 0,
-                Email = "admin@gmail.com",
-                EmailConfirmed = false,
-                LockoutEnabled = true,
-                NormalizedEmail = "ADMIN@GMAIL.COM",
-                NormalizedUserName = "ADMIN@GMAIL.COM",
+                Email = "info@jansenbyods.com",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                NormalizedEmail = "info@jansenbyods.com",
+                NormalizedUserName = "info@jansenbyods.com",
                 TwoFactorEnabled = false,
-                UserName = "admin@gmail.com"
+                UserName = "info@jansenbyods.com"
             };
 
-            var result = await _userManager.CreateAsync(user, "Admin01*");
+            var result = await _userManager.CreateAsync(user, "Catharina2018*");
 
             if (result.Succeeded)
             {

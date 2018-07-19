@@ -97,7 +97,7 @@ namespace AngularSPAWebAPI.Controllers
                 AccessFailedCount = 0,
                 Email = model.email,
                 EmailConfirmed = false,
-                LockoutEnabled = false,
+                LockoutEnabled = true,
                 NormalizedEmail = model.email.ToUpper(),
                 NormalizedUserName = model.email.ToUpper(),
                 TwoFactorEnabled = false,
