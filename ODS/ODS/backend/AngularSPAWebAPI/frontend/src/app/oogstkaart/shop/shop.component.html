@@ -14,200 +14,197 @@
   </section>
 
   <div class="container">
-    
+
     <h1 class="mb-2">Oogstkaart</h1>
-
-    <div class="container-fluid text-center">    
-        <div class="row content">
-          <div class="col-lg-3 sidenav ">
-              <select [(ngModel)]="sorting" (change)="sort($event)" class="form-control border mb-4">
-                  <option value="alphabetic">Sorteer alfabetisch</option>
-                  <option value="popularity">Sorteer populaire producten</option>
-                  <option value="date" selected="selected">Sorteer meest recente</option>
-                  <option value="price">Sorteer volgens prijs</option>
-                </select>
-  
-                <select [(ngModel)]="catsortmodel"  (change)="sortCategory($event)" class="form-control border  mb-4">
-                    <option disabled=true> Sorteer categorie </option>
-                    <option value="alles"> Alle categorieën </option>
-                    <option [value]="cat" *ngFor="let cat of categories"> {{cat}} </option>
-                  </select>
-                  
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/jansenprofiel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Jansenprofielen</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/constructieprofiel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Constructieprofielen</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/deur.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Deuren</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/raam.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Ramen</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/geveldeel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Geveldelen</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row align-items-baseline appear-animation" data-appear-animation="fadeInRightShorter">
-                    <div class="col-lg-2">
-                      <div class="icon-box icon-box-style-3">
-                        <div class="icon-box-icon">
-                          <img width="55" height="55" src="assets/img/markers/categories/overige.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}" />
-                        </div>
-                        <div class="icon-box-info">
-                          <div class="icon-box-info-title">
-                            <h5 class="font-weight-bold text-4 mb-3">Overige</h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-    
-          </div>
-          
-          <div class="col-lg-9"> 
-              <div class="row justify-content-between mb-4">
-
-                  <div class="col-auto  ">
-                    <div class="d-flex align-items-center">
-                      <h5>
-                        <strong> {{filtereditems?.length}} </strong> resultaten</h5>
-                      <a (click)='mapview(false)' class="text-color-dark text-10 ml-2" data-toggle="tooltip" data-placement="top" title="Map">
-                        <i class="fas fa-map"></i>
-                      </a>
-                      <a (click)='mapview(true)' class="text-color-dark text-10 ml-2" data-toggle="tooltip" data-placement="top" title="Grid">
-                        <i class="fas fa-th"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-        
-                <div [hidden]='isListview' class="row">
-                  <div class="col-md-12">
-                    <div class="text-center">
-                      <h3>
-                        <div #gmap style="width:100%;height:700px"></div>
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" *ngIf="isListview">
-        
-                  <div *ngFor="let item of filtereditems" class="col-sm-6 mb-4">
-        
-                    <div class="product portfolio-item portfolio-item-style-2">
-                      <div class="image-frame image-frame-style-1 image-frame-effect-2 mb-3">
-                        <span class="image-frame-wrapper image-frame-wrapper-overlay-bottom image-frame-wrapper-overlay-light image-frame-wrapper-align-end">
-                          <a [routerLink]=" item.oogstkaartItemID">
-                            <img [src]="root + '/uploads/images/' + item.avatar?.uri" class="img-fluid resize" alt="">
-                          </a>
-                          <span class="image-frame-action">
-                            <a [routerLink]=" item.oogstkaartItemID" class="btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-fs-2">Bekijk product</a>
-                          </span>
-                        </span>
-                      </div>
-                      <div class="product-info d-flex flex-column flex-lg-row justify-content-between">
-                        <div *ngIf="!item.sold" class="product-info-title">
-                          <h3 class="text-color-default text-2 line-height-1 mb-1">
-                            <a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a>
-                          </h3>
-                          <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4">
-                            <strong> Prijs overeen te komen</strong>
-                          </span>
-                          <span *ngIf="item.vraagPrijsTotaal !== 0 " class="price font-primary text-4">
-                            <strong class="text-color-dark">€ {{item.vraagPrijsTotaal}} </strong>
-                          </span>
-                          <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1">
-                            <strong class="text-color-default">€ {{item.vraagPrijsPerEenheid}} / stuk</strong>
-                          </span>
-                        </div>
-                        <div *ngIf="item.sold" class="product-info-title">
-                          <h3 class="text-color-default text-2 line-height-1 mb-1">
-                            <a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a>
-                          </h3>
-                          <span class="price font-primary text-4 red">
-                            <strong> Product verkocht</strong>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-        
-        
-        
-        
-                </div>
-          </div>
-          
+    <div >
+    <div class="container-fluid text-center">
+      <div class="row content">
+       
+        <div class="col-lg-4  ">
+          <select [(ngModel)]="catsortmodel" (change)="sortCategory($event)" class="form-control border  mb-4">
+            <option disabled=true> Sorteer categorie </option>
+            <option value="alles"> Alle categorieën </option>
+            <option [value]="cat" *ngFor="let cat of categories"> {{cat}} </option>
+          </select>
         </div>
-      </div>
+        <div class="col-lg-4  ">
+            <select *ngIf="isListview" [(ngModel)]="sorting" (change)="sort($event)" class="form-control border mb-4">
+              <option value="alphabetic">Sorteer alfabetisch</option>
+              <option value="popularity">Sorteer populaire producten</option>
+              <option value="date" selected="selected">Sorteer meest recente</option>
+              <option value="price">Sorteer volgens prijs</option>
+            </select>
+          </div>
 
-      
-    <div class="row">
+        <div class="col-lg-12">
+          <div class="row mb-4">
+
+            <a (click)='mapview(false)' class="text-color-dark text-10 ml-2 p-2 hovergray" data-toggle="tooltip" data-placement="top"
+              title="Map">
+              <i class="fas fa-map"></i>
+              <h5>Kaartweergave</h5>
+            </a>
+
+            <a (click)='mapview(true)' class="text-color-dark text-10 ml-2  p-2 hovergray" data-toggle="tooltip" data-placement="top"
+              title="Grid">
+              <i class="fas fa-th"></i>
+              <h5>Lijstweergave</h5>
+            </a>
+
+          </div>
+
+          <div class="row">
+            <h5 class="ml-3 text-right">
+              <strong> {{filtereditems?.length}} </strong> resultaten</h5>
+          </div>
+          <div [hidden]='isListview' class="row">
+
+            <div class="col-md-9">
+              <div class="text-center">
+                <h3>
+                  <div #gmap style="width:100%;height:800px"></div>
+                </h3>
+              </div>
+            </div>
+            <div class="col-md-3 ">
+              <div class="">
+                <div class="row">
+                  <div  class="  appear-animation hovergray p-3" data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3 ">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/deur.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Jansendeuren</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div  class=" appear-animation hovergray  p-3" data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/raam.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Jansenramen</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class=" appear-animation hovergray  p-3 " data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/geveldeel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Jansengeveldelen</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" appear-animation hovergray  p-3" data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/jansenprofiel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Jansenprofielen</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="  appear-animation hovergray  p-3" data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/constructieprofiel.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Constructieprofielen</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class=" appear-animation hovergray  p-3" data-appear-animation="fadeInRightShorter">
+                    <div class="icon-box icon-box-style-3">
+                      <div class="icon-box-icon">
+                        <img width="55" height="55" src="assets/img/markers/categories/overige.png" alt="" data-icon data-plugin-options="{'color': '#2388ED', 'animated': true}"
+                        />
+                      </div>
+                      <div class="icon-box-info">
+                        <div class="icon-box-info-title">
+                          <h5 class="font-weight-bold text-4 mb-3">Overige</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="isListview">
+
+            <div *ngFor="let item of filtereditems" class="col-sm-6 mb-4">
+
+              <div class="product portfolio-item portfolio-item-style-2">
+                <div class="image-frame image-frame-style-1 image-frame-effect-2 mb-3">
+                  <span class="image-frame-wrapper image-frame-wrapper-overlay-bottom image-frame-wrapper-overlay-light image-frame-wrapper-align-end">
+                    <a [routerLink]=" item.oogstkaartItemID">
+                      <img [src]="root + '/uploads/images/' + item.avatar?.uri" class="img-fluid resize" alt="">
+                    </a>
+                    <span class="image-frame-action">
+                      <a [routerLink]=" item.oogstkaartItemID" class="btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-fs-2">Bekijk product</a>
+                    </span>
+                  </span>
+                </div>
+                <div class="product-info d-flex flex-column flex-lg-row justify-content-between">
+                  <div *ngIf="!item.sold" class="product-info-title">
+                    <h3 class="text-color-default text-2 line-height-1 mb-1">
+                      <a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a>
+                    </h3>
+                    <span *ngIf="item.vraagPrijsTotaal === 0 || item.vraagPrijsPerEenheid === 0  " class="price font-primary text-4">
+                      <strong> Prijs overeen te komen</strong>
+                    </span>
+                    <span *ngIf="item.vraagPrijsTotaal !== 0 " class="price font-primary text-4">
+                      <strong class="text-color-dark">€ {{item.vraagPrijsTotaal}} </strong>
+                    </span>
+                    <span *ngIf="item.vraagPrijsPerEenheid !== 0 " class="old-price font-primary text-1">
+                      <strong class="text-color-default">€ {{item.vraagPrijsPerEenheid}} / stuk</strong>
+                    </span>
+                  </div>
+                  <div *ngIf="item.sold" class="product-info-title">
+                    <h3 class="text-color-default text-2 line-height-1 mb-1">
+                      <a [routerLink]=" item.oogstkaartItemID">{{item.artikelnaam}}</a>
+                    </h3>
+                    <span class="price font-primary text-4 red">
+                      <strong> Product verkocht</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
 
 
+          </div>
+        </div>
 
-      <div class="col">
-     
       </div>
     </div>
+  </div>
   </div>
 
   <section class="section bg-dark-4 py-5 mt-5">

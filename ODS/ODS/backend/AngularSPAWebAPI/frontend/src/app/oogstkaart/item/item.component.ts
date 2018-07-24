@@ -16,7 +16,7 @@ export class ItemComponent implements OnInit {
   relateditems: OogstKaartItem[];
   root: string;
 
-
+  loading : boolean;
   images: Afbeelding[] = [];
 
 
@@ -27,7 +27,7 @@ export class ItemComponent implements OnInit {
 
     this.root = Utils.getRoot().replace("/api", "");
 
-
+    this.loading = true;
     this.route.params.subscribe(data => {
       this.service.getItem(data['id']).subscribe(data => {
 
@@ -37,7 +37,7 @@ export class ItemComponent implements OnInit {
         window.scrollTo(0,0);
 
         this.item = data;
-
+        this.loading = false
         this.item.gallery.forEach(element => {
           this.images.push(element);
         });

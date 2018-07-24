@@ -2,6 +2,10 @@
     margin-top: 100px
 }
 
+.hovergray:hover{
+ background: gray;
+}
+
 /* Absolute Center Spinner */
 .loading {
     position: fixed;

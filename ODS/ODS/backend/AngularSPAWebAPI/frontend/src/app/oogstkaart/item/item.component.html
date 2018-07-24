@@ -33,10 +33,6 @@
           <ngb-carousel>
             <ng-template *ngFor="let image of item?.gallery" ngbSlide>
               <img [src]="root + '/uploads/images/' + image.uri" alt="Random first slide">
-              <!-- <div class="carousel-caption">
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </div>-->
             </ng-template>
           </ngb-carousel>
         </div>
@@ -68,7 +64,8 @@
             <strong class="text-color-dark">Dit product werd verkocht. </strong>
           </span>
         </div>
-        <p class="mt-4">
+        <p class="mt-4">Omschrijving</p>
+        <p >
 
           {{item?.omschrijving}}
 
@@ -84,6 +81,8 @@
             <strong> {{item?.datumBeschikbaar | date}}
             </strong>
           </li>
+          <hr class="my-4">
+
           <div *ngIf="item?.specificaties !== undefined">
             <h5 *ngIf="item?.specificaties.length > 0">Specificaties</h5>
             <li *ngFor="let spec of item?.specificaties">
@@ -94,12 +93,7 @@
 
 
         </ul>
-        <div *ngIf="!item?.sold">
-          <hr class="my-4">
-          <form class="shop-cart d-flex align-items-center">
-            <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
-          </form>
-        </div>
+        
         <hr class="my-4">
         <div *ngIf="item?.files !== undefined && item?.files.length > 0">
           <h5 class="mb-3">Meegeleverde bestanden</h5>
@@ -131,6 +125,14 @@
 
 
         </div>
+
+        <hr class="my-4">
+
+        <div *ngIf="!item?.sold">
+            <form class="shop-cart d-flex align-items-center">
+              <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
+            </form>
+          </div>
         <!--
         <div class="d-flex align-items-center">
           <span class="text-2">Deel dit product</span>

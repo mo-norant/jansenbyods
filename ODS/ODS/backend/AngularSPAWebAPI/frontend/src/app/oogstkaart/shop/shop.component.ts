@@ -91,6 +91,7 @@ export class ShopComponent implements OnInit {
   }
 
   sortCategory($event){
+    alert($event)
       if(this.catsortmodel === "alles"){
         this.filtereditems = this.items;
         this.setMarkers(this.items);

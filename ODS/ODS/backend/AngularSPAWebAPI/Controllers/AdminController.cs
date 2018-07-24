@@ -96,20 +96,14 @@ namespace AngularSPAWebAPI.Controllers
       var item = await _context.OogstkaartItems.Where(o => o.OogstkaartItemID == request.OogstkaartID).FirstOrDefaultAsync();
       var emailuser = await _context.Users.FirstOrDefaultAsync(i => item.UserID == i.Id);
 
-      
-
-
       request.Status = status;
-
-     // var product = await _context.OogstkaartIte
-
       await _context.SaveChangesAsync();
 
         //mail naar klant sturen dat status over een bepaald product werd goedgekeurd.
         var message = new EmailMessage();
-        message.Subject = String.Format("Er werd een status voor een aanvraag van uw product ({0}) gewijzigd.", item.Artikelnaam);
+        message.Subject = String.Format("Er werd een status voor een aanvraag van uw product ('{0}') gewijzigd naar '{1}' .", item.Artikelnaam, request.Status);
         message.Content = string.Format("Geachte, " +
-          "U hebt een aanvraag voor product {0} dat naar status {1} is gewijzigd.{2} Als uw product niet werd goedgekeurd, gelieve ons dan te contacteren. " +
+          "U hebt een aanvraag voor product ('{0}') dat naar status <strong>{1}</strong> is gewijzigd.{2} Als uw product niet werd goedgekeurd, gelieve ons dan te contacteren. " +
           "{2}met vriendelijke groeten," +
           "{2}Jansen By ODS", item.Artikelnaam, status , System.Environment.NewLine);
 
@@ -155,17 +149,17 @@ namespace AngularSPAWebAPI.Controllers
 
       if (status == "tobereviewed")
       {
-        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).Include(ic => ic.Company).ToListAsync();
+        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).OrderByDescending(i => i.Create).Include(ic => ic.Company).ToListAsync();
         return Ok(requests);
       }
       else if (status == "declined")
       {
-        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).Include(ic => ic.Company).ToListAsync();
+        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).OrderByDescending(i => i.Create).Include(ic => ic.Company).ToListAsync();
         return Ok(requests);
       }
       else if (status == "accepted")
       {
-        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).Include(ic => ic.Company).ToListAsync();
+        var requests = await _context.Requests.Where(r => r.Status == status).Include(ir => ir.Messages).OrderByDescending(i => i.Create).Include(ic => ic.Company).ToListAsync();
         return Ok(requests);
       }
       else
