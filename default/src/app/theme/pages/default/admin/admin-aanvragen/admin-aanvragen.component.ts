@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../../../../_services/admin.service';
@@ -34,9 +35,12 @@ export class AdminAanvragenComponent implements OnInit {
             { label: 'Goedgekeurd', value: 'accepted' },
 
         ];
+
+
     }
 
     ngOnInit() {
+        
         this.loading = true;
         this.adminservice.getRequests('').subscribe(data => {
             data.forEach(i => {
@@ -44,6 +48,23 @@ export class AdminAanvragenComponent implements OnInit {
             });
             this.requests = data;
             this.loading = false;
+
+            //refresh voor nieuwe aanvragen
+        Observable.interval(10000).takeWhile(() => true).subscribe(() => {
+            this.adminservice.getRequests('').subscribe(data => {
+                if(data.length !== this.requests.length){
+                    data.forEach(i => {
+                        i.create = new Date(i.create).toLocaleString()
+                    });
+                    this.requests = data;
+                }
+              
+            }, err => {
+                this.loading = false;
+    
+            });
+        });
+
         }, err => {
             this.loading = false;
 
@@ -69,6 +90,8 @@ export class AdminAanvragenComponent implements OnInit {
             this.loading = false;
         })
     }
+
+    
 
 
 }

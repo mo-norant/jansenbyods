@@ -4,6 +4,7 @@
       <h3 class="m-subheader__title m-subheader__title--separator">
         Aanvraag
       </h3>
+      <i routerLink="" class="flaticon-lyft m--font-brand"></i>
 
     </div>
     <div>
@@ -37,7 +38,7 @@
 
               <li> Naam: {{ request.name}} </li>
               <li> Bedrijf: {{ request.company.companyName}} </li>
-              <li> E-mail: {{ request.company.email}} </li>
+              <li><a [href]="'mailto:' + request.company.email" > E-mail: {{ request.company.email}} </a></li>
               <li> Telefoon: {{ request.company.phone}} </li>
               <li> Adres: {{ request.company.address.street}}  {{ request.company.address.number}} <br>
                 {{ request.company.address.city}}  {{ request.company.address.zipcode}}  <br>
@@ -120,13 +121,19 @@
             <div class="m-portlet__body">
               <ul>
     
-                  <li> Artikelnaam: {{ item.artikelnaam}} </li>
-                  <li> Artikel - ID: {{ item.oogstkaartItemID}} </li>
-                  <li> Artikel - ID: {{ item.category}} </li>
-                  <li> Artikel - ID: {{ item.jansenserie}} </li>
-                  <li> Prijs per eenheid: {{ item.vraagPrijsPerEenheid}} </li>
-                  <li> Prijs totaal: {{ item.vraagPrijsTotaal}} </li>
-      
+                  <li> Productnaam: {{ item.artikelnaam}} </li>
+                  <li> ID: {{ item.oogstkaartItemID}} </li>
+                  <li> productcategorie: {{ item.category}} </li>
+                  <li> Jansenserie - ID: {{ item.jansenserie}} </li>
+                  <div *ngIf="item.vraagPrijsPerEenheid === 0  && item.vraagPrijsTotaal === 0 else customprice">
+                    <li> Prijs overeen te komen </li>
+                  </div>
+     
+                  <ng-template #customprice>    
+                      <li> Prijs per eenheid: € {{ item.vraagPrijsPerEenheid}} </li>
+                    <li> Prijs totaal: € {{ item.vraagPrijsTotaal}} </li>
+                  </ng-template>
+
     
               </ul>
             </div>

@@ -13,6 +13,7 @@ export class AdminComponent implements OnInit {
     period: string;
     periodrequests: Request[];
 
+    loading :boolean;
     single = [
         {
             "name": "Germany",
@@ -53,9 +54,14 @@ export class AdminComponent implements OnInit {
 
 
     GetRequestsFromPeriod(period: string) {
+        this.loading = true;
         this.statisticsservice.GetRequestsFromPeriod(period).subscribe(res => {
             this.periodrequests = res;
-            console.log(this.periodrequests)
+            //boven naar beneden
+            this.periodrequests.reverse();
+            this.loading = false;
+        }, err => {
+            alert("Geen data")
         });
 
 

@@ -15,6 +15,7 @@ export class AdminOogstkaartListComponent implements OnInit {
     cols: any[];
     selecteditem: OogstKaartItem;
 
+    loading : boolean;
     constructor(private adminservice: AdminService, private router: Router) { }
 
     ngOnInit() {
@@ -29,12 +30,13 @@ export class AdminOogstkaartListComponent implements OnInit {
         ];
 
 
-
+        this.loading = true;
         this.adminservice.getOogstkaartItems().subscribe(data => {
             data.forEach(i => {
                 i.localdatestring = new Date(i.createDate).toLocaleString();
             });
             this.items = data;
+            this.loading = false;
         })
     }
 

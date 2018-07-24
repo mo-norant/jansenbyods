@@ -32,9 +32,8 @@ export class AdminRequestItemComponent implements OnInit {
                 this.admin.getOogstkaartItem(data.oogstkaartID).subscribe(res => {
                     this.loading = false;
                     this.item = res;
-                    this.showSuccess("Aanvraag en product geladen");
                 }, err=> {
-                    alert("data niet geladen");
+                    this.showError("data niet geladen");
                     this.loading = false;
                     this.router.navigate(["admin"])
                 })
