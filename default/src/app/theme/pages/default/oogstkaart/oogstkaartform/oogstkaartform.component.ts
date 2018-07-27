@@ -149,6 +149,9 @@ export class OogstkaartformComponent implements OnInit {
                         this.secondquestion();
                     }, 100);
                 },
+                reject: () => {
+                    this.router.navigate(['oogstkaart']);
+                }
             });
         }
 
@@ -164,6 +167,7 @@ export class OogstkaartformComponent implements OnInit {
                 var url = "http://jansenbyods.com/oogstkaart/" +  this.returnedid;
                 var win = window.open(url, '_blank');
                 win.focus();
+                this.router.navigate(['oogstkaart']);
             },
             reject: () => {
                 this.router.navigate(['oogstkaart']);

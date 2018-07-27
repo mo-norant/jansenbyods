@@ -17,7 +17,7 @@ export class OogstkaartlistComponent implements OnInit {
     selecteditem: OogstKaartItem;
     msgs: Message[] = [];
     loading: boolean;
-
+    
     selectionitems: number[] = [];
 
 
@@ -28,7 +28,7 @@ export class OogstkaartlistComponent implements OnInit {
             { field: "oogstkaartItemID", header: "ID" },
             { field: "artikelnaam", header: "Naam" },
             { field: "jansenserie", header: "Serie" },
-            { field: "views", header: "Aantal keer bekeken" },
+            { field: "viewcount", header: "Aantal keer bekeken" },
             { field: "localdatestring", header: "Aangemaakt op" }
 
         ];
@@ -41,6 +41,11 @@ export class OogstkaartlistComponent implements OnInit {
             data.forEach(i => {
                 i.localdatestring = new Date(i.createDate).toLocaleString();
             });
+
+            data.forEach(element => {
+                element.viewcount = element.views.length
+            })
+
             this.items = data;
             this.loading = false;
         }, err => {

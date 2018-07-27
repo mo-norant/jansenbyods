@@ -7,7 +7,23 @@ import { Request } from '../../../../../auth/_models/models';
 @Component({
     selector: 'app-admin-aanvragen',
     templateUrl: './admin-aanvragen.component.html',
-    styles: []
+    styles: [`
+    .declined {
+        background-color: red !important;
+        color: #ffffff !important;
+    }
+
+    .tobereviewed {
+        background-color: orange !important;
+        color: #ffffff !important;
+    }
+
+    .accepted {
+        background-color: green !important;
+        color: #ffffff !important;
+    }
+`
+    ]
 })
 export class AdminAanvragenComponent implements OnInit {
 
@@ -16,6 +32,8 @@ export class AdminAanvragenComponent implements OnInit {
     selecteditem: Request;
     loading : boolean;
     statusses;
+
+    selectedstatus;
 
 
     constructor(private adminservice: AdminService, private router: Router) {
@@ -29,10 +47,9 @@ export class AdminAanvragenComponent implements OnInit {
         ];
 
         this.statusses = [
-            { label: 'Alles', value: 'all' },
+            { label: 'Goedgekeurd', value: 'accepted' },
             { label: 'In review', value: 'tobereviewed' },
             { label: 'Afgekeurd', value: 'declined' },
-            { label: 'Goedgekeurd', value: 'accepted' },
 
         ];
 
@@ -47,24 +64,31 @@ export class AdminAanvragenComponent implements OnInit {
                 i.create = new Date(i.create).toLocaleString()
             });
             this.requests = data;
+            this.requests.sort(i => i.create);
+            this.requests.reverse();
             this.loading = false;
 
-            //refresh voor nieuwe aanvragen
-        Observable.interval(10000).takeWhile(() => true).subscribe(() => {
-            this.adminservice.getRequests('').subscribe(data => {
-                if(data.length !== this.requests.length){
-                    data.forEach(i => {
-                        i.create = new Date(i.create).toLocaleString()
-                    });
-                    this.requests = data;
-                }
-              
-            }, err => {
-                this.loading = false;
-    
-            });
-        });
 
+        }, err => {
+            this.loading = false;
+
+        });
+    }
+
+    reload(){
+        this.loading = true;
+        this.adminservice.getRequests('').subscribe(data => {
+            if(data.length !== this.requests.length){
+                data.forEach(i => {
+                    i.create = new Date(i.create).toLocaleString()
+                });
+                this.requests = data;
+                this.requests.sort(i => i.create);
+                this.requests.reverse();
+            }
+
+            this.loading = false;
+          
         }, err => {
             this.loading = false;
 
@@ -77,6 +101,8 @@ export class AdminAanvragenComponent implements OnInit {
 
 
     filter($event) {
+
+
         this.loading = true;
         this.adminservice.getRequests($event.value).subscribe(data => {
             data.forEach(i => {

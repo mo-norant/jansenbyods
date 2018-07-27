@@ -47,7 +47,8 @@ export class OogstKaartItem {
     concept: string;
     transportInbegrepen: boolean;
     userID: string;
-    views: number;
+    views: any[];
+    viewcount: number
     avatar: Afbeelding;
     specificaties: Specificatie[];
     gallery: Afbeelding[];

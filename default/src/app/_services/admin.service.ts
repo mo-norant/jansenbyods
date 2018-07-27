@@ -33,6 +33,10 @@ export class AdminService {
     public DeleteItem(id: number) {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + 'admin/delete/' + id, {});
     }
+    
+    public DeleteRequest(id: number) {
+        return this.http.post<OogstKaartItem>(Utils.getRoot() + 'admin/requests/delete/' + id, {});
+    }
 
     public changeStatus(id: number, status: string) {
         return this.http.post<string>(Utils.getRoot() + 'admin/requests/update/' + id + '?status=' + status, null);

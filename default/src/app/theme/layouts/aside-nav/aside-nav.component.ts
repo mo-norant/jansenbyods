@@ -20,7 +20,6 @@ export class AsideNavComponent implements OnInit, AfterViewInit {
 
     constructor(private auth: AuthenticationService, private oogstkaartservice: OogstkaartService) {
         this.role = this.auth.role;
-        console.log(this.role)
     }
     ngOnInit() {
 

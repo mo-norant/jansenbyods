@@ -43,7 +43,7 @@ export class ItemComponent implements OnInit {
         });
 
         this.createView();
-        this.getRelatedItems(data.oogstkaartItemID);
+        this.getRelatedItems(res.oogstkaartItemID);
 
       }, err => {
         this.router.navigate(['oogstkaart']);
@@ -61,8 +61,8 @@ export class ItemComponent implements OnInit {
   }
 
 
-  getRelatedItems(item: number) {
-      this.service.getRelatedItems(item).subscribe(data => {
+  getRelatedItems(id: number) {
+      this.service.getRelatedItems(id).subscribe(data => {
         this.relateditems = data;
 
       });

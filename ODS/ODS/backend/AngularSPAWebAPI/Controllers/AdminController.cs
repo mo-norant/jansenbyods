@@ -108,16 +108,35 @@ namespace AngularSPAWebAPI.Controllers
       return BadRequest();
     }
 
+    [HttpPost("requests/delete/{id}")]
+    public async Task<IActionResult> DeleteRequest([FromRoute] int id)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      if (user == null) return BadRequest();
+      var request = await _context.Requests.Include(i => i.Messages).FirstOrDefaultAsync(i => i.RequestID == id);
+
+      if(request != null)
+      {
+        _context.Requests.Remove(request);
+        await _context.SaveChangesAsync();
+        return Ok();
+      }
+
+      return BadRequest();
+    }
+
 
     [HttpPost("requests/update/{id}")]
-    public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromQuery]string status)
+    public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromQuery]string status, [FromQuery]string decision)
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
       var request = await _context.Requests.FirstOrDefaultAsync(i => i.RequestID == id);
 
-      var item = await _context.OogstkaartItems.Where(o => o.OogstkaartItemID == request.OogstkaartID).FirstOrDefaultAsync();
+      var item = await _context.OogstkaartItems.Where(o => o.OogstkaartItemID == request.OogstkaartID).Include(i => i.Views).FirstOrDefaultAsync();
       var emailuser = await _context.Users.FirstOrDefaultAsync(i => item.UserID == i.Id);
+
+      request.Decision = decision;
 
       request.Status = status;
       await _context.SaveChangesAsync();
@@ -144,7 +163,7 @@ namespace AngularSPAWebAPI.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
-      var items = await _context.OogstkaartItems.Include(i => i.Specificaties).Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Where( i => i.Avatar != null).Include(i => i.Location).ToListAsync();
+      var items = await _context.OogstkaartItems.Include(i => i.Specificaties).Include(i => i.Gallery).Include(i => i.Views).Include(i => i.Files).Include(i => i.Avatar).Where( i => i.Avatar != null).Include(i => i.Location).ToListAsync();
       return Ok(items);
 
     }
@@ -154,7 +173,7 @@ namespace AngularSPAWebAPI.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
-      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Include(i => i.Views).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
       if (product == null)
       {
         return NotFound("Product niet gevonden");
@@ -172,7 +191,7 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == updatingitem.OogstkaartItemID)
-         .Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+         .Include(i => i.Location).Include(i => i.Views).Include(i => i.Specificaties).FirstOrDefaultAsync();
 
         if (item == null) return NotFound();
 
@@ -233,7 +252,6 @@ namespace AngularSPAWebAPI.Controllers
        
 
         _context.OogstkaartItems.Update(item);
-        await _context.SaveChangesAsync();
 
         EmailMessage mail = new EmailMessage();
         mail.FromAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
@@ -242,6 +260,7 @@ namespace AngularSPAWebAPI.Controllers
         mail.Content = string.Format("De administator paste je product ('{0}') op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk het aangepaste product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
         await _emailService.Send(mail);
 
+        await _context.SaveChangesAsync();
 
 
         return Ok(item);
@@ -271,7 +290,7 @@ namespace AngularSPAWebAPI.Controllers
         {
 
 
-
+          _context.Views.RemoveRange(item.Views);
           _context.Files.RemoveRange(item.Files);
           _context.Afbeeldingen.Remove(item?.Avatar);
           _context.Specificaties.RemoveRange(item.Specificaties);
@@ -454,11 +473,9 @@ namespace AngularSPAWebAPI.Controllers
         .Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Include(i => i.Location).ToListAsync();
 
         _context.OogstkaartItems.RemoveRange(oogstkaartproducten);
-
         _context.Addresses.Remove(user.Company.Address);
         _context.Companies.Remove(user.Company);
 
-        await _context.SaveChangesAsync();
 
         var result = await _userManager.DeleteAsync(user);
         if(result.Succeeded)
@@ -483,6 +500,7 @@ namespace AngularSPAWebAPI.Controllers
             "uw Jansen By ODS werd verwijderd door de administrator.");
 
           await _emailService.Send(message);
+          await _context.SaveChangesAsync();
 
           return Ok();
         }

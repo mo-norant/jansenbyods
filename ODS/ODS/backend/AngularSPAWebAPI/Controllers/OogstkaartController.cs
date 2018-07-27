@@ -115,7 +115,7 @@ namespace AngularSPAWebAPI.Controllers
       if (user == null) return NotFound();
 
       var allitems = await _context.OogstkaartItems.Where(c => c.UserID == user.Id).Include(c => c.Specificaties)
-        .Include(i => i.Location).Include(i => i.Avatar).ToListAsync();
+        .Include(i => i.Location).Include(i => i.Views).Include(i => i.Avatar).ToListAsync();
       var filtereditems = allitems.Where(i => i.Location != null).Where(i => i.Avatar != null).ToList();
       return Ok(filtereditems);
     }
@@ -124,7 +124,7 @@ namespace AngularSPAWebAPI.Controllers
     public async Task<IActionResult> Get([FromRoute] int id)
     {
       var tempuser = await _usermanager.GetUserAsync(User);
-      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => i.UserID == tempuser.Id).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Include(i => i.Views).Where(i => i.UserID == tempuser.Id).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
       if(product == null)
       {
         return NotFound("Product niet gevonden");
@@ -143,7 +143,6 @@ namespace AngularSPAWebAPI.Controllers
         if (item != null)
         {
           item.OnlineStatus = !item.OnlineStatus;
-          await _context.SaveChangesAsync();
 
           if (item.OnlineStatus)
           {
@@ -154,7 +153,8 @@ namespace AngularSPAWebAPI.Controllers
             mail.Content = string.Format("Product ({0}) werd online op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
             await _emailservice.Send(mail);
           }
-   
+
+          await _context.SaveChangesAsync();
           return Ok();
         }
       }
@@ -174,7 +174,7 @@ namespace AngularSPAWebAPI.Controllers
         if (item != null)
         {
           item.Sold = !item.Sold;
-          await _context.SaveChangesAsync();
+          
 
           if (item.Sold)
           {
@@ -187,6 +187,7 @@ namespace AngularSPAWebAPI.Controllers
             await _emailservice.Send(mail);
           }
 
+          await _context.SaveChangesAsync();
           return Ok(item.Sold);
         }
       }
@@ -443,7 +444,7 @@ namespace AngularSPAWebAPI.Controllers
 
         if (item != null)
         {
-
+          _context.Views.RemoveRange(item.Views);
           _context.Files.RemoveRange(item.Files);
           _context.Afbeeldingen.Remove(item.Avatar);
           _context.Specificaties.RemoveRange(item.Specificaties);
@@ -488,6 +489,7 @@ namespace AngularSPAWebAPI.Controllers
         
         foreach (var oi in items)
         {
+          _context.Views.RemoveRange(oi.Views);
           _context.Files.RemoveRange(oi.Files);
           _context.Afbeeldingen.Remove(oi.Avatar);
           _context.Specificaties.RemoveRange(oi.Specificaties);
@@ -526,7 +528,7 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == updatingitem.OogstkaartItemID)
-          .Where(i => i.UserID == user.Id).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+          .Where(i => i.UserID == user.Id).Include(i => i.Views).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
 
         if (item == null) return NotFound();
 
@@ -727,8 +729,7 @@ namespace AngularSPAWebAPI.Controllers
       request.Status = "tobereviewed";
       request.Messages.First().Created = DateTime.Now;
       request.OogstkaartID = item.OogstkaartItemID;
-      item.Requests.Add(request);
-      await _context.SaveChangesAsync();
+      
 
       EmailMessage mail = new EmailMessage();
       mail.FromAddresses.Add(new EmailAddress { Address = request.Company.Email });
@@ -744,6 +745,8 @@ namespace AngularSPAWebAPI.Controllers
       requestoremail.Content = string.Format("U hebt een aanvraag voor product {0} van onze oogstkaart geplaatst. ", item.Artikelnaam);
       await _emailservice.Send(requestoremail);
 
+      item.Requests.Add(request);
+      await _context.SaveChangesAsync();
       return Ok();
 
     }
@@ -752,13 +755,18 @@ namespace AngularSPAWebAPI.Controllers
     [HttpPost("view/{id}")]
     public async Task<IActionResult> PostView([FromRoute] int id)
     {
-      var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).FirstOrDefaultAsync();
+      var item = await _context.OogstkaartItems.Include(i => i.Views).Where(i => i.OogstkaartItemID == id).FirstOrDefaultAsync();
 
       if (item != null)
       {
-        item.Views++;
+        var view = new View
+        {
+          CreateDate = DateTime.Now
+        };
+
+        item.Views.Add(view);
         await _context.SaveChangesAsync();
-        return Ok(item.Views);
+        return Ok(item.Views.Count);
       }
 
       return BadRequest();
@@ -770,7 +778,7 @@ namespace AngularSPAWebAPI.Controllers
     {
       var artikels = await _context.OogstkaartItems.Where(i => i.OnlineStatus).Include(i => i.Location)
         .Where(i => i.Location != null).Include(i => i.Avatar).Where(i => i.Avatar != null)
-        .Include(i => i.Gallery).Include(i => i.Specificaties).Include(i => i.Files).ToListAsync();
+        .Include(i => i.Gallery).Include(i => i.Views).Include(i => i.Specificaties).Include(i => i.Files).ToListAsync();
 
    
 

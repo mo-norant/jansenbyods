@@ -33,6 +33,7 @@ colsq = [
       this.questioncategories = res;
     });
     this.faq.GetQuestions().subscribe(res => {
+      this.questions = [];
       res.forEach(e => {
         e.questions.forEach(q => {
           this.questions.push(q);

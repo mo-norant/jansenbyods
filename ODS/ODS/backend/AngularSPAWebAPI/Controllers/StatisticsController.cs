@@ -58,9 +58,10 @@ namespace AngularSPAWebAPI.Controllers
         return NotFound("user niet gevonden.");
       }
 
-      var oogstkaart = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).OrderBy(i => i.Views).FirstOrDefaultAsync();
+      var oogstkaart = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i =>  i.Views).MaxAsync(i => i.Views.Count);
 
       return Ok(oogstkaart);
+
     }
 
 
@@ -74,7 +75,7 @@ namespace AngularSPAWebAPI.Controllers
         return NotFound("user niet gevonden.");
       }
 
-      var items = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i => i.Requests).ToListAsync();
+      var items = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i => i.Views).Include(i => i.Requests).ToListAsync();
 
       List<Request> requests = new List<Request>();
 
@@ -106,7 +107,7 @@ namespace AngularSPAWebAPI.Controllers
         return NotFound("user niet gevonden.");
       }
 
-      var items = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i => i.Requests).ToListAsync();
+      var items = await _context.OogstkaartItems.Where(i => i.UserID == user.Id).Include(i => i.Views).Include(i => i.Requests).ToListAsync();
 
       List<Request> requests = new List<Request>();
 

@@ -14,6 +14,9 @@
         Verstuur E-mail
       </button>
 
+      <button (click)="deleterequest()"  class="btn btn-danger mr-2">
+          Verwijder aanvraag
+        </button>
     </div>
     <div>
 
@@ -78,7 +81,7 @@
             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
 
               
-              <button disabled="true" class="m-btn btn btn-secondary">
+              <button disabled="true"  class="m-btn btn btn-secondary " [ngClass]="request.status">
                 {{request.status}}
               </button>
               <div class="btn-group" role="group">
@@ -133,7 +136,7 @@
                   <li> Productnaam: {{ item.artikelnaam}} </li>
                   <li> ID: {{ item.oogstkaartItemID}} </li>
                   <li> productcategorie: {{ item.category}} </li>
-                  <li> Jansenserie - ID: {{ item.jansenserie}} </li>
+                  <li> Jansenserie: {{ item.jansenserie}} </li>
                   <div *ngIf="item.vraagPrijsPerEenheid === 0  && item.vraagPrijsTotaal === 0 else customprice">
                     <li> Prijs overeen te komen </li>
                   </div>
@@ -176,6 +179,10 @@
 </div>
 
 <div *ngIf="loading" class="loading">Loading&#8230;</div>
+ 
+<p-confirmDialog header="Bevestigen" acceptLabel="Ok" rejectLabel="Annuleren" header="Aanvraag" icon="fa fa-question-circle"
+width="425"></p-confirmDialog>
+
 
 <style>
   .loading {

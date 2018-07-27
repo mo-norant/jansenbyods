@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Request, OogstKaartItem } from './../../../../../auth/_models/models';
 import { OogstkaartService } from './../../../../../_services/oogstkaart.service';
 import { Component, OnInit } from '@angular/core';
@@ -15,23 +16,34 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
     root
     request: Request;
     item: OogstKaartItem;
-
-    constructor(private oogstkaartservice: OogstkaartService, private route: ActivatedRoute, private toastr: ToastrService
+    loading: boolean;
+    
+    constructor(private oogstkaartservice: OogstkaartService, private route: ActivatedRoute, private toastr: ToastrService, private router: Router
     ) { }
     ngOnInit() {
-
+        this.loading = true;
         this.root = Utils.getRoot().replace("/api", "");
 
         this.route.params.subscribe(data => {
+            
             this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(res => {
                 this.request = res;
                 this.oogstkaartservice.getOogstkaartItem(this.request.oogstkaartID).subscribe(data => {
                     this.item = data;
+                    this.loading = false;
+                }, err => {
+                    this.goBack();
                 })
+            }, err => {
+                this.goBack();
             });
         })
 
 
+    }
+
+    goBack(){
+        this.router.navigate(['oogstkaart/aanvragen'])
     }
 
     showSuccess(message: string) {

@@ -13,7 +13,7 @@ export class OogstkaartaanvragenComponent implements OnInit {
     requests: Request[];
     cols;
     selecteditem: Request;
-
+    loading : boolean;
 
 
     constructor(private oogstkaartservice: OogstkaartService, private router: Router) {
@@ -36,6 +36,8 @@ export class OogstkaartaanvragenComponent implements OnInit {
             });
 
             this.requests = res;
+            this.requests.sort(i => i.create);
+            this.requests.reverse();
         })
     }
 
@@ -43,5 +45,25 @@ export class OogstkaartaanvragenComponent implements OnInit {
         this.router.navigate(['oogstkaart/aanvragen', event.data.requestID]);
     }
 
+
+    reload(){
+        this.loading = true;
+         this.oogstkaartservice.GetAcceptedRequests().subscribe(data => {
+            if(data.length !== this.requests.length){
+                data.forEach(i => {
+                    i.create = new Date(i.create).toLocaleString()
+                });
+                this.requests = data;
+                this.requests.sort(i => i.create);
+                this.requests.reverse();
+            }
+
+            this.loading = false;
+          
+        }, err => {
+            this.loading = false;
+
+        });
+    }
 
 }

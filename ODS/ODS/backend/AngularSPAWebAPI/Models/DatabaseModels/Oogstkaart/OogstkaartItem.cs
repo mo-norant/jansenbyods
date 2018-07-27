@@ -25,7 +25,7 @@ namespace AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart
         public bool Sold { get; set; }
         public bool TransportInbegrepen { get; set; }
         public string UserID { get; set; }
-        public int Views { get; set; }
+        public ICollection<View> Views { get; set; }
         public Afbeelding Avatar { get; set; }
         public ICollection<Specificatie> Specificaties { get; set; }
         public ICollection<Afbeelding> Gallery { get; set; }
