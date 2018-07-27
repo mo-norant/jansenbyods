@@ -5,6 +5,14 @@
         Aanvraag
       </h3>
 
+      <button (click)="viewProduct()"  class="btn btn-primary mr-2">
+        Bekijk product
+      </button>
+
+      <button (click)="email()"  class="btn btn-primary mr-2">
+        Verstuur E-mail
+      </button>
+
     </div>
     <div>
 
@@ -37,7 +45,7 @@
 
               <li> Naam: {{ request.name}} </li>
               <li> Bedrijf: {{ request.company.companyName}} </li>
-              <li> E-mail: {{ request.company.email}} </li>
+              <li><a class="btn-secondary" (click)="email()" > E-mail: {{ request.company.email}} </a></li>
               <li> Telefoon: {{ request.company.phone}} </li>
               <li> Adres: {{ request.company.address.street}}  {{ request.company.address.number}} <br>
                 {{ request.company.address.city}}  {{ request.company.address.zipcode}}  <br>
@@ -87,6 +95,7 @@
                   <h3 class="m-portlet__head-text m--font-brand">
                     Product
                   </h3>
+                  
                 </div>
               </div>
              

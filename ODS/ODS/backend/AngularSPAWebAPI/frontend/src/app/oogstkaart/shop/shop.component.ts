@@ -14,7 +14,7 @@ declare var MarkerClusterer: any;
   styleUrls: ["./shop.component.css"]
 })
 export class ShopComponent implements OnInit {
-  
+
   root: string;
 
   items: OogstKaartItem[];
@@ -73,16 +73,14 @@ export class ShopComponent implements OnInit {
         this.items.sort((a: OogstKaartItem, b : OogstKaartItem) => {
           return a.Views - b.Views;
         });
-      }
-      else if(this.sorting === "price"){
-        this.items.sort((a: OogstKaartItem, b : OogstKaartItem) => {
+      } else if (this.sorting === 'price') {
+        this.items.sort((a: OogstKaartItem, b: OogstKaartItem) => {
           return a.vraagPrijsTotaal - b.vraagPrijsTotaal;
         });
 
         this.items.reverse();
-      }
-      else{
-        this.items.sort((a: OogstKaartItem, b : OogstKaartItem) => {
+      } else {
+        this.items.sort((a: OogstKaartItem, b: OogstKaartItem) => {
           return this.getTime(a.createDate) - this.getTime(b.createDate);
         });
       }
@@ -90,14 +88,12 @@ export class ShopComponent implements OnInit {
 
   }
 
-  sortCategory($event){
-    alert($event)
-      if(this.catsortmodel === "alles"){
+  sortCategory($event) {
+      if (this.catsortmodel === 'alles') {
         this.filtereditems = this.items;
         this.setMarkers(this.items);
 
-      }
-      else{
+      } else {
         this.filtereditems = this.items.filter(i => i.category === this.catsortmodel);
         this.setMarkers(this.filtereditems);
       }

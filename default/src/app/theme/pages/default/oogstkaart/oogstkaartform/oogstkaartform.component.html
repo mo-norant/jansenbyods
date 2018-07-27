@@ -366,18 +366,19 @@
                                 </a>
                               </div>
                             </div>
-                            <div class="col-lg-3">
-                              <input type="text" [name]="spec.specificatieSleutel + '_' + i" [(ngModel)]="spec.specificatieSleutel" class="form-control m-input" 
-                                 required>
+                            <div class="col-lg-5">
+                             
+                                 <p-dropdown [name]="spec.specificatieSleutel + '_' + i" [options]="eigenschappen" [(ngModel)]="spec.specificatieSleutel"  editable="true" placeholder="Selecteer een eigenschap" class="form-control m-input" ></p-dropdown>
+
                               <span class="m-form__help">
-                                Eigenschap (verplicht)*
+                                Selecteer eigenschap of voeg er een toe (*)
                               </span>
                             </div>
                             <div class="col-lg-3">
                               <input type="text" [name]="spec.specificatieValue + '_' + i" [(ngModel)]="spec.specificatieValue" class="form-control m-input" [value]="spec.specificatieValue"
                                  required>
                               <span class="m-form__help">
-                                Waarde  (verplicht)*
+                                Waarde  (*)
                               </span>
                             </div>
                             <div class="col-lg-3">

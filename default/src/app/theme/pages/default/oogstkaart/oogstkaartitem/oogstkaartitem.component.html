@@ -104,19 +104,34 @@
             </div>
           </div>
           <div class="form-group m-form__group">
-            <label>
-              Prijs per eenheid
+            <label class="col-form-label">
+              Prijs overeen te komen
             </label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon2">
-                  €
-                </span>
+            <div class="col-lg-4">
+              <span class="m-switch">
+                <label>
+                  <input (ngModelChange)="itemupdatet()" type="checkbox" [(ngModel)]="prijsovereentekomen" name="prijsovereentekomen" />
+                  <span></span>
+                </label>
+              </span>
+            </div>
+            <div *ngIf="!prijsovereentekomen">
+
+              <label>
+                Prijs per eenheid
+              </label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon2">
+                    €
+                  </span>
+                </div>
+                <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsPerEenheid" name="vraagprijspereenheid" type="text" class="form-control m-input col-lg-4"
+                  placeholder="prijs">
               </div>
-              <input (ngModelChange)="itemupdatet()" [(ngModel)]="item.vraagPrijsPerEenheid" name="vraagprijspereenheid" type="text" class="form-control m-input col-lg-4"
-                placeholder="prijs">
             </div>
           </div>
+          <div *ngIf="!prijsovereentekomen">
           <div class="form-group m-form__group">
             <label>
               Totaalprijs
@@ -131,6 +146,8 @@
                 placeholder="prijs">
             </div>
           </div>
+          </div>
+          
           <div class="form-group m-form__group">
             <label>
               Hoeveelheid
@@ -178,22 +195,24 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-lg-3">
-                    <input type="text" (ngModelChange)="itemupdatet()" [name]="spec.specificatieSleutel + '_' + i" [(ngModel)]="spec.specificatieSleutel" class="form-control m-input"
-                      required>
+                  <div class="col-lg-5">
+
+                      <p-dropdown  (ngModelChange)="itemupdatet()" [name]="spec.specificatieSleutel + '_' + i" [options]="eigenschappen" [(ngModel)]="spec.specificatieSleutel"  editable="true" placeholder="Selecteer een eigenschap" class="form-control m-input" ></p-dropdown>
+
                     <span class="m-form__help">
                       Specificatie-eenheid
                     </span>
                   </div>
                   <div class="col-lg-3">
-                    <input type="text" (ngModelChange)="itemupdatet()" [name]="spec.specificatieValue + '_' + i" [(ngModel)]="spec.specificatieValue" class="form-control m-input"
-                      [value]="spec.specificatieValue" required>
+                    <input type="text" (ngModelChange)="itemupdatet()" [name]="spec.specificatieValue + '_' + i" [(ngModel)]="spec.specificatieValue"
+                      class="form-control m-input" [value]="spec.specificatieValue" required>
                     <span class="m-form__help">
                       Waarde
                     </span>
                   </div>
                   <div class="col-lg-3">
-                    <input type="text" (ngModelChange)="itemupdatet()" [name]="spec.specificatieOmschrijving + '_' + i" [(ngModel)]="spec.specificatieOmschrijving" class="form-control m-input">
+                    <input type="text" (ngModelChange)="itemupdatet()" [name]="spec.specificatieOmschrijving + '_' + i" [(ngModel)]="spec.specificatieOmschrijving"
+                      class="form-control m-input">
                     <span class="m-form__help">
                       Omschrijving
                     </span>
@@ -235,26 +254,26 @@
               </div>
 
               <div *ngIf="item.files" class=" m-form__group-sub">
-                  <div class="form-group m-form__group row">
-                    <div *ngFor="let pic of item.gallery" class="col-lg-4 m-5">
-                      <div class="row">
-  
-                        <div class="col-10">
-                          <img [src]="'http://jansenbyods.com/uploads/images/' + pic.uri" alt="">
-                          <h4>{{pic.name}}</h4>
-                        </div>
-                        <div class="col-2">
-                          <a (click)="removeFile(pic.uri)" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill">
-                            <i class="fa fa-minus-circle"></i>
-                          </a>
-                        </div>
+                <div class="form-group m-form__group row">
+                  <div *ngFor="let pic of item.gallery" class="col-lg-4 m-5">
+                    <div class="row">
+
+                      <div class="col-10">
+                        <img [src]="'http://jansenbyods.com/uploads/images/' + pic.uri" alt="">
+                        <h4>{{pic.name}}</h4>
+                      </div>
+                      <div class="col-2">
+                        <a (click)="removeFile(pic.uri)" class="btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill">
+                          <i class="fa fa-minus-circle"></i>
+                        </a>
                       </div>
                     </div>
-  
-  
-  
                   </div>
+
+
+
                 </div>
+              </div>
 
             </div>
           </div>

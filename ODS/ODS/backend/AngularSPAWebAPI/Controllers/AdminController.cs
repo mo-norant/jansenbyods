@@ -86,6 +86,29 @@ namespace AngularSPAWebAPI.Controllers
 
     }
 
+    [HttpPost("sold/{id}")]
+    public async Task<IActionResult> OogstkaartitemSold([FromRoute] int id)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      if (user != null)
+      {
+        var item = await _context.OogstkaartItems.Where(o => o.OogstkaartItemID == id)
+          .FirstOrDefaultAsync();
+
+        if (item != null)
+        {
+          item.Sold = !item.Sold;
+          await _context.SaveChangesAsync();
+
+
+          return Ok(item.Sold);
+        }
+      }
+
+      return BadRequest();
+    }
+
+
     [HttpPost("requests/update/{id}")]
     public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromQuery]string status)
     {
@@ -121,7 +144,7 @@ namespace AngularSPAWebAPI.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
-      var items = await _context.OogstkaartItems.Include(i => i.Specificaties).Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Include(i => i.Location).ToListAsync();
+      var items = await _context.OogstkaartItems.Include(i => i.Specificaties).Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Where( i => i.Avatar != null).Include(i => i.Location).ToListAsync();
       return Ok(items);
 
     }
@@ -131,15 +154,143 @@ namespace AngularSPAWebAPI.Controllers
     {
       var user = await _userManager.GetUserAsync(User);
       if (user == null) return BadRequest();
-      var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Include(i => i.Specificaties)
-          .Include(i => i.Gallery).Include(i => i.Files).Include(i => i.Avatar).Include(i => i.Location)
-          .FirstOrDefaultAsync();
-      if (item != null) return Ok(item);
-      return NotFound();
+      var product = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+      if (product == null)
+      {
+        return NotFound("Product niet gevonden");
+      }
+
+
+      return Ok(product);
 
     }
 
-   
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] OogstkaartItem updatingitem)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      if (user != null)
+      {
+        var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == updatingitem.OogstkaartItemID)
+         .Include(i => i.Location).Include(i => i.Specificaties).FirstOrDefaultAsync();
+
+        if (item == null) return NotFound();
+
+        var owner = await _context.Users.FirstOrDefaultAsync(i => i.Id == item.UserID);
+
+        item.Artikelnaam = updatingitem.Artikelnaam;
+        item.Category = updatingitem.Category;
+        item.Concept = updatingitem.Concept;
+        item.CreateDate = updatingitem.CreateDate;
+        item.DatumBeschikbaar = updatingitem.DatumBeschikbaar;
+        item.Hoeveelheid = updatingitem.Hoeveelheid;
+        item.Jansenserie = updatingitem.Jansenserie;
+
+        item.Omschrijving = updatingitem.Omschrijving;
+        item.VraagPrijsPerEenheid = updatingitem.VraagPrijsPerEenheid;
+        item.VraagPrijsTotaal = updatingitem.VraagPrijsTotaal;
+
+        item.Location.Latitude = updatingitem.Location.Latitude;
+        item.Location.Longtitude = updatingitem.Location.Longtitude;
+
+        //bekijk alle specificaties dat wel in de lijst voorkomen en update die
+
+        foreach (var tempspec in updatingitem.Specificaties)
+        {
+          var spec = await _context.Specificaties.FirstOrDefaultAsync(i => i.SpecificatieID == tempspec.SpecificatieID);
+
+          if (spec == null)
+          {
+            item.Specificaties.Add(tempspec);
+
+          }
+          else
+          {
+            spec.SpecificatieSleutel = tempspec.SpecificatieSleutel;
+            spec.SpecificatieEenheid = tempspec.SpecificatieEenheid;
+            spec.SpecificatieValue = tempspec.SpecificatieValue;
+            spec.SpecificatieOmschrijving = tempspec.SpecificatieOmschrijving;
+          }
+
+
+        }
+
+
+        foreach (var spec in item.Specificaties)
+        {
+          var sp = updatingitem.Specificaties.FirstOrDefault(i => i.SpecificatieID == spec.SpecificatieID);
+          if (sp == null)
+          {
+            _context.Specificaties.Remove(spec);
+          }
+        }
+
+        var specs = item.Specificaties.Where(i => i.SpecificatieValue == null || i.SpecificatieSleutel == null).ToList();
+        foreach (var sp in specs)
+        {
+          item.Specificaties.Remove(sp);
+        }
+       
+
+        _context.OogstkaartItems.Update(item);
+        await _context.SaveChangesAsync();
+
+        EmailMessage mail = new EmailMessage();
+        mail.FromAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+        mail.Subject = string.Format("Product {0}  werd aangepast op de oogstkaart op {1} ", item.Artikelnaam, DateTime.Now.ToShortDateString());
+        mail.ToAddresses.Add(new EmailAddress { Address = owner.Email });
+        mail.Content = string.Format("De administator paste je product ('{0}') op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk het aangepaste product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
+        await _emailService.Send(mail);
+
+
+
+        return Ok(item);
+      }
+
+      return BadRequest();
+    }
+
+    [HttpPost("delete/{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+      var user = await _userManager.GetUserAsync(User);
+      if (user != null)
+      {
+        var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id)
+          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
+
+
+        var message = new EmailMessage();
+        message.FromAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = "info@jansenbyods.com" });
+        message.ToAddresses.Add(new EmailAddress { Name = user.UserName, Address = user.Email });
+        message.Subject = String.Format("Er werd '{0}' uit de oogstkaart verwijderd.", item.Artikelnaam);
+        message.Content = String.Format("Er werd '{0}' uit de oogstkaart verwijderd.", item.Artikelnaam);
+
+
+        if (item != null)
+        {
+
+
+
+          _context.Files.RemoveRange(item.Files);
+          _context.Afbeeldingen.Remove(item?.Avatar);
+          _context.Specificaties.RemoveRange(item.Specificaties);
+          _context.Afbeeldingen.RemoveRange(item.Gallery);
+          _context.Requests.RemoveRange(item.Requests);
+          _context.Locations.Remove(item?.Location);
+          _context.OogstkaartItems.Remove(item);
+          await _context.SaveChangesAsync();
+
+          await _emailService.Send(message);
+          return Ok();
+        }
+      }
+
+      return BadRequest();
+    }
+
+
+
     [HttpGet("requests")]
     public async Task<IActionResult> GetRequests([FromQuery] string status)
     {
@@ -309,18 +460,10 @@ namespace AngularSPAWebAPI.Controllers
 
         await _context.SaveChangesAsync();
 
-        var message = new EmailMessage();
-        message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = user.Email });
-        message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
-
-        message.Subject = String.Format("U werd account Jansen by ODS-account is verwijderd.");
-        message.Content = String.Format("Geachte," +
-          "uw Jansen By ODS werd verwijderd door de administrator.");
-        await _emailService.Send(message);
-
         var result = await _userManager.DeleteAsync(user);
         if(result.Succeeded)
         {
+          var message = new EmailMessage();
 
           //notify jansen by ods
           message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS" , Address = "info@jansenbyods.com" });
@@ -364,7 +507,18 @@ namespace AngularSPAWebAPI.Controllers
 
         user.LockoutEnabled = !user.LockoutEnabled;
         await _context.SaveChangesAsync();
-        return Ok(user.LockoutEnabled);
+
+        if (!user.LockoutEnabled)
+        {
+          var message = new EmailMessage();
+          message.ToAddresses.Add(new EmailAddress { Name = "Jansen by ODS", Address = user.Email });
+          message.FromAddresses.Add(new EmailAddress { Name = "Jansen By ODS", Address = "info@jansenbyods.com" });
+
+          message.Subject = String.Format("U werd Jansen by ODS-account werd geactiveerd.");
+          message.Content = String.Format("Geachte," + System.Environment.NewLine +
+            "uw Jansen By ODS werd verwijderd door de administrator.");
+          return Ok(user.LockoutEnabled);
+        }
 
       }
 

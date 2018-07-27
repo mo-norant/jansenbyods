@@ -30,9 +30,24 @@ export class AdminService {
 
     }
 
+    public DeleteItem(id: number) {
+        return this.http.post<OogstKaartItem>(Utils.getRoot() + 'admin/delete/' + id, {});
+    }
+
     public changeStatus(id: number, status: string) {
         return this.http.post<string>(Utils.getRoot() + 'admin/requests/update/' + id + '?status=' + status, null);
 
+    }
+
+    
+    public ProductSold(id: number) {
+        return this.http.post<boolean>(Utils.getRoot() + 'admin/sold/' + id, {});
+    }
+
+
+    
+    public UpdateOogstkaartitem(item: OogstKaartItem) {
+        return this.http.post<OogstKaartItem>(Utils.getRoot() + "admin/update", item)
     }
 
     

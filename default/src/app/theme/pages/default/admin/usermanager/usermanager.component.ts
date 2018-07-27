@@ -21,9 +21,7 @@ import { AdminService } from '../../../../../_services/admin.service';
 export class UsermanagerComponent implements OnInit {
 
     cols;
-
     users;
-
     loading: boolean;
     selecteduser;
 

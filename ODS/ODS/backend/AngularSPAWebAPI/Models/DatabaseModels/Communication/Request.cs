@@ -17,8 +17,9 @@ namespace AngularSPAWebAPI.Models.DatabaseModels.Communication
     public DateTime Create { get; set; }
     public DateTime LastUpdatet { get; set; }
     public bool UserViewed { get; set; }
+    public string Decision { get; set; }
     public ICollection<Message> Messages { get; set; }
-      public OogstkaartItem Item { get; set; }
+    public OogstkaartItem Item { get; set; }
     
   }
 }

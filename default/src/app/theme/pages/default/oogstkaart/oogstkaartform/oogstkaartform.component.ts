@@ -42,7 +42,23 @@ export class OogstkaartformComponent implements OnInit {
 
     userSettings = {
         inputString: "adres"
-    }
+    };
+
+    eigenschappen = [
+        {label: 'Kleur', value: 'kleur'},
+        {label: 'Gewicht', value: 'gewicht'},
+        {label: 'Brandwerend', value: 'brandwerend'},
+        {label: 'Lengte', value: 'lengte'},
+        {label: 'Breedte', value: 'breedte'},
+        {label: 'Hoogte', value: 'hoogte'},
+        {label: 'RAL', value: 'hoogte'},
+        {label: 'U-waarde', value: 'hoogte'},
+        {label: 'Glas', value: 'hoogte'},
+
+    ];
+
+
+
     autoCompleteCallback1(selectedData: any) {
         if (selectedData.response) {
             if (this.selectedlocation == null) {
@@ -145,7 +161,9 @@ export class OogstkaartformComponent implements OnInit {
             message: "Wilt uw product bekijken op de website?",
             key: "second",
             accept: () => {
-                window.location.href = "http://jansenbyods.com/oogstkaart/" + this.returnedid;
+                var url = "http://jansenbyods.com/oogstkaart/" +  this.returnedid;
+                var win = window.open(url, '_blank');
+                win.focus();
             },
             reject: () => {
                 this.router.navigate(['oogstkaart']);

@@ -27,14 +27,12 @@ export class OogstkaartService {
 
     public PostProductPhoto(file: File, id: number) {
 
-        console.log(file)
         let formData: FormData = new FormData();
         formData.append(file.name, file);
         return this.http.post(Utils.getRoot() + "Oogstkaart/oogstkaartavatar/" + id, formData);
     }
 
     public PostPhotoGallery(files: File[], id: number) {
-        console.log(files);
         let formData: FormData = new FormData();
         files.forEach(file => {
             formData.append(file.name, file);
@@ -43,7 +41,6 @@ export class OogstkaartService {
     }
 
     public PostFiles(files: File[], id: number) {
-        console.log(files);
         let formData: FormData = new FormData();
         files.forEach(file => {
             formData.append(file.name, file);

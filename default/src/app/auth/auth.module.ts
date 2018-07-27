@@ -12,7 +12,6 @@ import { AuthGuard } from './_guards/auth.guard';
 import { AlertService } from './_services/alert.service';
 import { AuthenticationService } from './_services/authentication.service';
 import { UserService } from './_services/user.service';
-import { fakeBackendProvider } from './_helpers/index';
 import { RegisterComponent } from './register/register.component';
 import { RegistersuccesComponent } from './register/registersucces/registersucces.component';
 import { ConfirmmailComponent } from './register/confirmmail/confirmmail.component';

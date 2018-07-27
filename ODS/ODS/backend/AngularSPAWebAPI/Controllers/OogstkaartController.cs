@@ -67,6 +67,16 @@ namespace AngularSPAWebAPI.Controllers
         oogstkaartItem.OnlineStatus = true;
         oogstkaartItem.UserID = user.Id;
         oogstkaartItem.CreateDate = now;
+
+        //verwijder lege specificaties die leeg zijn.
+        foreach (var spec in oogstkaartItem.Specificaties)
+        {
+          if(spec.SpecificatieSleutel == null || spec.SpecificatieValue == null)
+          {
+            oogstkaartItem.Specificaties.Remove(spec);
+          }
+        }
+
         await _context.OogstkaartItems.AddAsync(oogstkaartItem);
         await _context.SaveChangesAsync();
 
@@ -134,6 +144,17 @@ namespace AngularSPAWebAPI.Controllers
         {
           item.OnlineStatus = !item.OnlineStatus;
           await _context.SaveChangesAsync();
+
+          if (item.OnlineStatus)
+          {
+            EmailMessage mail = new EmailMessage();
+            mail.FromAddresses.Add(new EmailAddress { Address = user.Email });
+            mail.Subject = string.Format("Product {0} is (terug) online op {1} ", item.Artikelnaam, DateTime.Now.ToShortDateString());
+            mail.ToAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
+            mail.Content = string.Format("Product ({0}) werd online op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
+            await _emailservice.Send(mail);
+          }
+   
           return Ok();
         }
       }
@@ -160,7 +181,7 @@ namespace AngularSPAWebAPI.Controllers
             //Stuur bevestiging naar admin dat er een nieuw product is.
             EmailMessage mail = new EmailMessage();
             mail.FromAddresses.Add(new EmailAddress { Address = user.Email });
-            mail.Subject = string.Format("Product {0} is verkocht op {1} ", item.Artikelnaam, DateTime.Now.ToShortDateString());
+            mail.Subject = string.Format("Product {0} is (terug) verkocht op {1} ", item.Artikelnaam, DateTime.Now.ToShortDateString());
             mail.ToAddresses.Add(new EmailAddress { Address = "info@jansenbyods.com" });
             mail.Content = string.Format("Product ({0}) werd verkocht op de oogstkaart. <a href='http://jansenbyods.com/oogstkaart/{1}'>Bekijk product.</a>", item.Artikelnaam, item.OogstkaartItemID.ToString());
             await _emailservice.Send(mail);
@@ -558,6 +579,14 @@ namespace AngularSPAWebAPI.Controllers
             _context.Specificaties.Remove(spec);
           }
         }
+
+        //verwijder lege specificaties die leeg zijn.
+        var specs = item.Specificaties.Where(i => i.SpecificatieValue == null || i.SpecificatieSleutel == null).ToList();
+        foreach (var sp in specs)
+        {
+          item.Specificaties.Remove(sp);
+        }
+
         _context.OogstkaartItems.Update(item);
         await _context.SaveChangesAsync();
 
@@ -779,12 +808,5 @@ namespace AngularSPAWebAPI.Controllers
 
       return Ok(suggesteditems);
     }
-
- 
-    
-
-
-
-  }
-
+ }
 }

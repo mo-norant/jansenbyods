@@ -100,6 +100,21 @@
       messages: Message[];
   }
 
+  export class Question{
+    questionID: number;
+    _question:	string;
+    answer:	string;
+    createDate: Date;
+
+}
+
+export class QuestionCategory{
+    questionCategoryID	: number;
+    title:	string;
+    creationDate:	Date;
+    questions : Question[];
+    }
+
 
 
 

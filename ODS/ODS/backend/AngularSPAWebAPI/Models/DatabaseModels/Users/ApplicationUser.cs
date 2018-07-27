@@ -12,6 +12,7 @@ namespace AngularSPAWebAPI.Models
         public DateTime CreateDate { get; set; }
         public bool SubscripedWithCompany { get; set; }
         public string Name { get; set; }
+        public bool Tour { get; set; }
 
-    }
+  }
 }

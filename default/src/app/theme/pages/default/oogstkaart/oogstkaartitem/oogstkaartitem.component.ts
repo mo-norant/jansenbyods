@@ -16,7 +16,21 @@ export class OogstkaartitemComponent implements OnInit {
     updated: boolean;
     msgs: Message[] = [];
     loading: boolean;
+    prijsovereentekomen: boolean;
+    eigenschappen = [
+        {label: 'Kleur', value: 'kleur'},
+        {label: 'Gewicht', value: 'gewicht'},
+        {label: 'Brandwerend', value: 'brandwerend'},
+        {label: 'Lengte', value: 'lengte'},
+        {label: 'Breedte', value: 'breedte'},
+        {label: 'Hoogte', value: 'hoogte'},
+        {label: 'RAL', value: 'hoogte'},
+        {label: 'U-waarde', value: 'hoogte'},
+        {label: 'Glas', value: 'hoogte'},
 
+    ];
+
+    
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -31,7 +45,14 @@ export class OogstkaartitemComponent implements OnInit {
                 data => {
                     this.item = data;
                     this.item.createDate = data.createDate;
+
+                    if(data.vraagPrijsPerEenheid === 0 && data.vraagPrijsTotaal === 0  ){
+                        this.prijsovereentekomen = true;
+                    }
+
                     this.loading = false;
+
+
                 },
                 err => {
                         alert("Data niet beschikbaar");
@@ -48,6 +69,12 @@ export class OogstkaartitemComponent implements OnInit {
         this.dialogservice.confirm({
             message: "Wilt u dit product updaten?",
             accept: () => {
+
+                if(this.prijsovereentekomen){
+                    this.item.vraagPrijsPerEenheid = 0;
+                    this.item.vraagPrijsTotaal = 0;
+                }
+
                 this.oogstkaartservice.UpdateOogstkaartitem(this.item).subscribe(data => {
                     this.router.navigate(["oogstkaart"]);
                 }, err => {
@@ -123,8 +150,9 @@ export class OogstkaartitemComponent implements OnInit {
     }
 
     goToProduct() {
-        window.location.href = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
-    }
+        var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
+        var win = window.open(url, '_blank');
+        win.focus();      }
 
 
     addSpecificatie() {

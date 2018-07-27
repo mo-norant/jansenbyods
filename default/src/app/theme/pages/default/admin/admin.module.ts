@@ -1,3 +1,6 @@
+import { FAQService } from './../../../../_services/FAQ.service';
+import { QuestionComponent } from './question/question.component';
+import { QuestionslistComponent } from './questionslist/questionslist.component';
 import { ConfirmationService } from 'primeng/api';
 import { AdminService } from './../../../../_services/admin.service';
 import { RoleService } from './../../../../auth/_guards/role.service';
@@ -18,13 +21,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { ConfirmDialogModule } from 'primeng/components/confirmdialog/confirmdialog';
 import { DropdownModule } from 'primeng/dropdown';
-import {EditorModule} from 'primeng/editor';
 import { AdminRequestItemComponent } from './admin-request-item/admin-request-item.component';
 import { ToastrService } from 'ngx-toastr';
 import { AdminStatisticsService } from '../../../../_services/adminstatistics.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { UsermanagerdetailComponent } from './usermanager/usermanagerdetail/usermanagerdetail.component';
 import { NgxEditorModule } from 'ngx-editor';
+import {DialogModule} from 'primeng/dialog';
 
 const routes: Routes = [
     {
@@ -66,6 +69,17 @@ const routes: Routes = [
                 component: UsermanagerdetailComponent,
 
             },
+            {
+                path: 'faq',
+                component: QuestionslistComponent,
+
+            },
+            
+            {
+                path: 'faq/question',
+                component: QuestionComponent,
+
+            },
         ],
     },
 ];
@@ -82,7 +96,8 @@ const routes: Routes = [
         GrowlModule,
         DropdownModule,
         NgxChartsModule,
-        NgxEditorModule
+        NgxEditorModule,
+        DialogModule
     ], exports: [
         RouterModule,
     ], declarations: [
@@ -92,9 +107,11 @@ const routes: Routes = [
         UsermanagerComponent,
         AdminOogstkaartItemComponent,
         AdminRequestItemComponent,
-        UsermanagerdetailComponent
+        UsermanagerdetailComponent,
+        QuestionslistComponent,
+        QuestionComponent
     ],
-    providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService]
+    providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService, FAQService]
 })
 export class AdminModule {
 }

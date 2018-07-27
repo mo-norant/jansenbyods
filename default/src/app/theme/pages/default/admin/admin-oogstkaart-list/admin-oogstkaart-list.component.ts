@@ -14,7 +14,6 @@ export class AdminOogstkaartListComponent implements OnInit {
     items: OogstKaartItem[];
     cols: any[];
     selecteditem: OogstKaartItem;
-
     loading : boolean;
     constructor(private adminservice: AdminService, private router: Router) { }
 
@@ -43,7 +42,6 @@ export class AdminOogstkaartListComponent implements OnInit {
 
 
     onRowSelect(event) {
-        console.log(event)
         this.router.navigate(['admin/oogstkaart', event.data.oogstkaartItemID]);
     }
 }

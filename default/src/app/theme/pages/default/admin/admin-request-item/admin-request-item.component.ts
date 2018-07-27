@@ -84,4 +84,15 @@ export class AdminRequestItemComponent implements OnInit {
         });
     }
 
+    email(){
+        window.location.href = "mailto:" + this.request.company.email;
+    }
+
+    viewProduct(){
+        var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
+        var win = window.open(url, '_blank');
+        win.focus();
+
+    }
+
 }

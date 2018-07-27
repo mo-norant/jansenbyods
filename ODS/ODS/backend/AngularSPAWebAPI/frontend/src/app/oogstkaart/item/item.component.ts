@@ -16,28 +16,28 @@ export class ItemComponent implements OnInit {
   relateditems: OogstKaartItem[];
   root: string;
 
-  loading : boolean;
+  loading: boolean;
   images: Afbeelding[] = [];
 
 
 
-  constructor(private route: ActivatedRoute, private service : OogstkaartService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private service: OogstkaartService, private router: Router) { }
 
   ngOnInit() {
 
-    this.root = Utils.getRoot().replace("/api", "");
+    this.root = Utils.getRoot().replace('/api', '');
 
     this.loading = true;
     this.route.params.subscribe(data => {
-      this.service.getItem(data['id']).subscribe(data => {
+      this.service.getItem(data['id']).subscribe( res => {
 
-        if(data.specificaties == undefined){
-          data.specificaties = [];
+        if (res.specificaties === undefined) {
+          res.specificaties = [];
         }
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
 
-        this.item = data;
-        this.loading = false
+        this.item = res;
+        this.loading = false;
         this.item.gallery.forEach(element => {
           this.images.push(element);
         });
@@ -47,21 +47,21 @@ export class ItemComponent implements OnInit {
 
       }, err => {
         this.router.navigate(['oogstkaart']);
-      })
+      });
     });
 
   }
 
-  goToItem(){
+  goToItem() {
     this.router.navigate(['oogstkaart/contact/' + this.item.oogstkaartItemID]);
   }
 
-  createView(){
+  createView() {
     this.service.postView(this.item.oogstkaartItemID).subscribe();
   }
 
 
-  getRelatedItems(item: number){
+  getRelatedItems(item: number) {
       this.service.getRelatedItems(item).subscribe(data => {
         this.relateditems = data;
 

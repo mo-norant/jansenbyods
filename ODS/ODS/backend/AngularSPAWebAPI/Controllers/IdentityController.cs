@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AngularSPAWebAPI.Controllers
 {
@@ -32,12 +33,15 @@ namespace AngularSPAWebAPI.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
-    private readonly IEmailService _emailService;
-        public IdentityController(
+        private readonly IEmailService _emailService;
+        private readonly IHostingEnvironment _env;
+
+    public IdentityController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<IdentityController> logger, ApplicationDbContext context,
+            IHostingEnvironment env,
             IEmailService emailService)
         {
             _userManager = userManager;
@@ -46,6 +50,7 @@ namespace AngularSPAWebAPI.Controllers
             _logger = logger;
             _context = context;
             _emailService = emailService;
+      _env = env;
         }
 
         /// <summary>
@@ -97,7 +102,7 @@ namespace AngularSPAWebAPI.Controllers
                 AccessFailedCount = 0,
                 Email = model.email,
                 EmailConfirmed = false,
-                LockoutEnabled = true,
+                LockoutEnabled = false,
                 NormalizedEmail = model.email.ToUpper(),
                 NormalizedUserName = model.email.ToUpper(),
                 TwoFactorEnabled = false,
@@ -134,7 +139,6 @@ namespace AngularSPAWebAPI.Controllers
 
           await _emailService.Send(message);
           _logger.LogInformation(3, "User created a new account with password.");
-          await _signInManager.SignInAsync(user, isPersistent: false);
           return Ok();
             }
           return BadRequest(result);
@@ -173,7 +177,7 @@ namespace AngularSPAWebAPI.Controllers
       message.ToAddresses.Add(new EmailAddress { Name = email, Address =email });
 
       message.Subject = "Reset uw wachtwoord van uw JansenByODS-account.";
-      message.Content = string.Format("<a href='{2}/login/resetpassword?userid={0}&code={1}'>Gelieve deze link te bevestigen om uw account te activeren.</a>", user.Id, codeEncoded, "http://admin.jansenbyods.com");
+      message.Content = string.Format("<a href='{2}/login/resetpassword?userid={0}&code={1}'>Gelieve deze link te bevestigen om uw account te activeren.</a>", user.Id, codeEncoded,"http:admin.jansenbyods.com");
 
       await _emailService.Send(message);
 
@@ -252,7 +256,8 @@ namespace AngularSPAWebAPI.Controllers
       var result = await _userManager.ConfirmEmailAsync(user, code);
       if (result.Succeeded)
       {
-        return Redirect("http://admin.jansenbyods.com/login/registersucces");
+        await _userManager.SetLockoutEnabledAsync(user, false);
+        return Redirect("http:admin.jansenbyods.com/login/registersucces");
       }
 
      return BadRequest();

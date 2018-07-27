@@ -66,9 +66,7 @@ namespace AngularSPAWebAPI
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
-              // Lockout settings.
-              options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-              options.Lockout.MaxFailedAccessAttempts = 20;
+            
             });
 
             services.AddAuthorization(options =>

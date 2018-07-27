@@ -81,9 +81,10 @@
             <strong> {{item?.datumBeschikbaar | date}}
             </strong>
           </li>
-          <hr class="my-4">
 
           <div *ngIf="item?.specificaties !== undefined">
+              <hr class="my-4">
+
             <h5 *ngIf="item?.specificaties.length > 0">Specificaties</h5>
             <li *ngFor="let spec of item?.specificaties">
               <strong> {{spec.specificatieSleutel}} :
@@ -93,14 +94,15 @@
 
 
         </ul>
-        
-        <hr class="my-4">
+
         <div *ngIf="item?.files !== undefined && item?.files.length > 0">
+            <hr class="my-4">
+
           <h5 class="mb-3">Meegeleverde bestanden</h5>
           <div class="row ">
 
             <div *ngFor="let file of item.files; let i = index" class="col-md-3 mb-2 lighthover">
-              <a [href]="'http://jansenbyods.com/uploads/files/' + file.uri" download>
+              <a [href]="'https://jansenbyods.com/uploads/files/' + file.uri" download>
                 <div class="icon-box icon-box-style-2">
                   <div class="icon-box-icon ">
                     <i *ngIf="file.extension === '.xlsx'" class=" fas fa-file-excel text-color-primary "></i>
@@ -110,12 +112,12 @@
 
                   </div>
                   <div class="icon-box-info-title">
-                    <a [href]="'http://jansenbyods.com/uploads/files/' + file.uri" download>
+                    <a [href]="'https://jansenbyods.com/uploads/files/' + file.uri" download>
                       <h4> {{file.extension.replace(".","")}} </h4>
                     </a>
                   </div>
                   <div class="icon-box-info">
-                    <a [href]="'http://jansenbyods.com/uploads/files/' + file.uri" download> {{file.name}}</a>
+                    <a [href]="'https://jansenbyods.com/uploads/files/' + file.uri" download> {{file.name}}</a>
                   </div>
                 </div>
               </a>
@@ -124,11 +126,15 @@
 
 
 
+
+
+
         </div>
 
-        <hr class="my-4">
 
         <div *ngIf="!item?.sold">
+            <hr class="my-4">
+
             <form class="shop-cart d-flex align-items-center">
               <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
             </form>

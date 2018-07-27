@@ -38,5 +38,15 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
         this.toastr.success('Succes', message);
     }
 
+    email(){
+        window.location.href = "mailto:" + this.request.company.email;
+    }
+
+    viewProduct(){
+        var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
+        var win = window.open(url, '_blank');
+        win.focus();
+
+    }
+
 }
-;

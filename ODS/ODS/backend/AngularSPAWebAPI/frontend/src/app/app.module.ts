@@ -22,7 +22,7 @@ const appRoutes: Routes = [
     path : "**",
     redirectTo: ""
   }
-  
+
 
 ];
 
@@ -36,7 +36,6 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     OogstkaartModule,
     HttpClientModule,
-
     RouterModule.forRoot(appRoutes)    ],
   providers: [],
   bootstrap: [AppComponent]

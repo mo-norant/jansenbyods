@@ -10,7 +10,6 @@ export class UserguardService {
 
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-        console.log("hier gekomen")
         if (this.auth.role !== "user") {
             this._router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
             return false;
