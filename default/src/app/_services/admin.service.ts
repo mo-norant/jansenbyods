@@ -7,7 +7,7 @@ import { Utils } from '../auth/_helpers/Utils';
 @Injectable()
 export class AdminService {
 
-    constructor(private http: HttpClient, private _authservice : AuthenticationService) { }
+    constructor(private http: HttpClient, private _authservice: AuthenticationService) { }
 
     /**
      * getRequests
@@ -33,7 +33,7 @@ export class AdminService {
     public DeleteItem(id: number) {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + 'admin/delete/' + id, {});
     }
-    
+
     public DeleteRequest(id: number) {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + 'admin/requests/delete/' + id, {});
     }
@@ -43,49 +43,49 @@ export class AdminService {
 
     }
 
-    
+
     public ProductSold(id: number) {
         return this.http.post<boolean>(Utils.getRoot() + 'admin/sold/' + id, {});
     }
 
 
-    
+
     public UpdateOogstkaartitem(item: OogstKaartItem) {
         return this.http.post<OogstKaartItem>(Utils.getRoot() + "admin/update", item)
     }
 
-    
+
     public GetAllUsers() {
         return this.http.get(Utils.getRoot() + 'admin/user/');
 
     }
 
-    public GetUser(id: string){
+    public GetUser(id: string) {
 
-        return this.http.get(Utils.getRoot() + 'admin/user/' + id  );
-
-    }
-
-    public DeleteUser(id : string){
-        return this.http.post(Utils.getRoot() + 'Admin/delete/user/' + id , null );
+        return this.http.get(Utils.getRoot() + 'admin/user/' + id);
 
     }
 
-    
-    public PostMessage(id : string, message : string, subject: string){
+    public DeleteUser(id: string) {
+        return this.http.post(Utils.getRoot() + 'Admin/delete/user/' + id, null);
 
-        let params : HttpParams = new HttpParams();
+    }
+
+
+    public PostMessage(id: string, message: string, subject: string) {
+
+        let params: HttpParams = new HttpParams();
         params = params.append("subject", subject)
         params = params.append("message", message)
-        return this.http.post(Utils.getRoot() + 'Admin/message/user/' + id , null, {params : params} );
+        return this.http.post(Utils.getRoot() + 'Admin/message/user/' + id, null, { params: params });
     }
 
-    public resetPassword(email :string){
-            return this._authservice.passwordrequest(email)
+    public resetPassword(email: string) {
+        return this._authservice.passwordrequest(email)
     }
 
-    public lockEnable(userid : string){
-        return this.http.post<boolean>(Utils.getRoot() + 'Admin/lockenabled/' + userid , null );
+    public lockEnable(userid: string) {
+        return this.http.post<boolean>(Utils.getRoot() + 'Admin/lockenabled/' + userid, null);
     }
 
 }

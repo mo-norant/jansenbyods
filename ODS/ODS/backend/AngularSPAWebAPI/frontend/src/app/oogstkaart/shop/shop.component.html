@@ -1,5 +1,21 @@
+
+
+
 <div role="main" class="main">
-  <section class="page-header py-3">
+
+    <!-- Header -->
+    <header class="masthead d-flex">
+        <div class="container text-center my-auto" data-appear-animation="fadeInUp ">
+          <h1 class="mb-1 white">Oogstkaart</h1>
+          <h3 class="mb-5 white">
+            <em>Interactieve kaart voor circulaire producten.</em>
+          </h3>
+          <a class="btn btn-primary btn-xl js-scroll-trigger text-color-light" [ngx-scroll-to]="'map'">Bekijk de oogstkaart</a>
+        </div>
+        <div class="overlay"></div>
+      </header>
+
+  <section class="py-3">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-8 text-left">
@@ -14,12 +30,10 @@
   </section>
 
   <div class="container">
-
-    <h1 class="mb-2">Oogstkaart</h1>
     <div >
     <div class="container-fluid text-center">
       <div class="row content">
-       
+
         <div class="col-lg-4  ">
           <select [(ngModel)]="catsortmodel" (change)="sortCategory($event)" class="form-control border  mb-4">
             <option disabled=true> Sorteer categorie </option>
@@ -39,13 +53,13 @@
         <div class="col-lg-12">
           <div class="row mb-4">
 
-            <a (click)='mapview(false)' class="text-color-dark text-10 ml-2 p-2 hovergray" data-toggle="tooltip" data-placement="top"
+            <a (click)='mapview(false)' class="text-color-dark text-6 ml-2 p-2 hovergray" data-toggle="tooltip" data-placement="top"
               title="Map">
               <i class="fas fa-map"></i>
               <h5>Kaartweergave</h5>
             </a>
 
-            <a (click)='mapview(true)' class="text-color-dark text-10 ml-2  p-2 hovergray" data-toggle="tooltip" data-placement="top"
+            <a (click)='mapview(true)' class="text-color-dark text-6 ml-2  p-2 hovergray" data-toggle="tooltip" data-placement="top"
               title="Grid">
               <i class="fas fa-th"></i>
               <h5>Lijstweergave</h5>
@@ -59,14 +73,16 @@
           </div>
           <div [hidden]='isListview' class="row">
 
-            <div class="col-md-9">
+            <div class="col-lg-12">
+
               <div class="text-center">
-                <h3>
-                  <div #gmap style="width:100%;height:800px"></div>
-                </h3>
+
+                  <div  #gmap style="width:100%;height:800px"></div>
               </div>
+              <div id="map"></div>
+
             </div>
-            <div class="col-md-3 ">
+            <div class="row text-center ">
               <div class="">
                 <div class="row">
                   <div  class="  appear-animation hovergray p-3" data-appear-animation="fadeInRightShorter">

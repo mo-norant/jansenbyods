@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+
+
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 
@@ -9,6 +12,7 @@ import { ContactComponent } from './contact/contact.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { FaqComponent } from './faq/faq.component';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 
 const routes: Route[] = [
@@ -28,14 +32,15 @@ const routes: Route[] = [
     path: 'faq',
     component: FaqComponent,
   },
- 
+
 
 ];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ScrollToModule.forRoot()
   ],
   declarations: [NavbarComponent, FooterComponent, HomeComponent, ContactComponent, AboutusComponent, NotfoundComponent, FaqComponent],
   exports: [NavbarComponent, FooterComponent, HomeComponent, ContactComponent, AboutusComponent, NotfoundComponent, FaqComponent]})

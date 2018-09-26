@@ -17,7 +17,7 @@ export class OogstkaartlistComponent implements OnInit {
     selecteditem: OogstKaartItem;
     msgs: Message[] = [];
     loading: boolean;
-    
+
     selectionitems: number[] = [];
 
 
@@ -36,7 +36,7 @@ export class OogstkaartlistComponent implements OnInit {
         this.loading = true;
 
         this.oogstkaartservice.GetOogstkaartitems().subscribe(data => {
-            
+
 
             data.forEach(i => {
                 i.localdatestring = new Date(i.createDate).toLocaleString();

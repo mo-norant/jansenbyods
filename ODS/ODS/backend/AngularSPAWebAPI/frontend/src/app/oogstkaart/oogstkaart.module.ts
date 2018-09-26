@@ -1,3 +1,4 @@
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { OogstkaartService } from './oogstkaart.service';
 import { NgModule } from '@angular/core';
@@ -38,6 +39,8 @@ const routes: Route[] = [
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
+    ScrollToModule.forRoot(),
+
   ],
   providers:[OogstkaartService],
   declarations: [ShopComponent, ItemComponent, ContactComponent, SuccesComponent],

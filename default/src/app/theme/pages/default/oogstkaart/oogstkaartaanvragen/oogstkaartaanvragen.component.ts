@@ -13,7 +13,7 @@ export class OogstkaartaanvragenComponent implements OnInit {
     requests: Request[];
     cols;
     selecteditem: Request;
-    loading : boolean;
+    loading: boolean;
 
 
     constructor(private oogstkaartservice: OogstkaartService, private router: Router) {
@@ -46,10 +46,10 @@ export class OogstkaartaanvragenComponent implements OnInit {
     }
 
 
-    reload(){
+    reload() {
         this.loading = true;
-         this.oogstkaartservice.GetAcceptedRequests().subscribe(data => {
-            if(data.length !== this.requests.length){
+        this.oogstkaartservice.GetAcceptedRequests().subscribe(data => {
+            if (data.length !== this.requests.length) {
                 data.forEach(i => {
                     i.create = new Date(i.create).toLocaleString()
                 });
@@ -59,7 +59,7 @@ export class OogstkaartaanvragenComponent implements OnInit {
             }
 
             this.loading = false;
-          
+
         }, err => {
             this.loading = false;
 

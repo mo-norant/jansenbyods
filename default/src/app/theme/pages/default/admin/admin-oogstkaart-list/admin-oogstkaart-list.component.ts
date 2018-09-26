@@ -14,7 +14,7 @@ export class AdminOogstkaartListComponent implements OnInit {
     items: OogstKaartItem[];
     cols: any[];
     selecteditem: OogstKaartItem;
-    loading : boolean;
+    loading: boolean;
     constructor(private adminservice: AdminService, private router: Router) { }
 
     ngOnInit() {

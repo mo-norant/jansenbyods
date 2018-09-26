@@ -1,0 +1,32 @@
+.masthead {
+  min-height: 18rem;
+  position: relative;
+  display: table;
+  width: 100%;
+  height: auto;
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.masthead h1 {
+  font-size: 3rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 992px) {
+  .masthead {
+    height: 60vh;
+  }
+  .masthead h1 {
+    font-size: 5.5rem;
+  }
+}
+
+
+.heroimage {
+  width: 500px;
+  height: auto;
+}

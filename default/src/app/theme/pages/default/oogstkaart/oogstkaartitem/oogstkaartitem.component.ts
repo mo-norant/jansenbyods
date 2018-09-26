@@ -18,19 +18,19 @@ export class OogstkaartitemComponent implements OnInit {
     loading: boolean;
     prijsovereentekomen: boolean;
     eigenschappen = [
-        {label: 'Kleur', value: 'kleur'},
-        {label: 'Gewicht', value: 'gewicht'},
-        {label: 'Brandwerend', value: 'brandwerend'},
-        {label: 'Lengte', value: 'lengte'},
-        {label: 'Breedte', value: 'breedte'},
-        {label: 'Hoogte', value: 'hoogte'},
-        {label: 'RAL', value: 'hoogte'},
-        {label: 'U-waarde', value: 'hoogte'},
-        {label: 'Glas', value: 'hoogte'},
+        { label: 'Kleur', value: 'kleur' },
+        { label: 'Gewicht', value: 'gewicht' },
+        { label: 'Brandwerend', value: 'brandwerend' },
+        { label: 'Lengte', value: 'lengte' },
+        { label: 'Breedte', value: 'breedte' },
+        { label: 'Hoogte', value: 'hoogte' },
+        { label: 'RAL', value: 'hoogte' },
+        { label: 'U-waarde', value: 'hoogte' },
+        { label: 'Glas', value: 'hoogte' },
 
     ];
 
-    
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -46,7 +46,7 @@ export class OogstkaartitemComponent implements OnInit {
                     this.item = data;
                     this.item.createDate = data.createDate;
 
-                    if(data.vraagPrijsPerEenheid === 0 && data.vraagPrijsTotaal === 0  ){
+                    if (data.vraagPrijsPerEenheid === 0 && data.vraagPrijsTotaal === 0) {
                         this.prijsovereentekomen = true;
                     }
 
@@ -55,8 +55,8 @@ export class OogstkaartitemComponent implements OnInit {
 
                 },
                 err => {
-                        alert("Data niet beschikbaar");
-                       this.router.navigate(["oogstkaart"]);
+                    alert("Data niet beschikbaar");
+                    this.router.navigate(["oogstkaart"]);
                 }
             );
         });
@@ -70,7 +70,7 @@ export class OogstkaartitemComponent implements OnInit {
             message: "Wilt u dit product updaten?",
             accept: () => {
 
-                if(this.prijsovereentekomen){
+                if (this.prijsovereentekomen) {
                     this.item.vraagPrijsPerEenheid = 0;
                     this.item.vraagPrijsTotaal = 0;
                 }
@@ -81,7 +81,7 @@ export class OogstkaartitemComponent implements OnInit {
                     this.loading = false;
                     alert("data niet aangepast.")
                 });
-            }, reject : () => {
+            }, reject: () => {
                 this.loading = false;
             }
         });
@@ -106,7 +106,7 @@ export class OogstkaartitemComponent implements OnInit {
                         this.loading = false;
                         alert("product niet verwijderd.")
                     });
-            }, reject : () => {
+            }, reject: () => {
                 this.loading = false;
             }
         });
@@ -152,7 +152,8 @@ export class OogstkaartitemComponent implements OnInit {
     goToProduct() {
         var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
         var win = window.open(url, '_blank');
-        win.focus();      }
+        win.focus();
+    }
 
 
     addSpecificatie() {
@@ -171,7 +172,7 @@ export class OogstkaartitemComponent implements OnInit {
         }
     }
 
-    removeFile(uri){
+    removeFile(uri) {
         this.dialogservice.confirm({
             message: "Wilt u dit bestand verwijderen?",
             accept: () => {

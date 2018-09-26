@@ -5,7 +5,7 @@ import { ProgressBarModule } from "primeng/progressbar";
 import { AgmCoreModule } from '@agm/core';
 import { FileUploadModule } from 'primeng/fileupload';
 import { KeyFilterModule } from 'primeng/keyfilter';
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { OogstkaartService } from "./../../../../_services/oogstkaart.service";
 import { OogstkaartlistComponent } from "./oogstkaartlist/oogstkaartlist.component";

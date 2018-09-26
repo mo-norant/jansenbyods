@@ -1,3 +1,43 @@
+header{
+  background-image: url("../../../assets/img/bg-4.jpg");
+}
+
+.white{
+  color: white;
+}
+
+
+
+.masthead {
+  min-height: 30rem;
+  position: relative;
+  display: table;
+  width: 100%;
+  height: auto;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.masthead h1 {
+  font-size: 4rem;
+  margin: 0;
+  padding: 0;
+
+}
+
+@media (min-width: 992px) {
+  .masthead {
+    height: 80vh;
+  }
+  .masthead h1 {
+    font-size: 5.5rem;
+  }
+}
+
 .mt-4{
     margin-top: 100px
 }
@@ -19,7 +59,7 @@
     bottom: 0;
     right: 0;
   }
-  
+
   /* Transparent Overlay */
   .loading:before {
     content: '';
@@ -31,7 +71,7 @@
     height: 100%;
     background-color: rgba(0,0,0,0.3);
   }
-  
+
   /* :not(:required) hides these rules from IE9 and below */
   .loading:not(:required) {
     /* hide "loading..." text */
@@ -41,7 +81,7 @@
     background-color: transparent;
     border: 0;
   }
-  
+
   .loading:not(:required):after {
     content: '';
     display: block;
@@ -58,9 +98,9 @@
     -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
     box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
   }
-  
+
   /* Animation */
-  
+
   @-webkit-keyframes spinner {
     0% {
       -webkit-transform: rotate(0deg);

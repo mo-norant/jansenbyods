@@ -45,15 +45,15 @@ export class OogstkaartformComponent implements OnInit {
     };
 
     eigenschappen = [
-        {label: 'Kleur', value: 'kleur'},
-        {label: 'Gewicht', value: 'gewicht'},
-        {label: 'Brandwerend', value: 'brandwerend'},
-        {label: 'Lengte', value: 'lengte'},
-        {label: 'Breedte', value: 'breedte'},
-        {label: 'Hoogte', value: 'hoogte'},
-        {label: 'RAL', value: 'hoogte'},
-        {label: 'U-waarde', value: 'hoogte'},
-        {label: 'Glas', value: 'hoogte'},
+        { label: 'Kleur', value: 'kleur' },
+        { label: 'Gewicht', value: 'gewicht' },
+        { label: 'Brandwerend', value: 'brandwerend' },
+        { label: 'Lengte', value: 'lengte' },
+        { label: 'Breedte', value: 'breedte' },
+        { label: 'Hoogte', value: 'hoogte' },
+        { label: 'RAL', value: 'hoogte' },
+        { label: 'U-waarde', value: 'hoogte' },
+        { label: 'Glas', value: 'hoogte' },
 
     ];
 
@@ -115,11 +115,11 @@ export class OogstkaartformComponent implements OnInit {
                 this.dialogservice.confirm({
                     message: "Bent u niets vergeten?",
                     accept: () => {
-                        if(!this.loading){
+                        if (!this.loading) {
                             this.loading = true;
                             this.postItem();
                         }
-                      
+
 
                     }
                 });
@@ -164,7 +164,7 @@ export class OogstkaartformComponent implements OnInit {
             message: "Wilt uw product bekijken op de website?",
             key: "second",
             accept: () => {
-                var url = "http://jansenbyods.com/oogstkaart/" +  this.returnedid;
+                var url = "http://jansenbyods.com/oogstkaart/" + this.returnedid;
                 var win = window.open(url, '_blank');
                 win.focus();
                 this.router.navigate(['oogstkaart']);

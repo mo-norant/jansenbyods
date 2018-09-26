@@ -14,7 +14,7 @@ namespace AngularSPAWebAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("AngularSPAWebAPI.Models.ApplicationUser", b =>
@@ -287,6 +287,71 @@ namespace AngularSPAWebAPI.Migrations
                     b.ToTable("Weights");
                 });
 
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.BaseSubProduct", b =>
+                {
+                    b.Property<int>("ProductID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ProductCategoryID");
+
+                    b.Property<int?>("ProductID1");
+
+                    b.Property<double>("ProductPrice");
+
+                    b.HasKey("ProductID");
+
+                    b.HasIndex("ProductCategoryID");
+
+                    b.HasIndex("ProductID1");
+
+                    b.ToTable("SubProducts");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseSubProduct");
+                });
+
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.Product", b =>
+                {
+                    b.Property<int>("ProductID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Availability");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ProductCategoryID");
+
+                    b.HasKey("ProductID");
+
+                    b.HasIndex("ProductCategoryID");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.ProductCategory", b =>
+                {
+                    b.Property<int>("ProductCategoryID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Creation");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ProductCategoryID");
+
+                    b.ToTable("productCategories");
+                });
+
             modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart.Location", b =>
                 {
                     b.Property<int>("LocationID")
@@ -478,6 +543,31 @@ namespace AngularSPAWebAPI.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.SingleProduct", b =>
+                {
+                    b.HasBaseType("AngularSPAWebAPI.Models.DatabaseModels.Inventory.BaseSubProduct");
+
+
+                    b.ToTable("SingleProduct");
+
+                    b.HasDiscriminator().HasValue("SingleProduct");
+                });
+
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.UnitProduct", b =>
+                {
+                    b.HasBaseType("AngularSPAWebAPI.Models.DatabaseModels.Inventory.BaseSubProduct");
+
+                    b.Property<string>("UnitCall");
+
+                    b.Property<string>("UnitMetric");
+
+                    b.Property<int>("UnitValue");
+
+                    b.ToTable("UnitProduct");
+
+                    b.HasDiscriminator().HasValue("UnitProduct");
+                });
+
             modelBuilder.Entity("AngularSPAWebAPI.Models.ApplicationUser", b =>
                 {
                     b.HasOne("AngularSPAWebAPI.Models.DatabaseModels.General.Company", "Company")
@@ -536,6 +626,24 @@ namespace AngularSPAWebAPI.Migrations
                     b.HasOne("AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart.OogstkaartItem")
                         .WithMany("Views")
                         .HasForeignKey("OogstkaartItemID");
+                });
+
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.BaseSubProduct", b =>
+                {
+                    b.HasOne("AngularSPAWebAPI.Models.DatabaseModels.Inventory.ProductCategory", "ProductCategory")
+                        .WithMany()
+                        .HasForeignKey("ProductCategoryID");
+
+                    b.HasOne("AngularSPAWebAPI.Models.DatabaseModels.Inventory.Product")
+                        .WithMany("SubProducts")
+                        .HasForeignKey("ProductID1");
+                });
+
+            modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Inventory.Product", b =>
+                {
+                    b.HasOne("AngularSPAWebAPI.Models.DatabaseModels.Inventory.ProductCategory", "ProductCategory")
+                        .WithMany()
+                        .HasForeignKey("ProductCategoryID");
                 });
 
             modelBuilder.Entity("AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart.OogstkaartItem", b =>

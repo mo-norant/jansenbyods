@@ -8,12 +8,12 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
 
-    constructor(public auth: AuthenticationService, private router : Router) { }
+    constructor(public auth: AuthenticationService, private router: Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
 
-        if(this.auth.tokenExpired()){
+        if (this.auth.tokenExpired()) {
             this.auth.removeToken();
             this.router.navigate(["login"]);
         }
@@ -30,16 +30,16 @@ export class TokenInterceptorService implements HttpInterceptor {
 
         return next.handle(request).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
-              // do stuff with response if you want
+                // do stuff with response if you want
             }
-          }, (err: any) => {
+        }, (err: any) => {
             if (err instanceof HttpErrorResponse) {
-              if (err.status === 401) {
-                  this.auth.removeToken();
-                this.router.navigate(["login"])
-              }
+                if (err.status === 401) {
+                    this.auth.removeToken();
+                    this.router.navigate(["login"])
+                }
             }
-          });
+        });
 
 
     }

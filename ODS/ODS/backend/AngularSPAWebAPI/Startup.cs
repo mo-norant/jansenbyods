@@ -47,6 +47,7 @@ namespace AngularSPAWebAPI
         else
         {
           options.UseMySql("Server=server10.exacthost.nl ;Port=3306;Database=odsbe_;Uid=odsuser;Pwd = Catharina2018*;  ");
+       //   options.UseMySql("Server=localhost ;Port=3306;Database=mo;Uid=root;Pwd =Boeras23; ");
 
         }
       });
@@ -190,7 +191,8 @@ namespace AngularSPAWebAPI
       app.UseCors("MyCorsPolicy");
 
       app.Use(async (context, next) => {
-                await next();
+
+        await next();
                 if (context.Response.StatusCode == 404 &&
                    !Path.HasExtension(context.Request.Path.Value) &&
                    !context.Request.Path.Value.StartsWith("/api/"))

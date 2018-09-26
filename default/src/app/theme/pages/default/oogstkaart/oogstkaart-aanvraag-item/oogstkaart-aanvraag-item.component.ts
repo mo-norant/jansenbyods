@@ -17,7 +17,7 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
     request: Request;
     item: OogstKaartItem;
     loading: boolean;
-    
+
     constructor(private oogstkaartservice: OogstkaartService, private route: ActivatedRoute, private toastr: ToastrService, private router: Router
     ) { }
     ngOnInit() {
@@ -25,7 +25,7 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
         this.root = Utils.getRoot().replace("/api", "");
 
         this.route.params.subscribe(data => {
-            
+
             this.oogstkaartservice.GetAcceptedRequest(data['id']).subscribe(res => {
                 this.request = res;
                 this.oogstkaartservice.getOogstkaartItem(this.request.oogstkaartID).subscribe(data => {
@@ -42,7 +42,7 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
 
     }
 
-    goBack(){
+    goBack() {
         this.router.navigate(['oogstkaart/aanvragen'])
     }
 
@@ -50,11 +50,11 @@ export class OogstkaartAanvraagItemComponent implements OnInit {
         this.toastr.success('Succes', message);
     }
 
-    email(){
+    email() {
         window.location.href = "mailto:" + this.request.company.email;
     }
 
-    viewProduct(){
+    viewProduct() {
         var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
         var win = window.open(url, '_blank');
         win.focus();

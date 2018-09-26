@@ -1,3 +1,4 @@
+import { ProductconfiguratorService } from './admin-productconfigurator/productconfigurator.service';
 import { FAQService } from './../../../../_services/FAQ.service';
 import { QuestionComponent } from './question/question.component';
 import { QuestionslistComponent } from './questionslist/questionslist.component';
@@ -27,7 +28,12 @@ import { AdminStatisticsService } from '../../../../_services/adminstatistics.se
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { UsermanagerdetailComponent } from './usermanager/usermanagerdetail/usermanagerdetail.component';
 import { NgxEditorModule } from 'ngx-editor';
-import {DialogModule} from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
+import { AdminProductconfiguratorComponent } from './admin-productconfigurator/admin-productconfigurator.component';
+import { AdminSubproductFormcomponent } from './admin-productconfigurator/admin-subproductform/admin-subproductform';
+import { FormComponent } from './admin-productconfigurator/admin-subproductform/form/form.component';
+import { ProductcategoryComponent } from './admin-productconfigurator/productcategory/productcategory.component';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 const routes: Routes = [
     {
@@ -74,12 +80,29 @@ const routes: Routes = [
                 component: QuestionslistComponent,
 
             },
-            
+
             {
                 path: 'faq/question',
                 component: QuestionComponent,
 
             },
+            {
+                path: 'productmanager',
+                component: AdminProductconfiguratorComponent,
+
+            },
+            {
+                path: 'productmanager/subproducts',
+                component: AdminSubproductFormcomponent
+            },
+            {
+                path: 'productmanager/addsubcomponent',
+                component: FormComponent
+            },
+            {
+                path: 'productmanager/categories',
+                component: ProductcategoryComponent
+            }
         ],
     },
 ];
@@ -97,7 +120,8 @@ const routes: Routes = [
         DropdownModule,
         NgxChartsModule,
         NgxEditorModule,
-        DialogModule
+        DialogModule,
+        ScrollToModule.forRoot()
     ], exports: [
         RouterModule,
     ], declarations: [
@@ -109,9 +133,13 @@ const routes: Routes = [
         AdminRequestItemComponent,
         UsermanagerdetailComponent,
         QuestionslistComponent,
-        QuestionComponent
+        QuestionComponent,
+        AdminProductconfiguratorComponent,
+        AdminSubproductFormcomponent,
+        FormComponent,
+        ProductcategoryComponent
     ],
-    providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService, FAQService]
+    providers: [AdminService, ConfirmationService, ToastrService, AdminStatisticsService, FAQService, ProductconfiguratorService]
 })
 export class AdminModule {
 }

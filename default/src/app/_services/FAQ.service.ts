@@ -10,26 +10,26 @@ export class FAQService {
 
 
     constructor(private http: HttpClient) { }
-    public PostCategory(qc : QuestionCategory) {
+    public PostCategory(qc: QuestionCategory) {
         return this.http.post<QuestionCategory[]>(Utils.getRoot() + this.link + '/category', qc);
     }
     public GetCategories() {
         return this.http.get<QuestionCategory[]>(Utils.getRoot() + this.link + '/QuestionsCategories');
     }
 
-    public PostQuestion(questioncategoryid: number, q : Question) {
-        return this.http.post(Utils.getRoot() + this.link + '/Question/' + questioncategoryid  , q);
+    public PostQuestion(questioncategoryid: number, q: Question) {
+        return this.http.post(Utils.getRoot() + this.link + '/Question/' + questioncategoryid, q);
     }
 
-    public DeleteQuestionCategory(qcid : number){
-        return this.http.post(Utils.getRoot() + this.link + '/delete/questioncategory/' + qcid  , null);
+    public DeleteQuestionCategory(qcid: number) {
+        return this.http.post(Utils.getRoot() + this.link + '/delete/questioncategory/' + qcid, null);
     }
 
-    public DeleteQuestion(qid : number){
-        return this.http.post(Utils.getRoot() + this.link + '/delete/question/' + qid  , null);
+    public DeleteQuestion(qid: number) {
+        return this.http.post(Utils.getRoot() + this.link + '/delete/question/' + qid, null);
     }
 
-    public GetQuestions(){
+    public GetQuestions() {
         return this.http.get<QuestionCategory[]>(Utils.getRoot() + this.link + '/Question');
     }
 }

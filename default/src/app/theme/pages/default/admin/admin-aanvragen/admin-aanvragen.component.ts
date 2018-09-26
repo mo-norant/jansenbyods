@@ -30,7 +30,7 @@ export class AdminAanvragenComponent implements OnInit {
     requests: Request[];
     cols;
     selecteditem: Request;
-    loading : boolean;
+    loading: boolean;
     statusses;
 
     selectedstatus;
@@ -57,7 +57,7 @@ export class AdminAanvragenComponent implements OnInit {
     }
 
     ngOnInit() {
-        
+
         this.loading = true;
         this.adminservice.getRequests('').subscribe(data => {
             data.forEach(i => {
@@ -75,10 +75,10 @@ export class AdminAanvragenComponent implements OnInit {
         });
     }
 
-    reload(){
+    reload() {
         this.loading = true;
         this.adminservice.getRequests('').subscribe(data => {
-            if(data.length !== this.requests.length){
+            if (data.length !== this.requests.length) {
                 data.forEach(i => {
                     i.create = new Date(i.create).toLocaleString()
                 });
@@ -88,7 +88,7 @@ export class AdminAanvragenComponent implements OnInit {
             }
 
             this.loading = false;
-          
+
         }, err => {
             this.loading = false;
 
@@ -111,13 +111,13 @@ export class AdminAanvragenComponent implements OnInit {
             this.requests = data;
             this.loading = false;
 
-        },err => {
+        }, err => {
             alert("Data niet geladen");
             this.loading = false;
         })
     }
 
-    
+
 
 
 }

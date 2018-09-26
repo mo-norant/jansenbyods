@@ -32,7 +32,7 @@ export class AdminOogstkaartItemComponent implements OnInit {
                     this.item = data;
                     this.item.createDate = data.createDate;
 
-                    if(data.vraagPrijsPerEenheid === 0 && data.vraagPrijsTotaal === 0  ){
+                    if (data.vraagPrijsPerEenheid === 0 && data.vraagPrijsTotaal === 0) {
                         this.prijsovereentekomen = true;
                     }
 
@@ -41,7 +41,7 @@ export class AdminOogstkaartItemComponent implements OnInit {
 
                 },
                 err => {
-                       this.router.navigate(["admin/oogstkaart"]);
+                    this.router.navigate(["admin/oogstkaart"]);
                 }
             );
         });
@@ -55,7 +55,7 @@ export class AdminOogstkaartItemComponent implements OnInit {
             message: "Wilt u dit product updaten?",
             accept: () => {
 
-                if(this.prijsovereentekomen){
+                if (this.prijsovereentekomen) {
                     this.item.vraagPrijsPerEenheid = 0;
                     this.item.vraagPrijsTotaal = 0;
                 }
@@ -67,7 +67,7 @@ export class AdminOogstkaartItemComponent implements OnInit {
                 }, err => {
                     this.loading = false;
                 });
-            }, reject : () => {
+            }, reject: () => {
                 this.loading = false;
             }
         });
@@ -89,7 +89,7 @@ export class AdminOogstkaartItemComponent implements OnInit {
                         this.router.navigate(["admin/oogstkaart"]);
 
                     });
-            }, reject : () => {
+            }, reject: () => {
                 this.loading = false;
             }
         });
@@ -126,7 +126,8 @@ export class AdminOogstkaartItemComponent implements OnInit {
     goToProduct() {
         var url = "http://jansenbyods.com/oogstkaart/" + this.item.oogstkaartItemID;
         var win = window.open(url, '_blank');
-        win.focus();      }
+        win.focus();
+    }
 
 
     addSpecificatie() {
@@ -145,6 +146,6 @@ export class AdminOogstkaartItemComponent implements OnInit {
         }
     }
 
-  
+
 
 }

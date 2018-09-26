@@ -8,7 +8,7 @@ import { AuthenticationService } from '../../_services';
 })
 export class ConfirmmailComponent implements OnInit {
 
-    constructor(private _auth : AuthenticationService) { }
+    constructor(private _auth: AuthenticationService) { }
 
     ngOnInit() {
         this._auth.removeToken();

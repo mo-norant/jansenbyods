@@ -9,6 +9,7 @@ using AngularSPAWebAPI.Models.DatabaseModels.General;
 using AngularSPAWebAPI.Models.DatabaseModels.Oogstkaart;
 using AngularSPAWebAPI.Models.DatabaseModels.Communication;
 using AngularSPAWebAPI.Models.DatabaseModels.Faq;
+using AngularSPAWebAPI.Models.DatabaseModels.Inventory;
 
 namespace AngularSPAWebAPI.Data
 {
@@ -26,7 +27,10 @@ namespace AngularSPAWebAPI.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-    public DbSet<View> Views { get; set; }
+        public DbSet<View> Views { get; set; }
+    public DbSet<BaseSubProduct> SubProducts { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductCategory> productCategories { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -36,7 +40,9 @@ namespace AngularSPAWebAPI.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-    
-        }
+      builder.Entity<SingleProduct>().HasBaseType<BaseSubProduct>();
+      builder.Entity<UnitProduct>().HasBaseType<BaseSubProduct>();
+
     }
+  }
 }

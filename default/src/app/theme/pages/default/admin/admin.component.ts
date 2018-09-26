@@ -13,7 +13,7 @@ export class AdminComponent implements OnInit {
     period: string;
     periodrequests: Request[];
 
-    loading :boolean;
+    loading: boolean;
     single = [
         {
             "name": "Germany",

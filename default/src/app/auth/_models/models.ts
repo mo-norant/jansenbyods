@@ -52,16 +52,16 @@ export class OogstKaartItem {
     avatar: Afbeelding;
     specificaties: Specificatie[];
     gallery: Afbeelding[];
-    files : File[];
+    files: File[];
 }
 
-export class File{
+export class File {
     create: Date;
     extension: string;
     fileID: number;
     name: string;
     omschrijving: string;
-    uri : string;
+    uri: string;
 }
 
 export class Afbeelding {
@@ -108,7 +108,7 @@ export class Message {
     created: Date;
     messageString: string;
     opened: boolean;
- 
+
 }
 
 export class Request {
@@ -130,17 +130,17 @@ export class CreateUser {
     name: string;
 }
 
-export class Question{
+export class Question {
     questionID: number;
-    _question:	string;
-    answer:	string;
+    _question: string;
+    answer: string;
     createDate: Date;
 
 }
 
-export class QuestionCategory{
-    questionCategoryID	: number;
-    title:	string;
-    creationDate:	Date;
-    questions : Question[];
-    }
+export class QuestionCategory {
+    questionCategoryID: number;
+    title: string;
+    creationDate: Date;
+    questions: Question[];
+}

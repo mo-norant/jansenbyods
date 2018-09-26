@@ -9,10 +9,7 @@ export class OogstkaartService {
   link = 'Oogstkaart/mapview';
 
 
-  constructor(private http: HttpClient,) { }
-
-
-
+  constructor(private http: HttpClient) { }
   public getOogstkaartItems(){
     return this.http.get<OogstKaartItem[]>(Utils.getRoot() + this.link)
   }
