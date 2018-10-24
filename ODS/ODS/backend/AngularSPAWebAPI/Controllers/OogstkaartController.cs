@@ -13,6 +13,7 @@ using AngularSPAWebAPI.Services;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -295,8 +296,7 @@ namespace AngularSPAWebAPI.Controllers
 
 
     [HttpPost("files/{id}")]
-    [RequestSizeLimit(25000000)]
-    public async Task<IActionResult> PostFiles([FromRoute] int id)
+    public async Task<IActionResult> PostFiles([FromRoute] int id, List<IFormFile> files)
     {
       if (!ModelState.IsValid) return BadRequest();
 
@@ -308,65 +308,32 @@ namespace AngularSPAWebAPI.Controllers
 
        if (item == null) return NotFound();
 
-        var files = HttpContext.Request.Form.Files;
-
-        foreach (var file in files)
-          if (file != null && file.Length > 0)
+        long size = files.Sum(f => f.Length);
+        foreach (var formFile in files)
+        {
+          if (formFile.Length > 0)
           {
-              var uploads = Path.Combine(_env.WebRootPath, "uploads\\files");
-              var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-              var intermediarydirectory = Path.Combine(uploads, Path.GetFileNameWithoutExtension(fileName));
-
-             if (!Directory.Exists(uploads))
-             {
-                   Directory.CreateDirectory(uploads);
-               }
-
-
-          var temp = Path.Combine(intermediarydirectory, "temp");
-          Directory.CreateDirectory(temp);
-          var f = Path.Combine(temp, fileName);
-
-          using (var fileStream = new FileStream(f, FileMode.Create))
-          {
-
-            await file.CopyToAsync(fileStream);
-
-            var filesave = new File
+            var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(formFile.FileName);
+            var uploads = Path.Combine(_env.WebRootPath, "uploads\\files");
+            var intermediarydirectory = Path.Combine(uploads, Path.GetFileNameWithoutExtension(fileName));
+            using (var stream = new FileStream(intermediarydirectory, FileMode.Create))
             {
-              Create = DateTime.Now,
-              URI = intermediarydirectory + ".zip",
-              Name = file.Name,
-              Extension = Path.GetExtension(fileName)
-            };
+              await formFile.CopyToAsync(stream);
 
-              item.Files.Add(filesave);
-
-            }
-
-            ZipFile.CreateFromDirectory(temp, intermediarydirectory + ".zip");
-
-            using (FileStream zipToOpen = new FileStream(intermediarydirectory + ".zip", FileMode.Open))
-            {
-              using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+              var filesave = new File
               {
-                ZipArchiveEntry filetozip = archive.CreateEntry(fileName);
-                using (StreamWriter writer = new StreamWriter(filetozip.Open()))
-                {
-                  writer.WriteLine("Fileziped");
-                  writer.WriteLine("========================");
+                Create = DateTime.Now,
+                URI = intermediarydirectory + ".zip",
+                Name = formFile.Name,
+                Extension = Path.GetExtension(fileName)
+              };
+              item.Files.Add(filesave);
+             
 
-                }
-              }
             }
-
-          Directory.Delete(intermediarydirectory, true);
-
-          
-
+          }
         }
-
-       await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
         return Ok();
       }
 
@@ -427,7 +394,7 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id).Where(i => user.Id == i.UserID)
-          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
+          .Include(i => i.Gallery).Include(i => i.Views).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
 
 
         var message = new EmailMessage();

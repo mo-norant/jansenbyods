@@ -117,7 +117,7 @@ namespace AngularSPAWebAPI
 
       var cors = new DefaultCorsPolicyService(_loggerFactory.CreateLogger<DefaultCorsPolicyService>())
       {
-        AllowedOrigins = { "http://admin.jansenbyods.com", "http://jansenbyods.com", "http://localhost:4200", "http://localhost:4201" , "http://localhost:55646" }
+        AllowedOrigins = { "http://admin.jansenbyods.com", "https://admin.jansenbyods.com'", "http://localhost:4200", "http://jansenbyods.com", "https://jansenbyods.com", "http://localhost:4201", "http://localhost:55646" }
       };
       services.AddSingleton<ICorsPolicyService>(cors);
 
@@ -131,7 +131,7 @@ namespace AngularSPAWebAPI
         options.AddPolicy("MyCorsPolicy",
    builder => builder
       .SetIsOriginAllowedToAllowWildcardSubdomains()
-      .WithOrigins("http://*.jansenbyods.com", "http://localhost:4200", "http://jansenbyods.com", "http://admin.jansenbyods.com", "http://localhost:4201", "http://localhost:55646")
+      .WithOrigins("http://*.jansenbyods.com", "https://admin.jansenbyods.com" ,"http://admin.jansenbyods.com'", "http://localhost:4200", "http://jansenbyods.com", "http://admin.jansenbyods.com", "http://localhost:4201", "http://localhost:55646")
       .AllowAnyMethod()
       .AllowCredentials()
       .AllowAnyHeader()
@@ -201,6 +201,13 @@ namespace AngularSPAWebAPI
                     await next();
                 }
             });
+
+
+      app.Use((context, next) =>
+      {
+        context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+        return next.Invoke();
+      });
 
       app.UseDefaultFiles();
       app.UseStaticFiles();

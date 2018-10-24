@@ -27,17 +27,6 @@
         </div>
         <br>
 
-        <div *ngIf="item?.gallery.length > 0">
-          <h5 class="mb-3">Fotogallerij</h5>
-
-          <ngb-carousel>
-            <ng-template *ngFor="let image of item?.gallery" ngbSlide>
-              <img [src]="root + '/uploads/images/' + image.uri" alt="Random first slide">
-            </ng-template>
-          </ngb-carousel>
-        </div>
-
-
       </div>
       <div class="col-md-7">
         <h2 class="line-height-1 font-weight-bold mb-2">{{item?.artikelnaam }}</h2>
@@ -64,7 +53,10 @@
             <strong class="text-color-dark">Dit product werd verkocht. </strong>
           </span>
         </div>
-        <p class="mt-4">Omschrijving</p>
+
+        <br>
+
+        <h5 class="mb-3">Omschrijving</h5>
         <p >
 
           {{item?.omschrijving}}
@@ -91,6 +83,10 @@
               </strong> {{spec.specificatieValue}}
             </li>
           </div>
+          <hr class="my-4">
+          <h5>Locatie</h5>
+          <div #gmap style="width:100%;height:200px"></div>
+
 
 
         </ul>
@@ -139,28 +135,7 @@
               <button (click)="goToItem()" type="submit" class="add-to-cart btn btn-primary btn-rounded font-weight-semibold btn-v-3 btn-h-2 btn-fs-2 ml-3">Ik ben geïntresseerd in dit product</button>
             </form>
           </div>
-        <!--
-        <div class="d-flex align-items-center">
-          <span class="text-2">Deel dit product</span>
-          <ul class="social-icons social-icons-dark social-icons-1 ml-3">
-            <li class="social-icons-facebook">
-              <a href="http://www.facebook.com/" target="_blank" title="Facebook">
-                <i class="fab fa-facebook-f"></i>
-              </a>
-            </li>
-            <li class="social-icons-twitter">
-              <a href="http://www.twitter.com/" target="_blank" title="Twitter">
-                <i class="fab fa-twitter"></i>
-              </a>
-            </li>
-            <li class="social-icons-instagram">
-              <a href="http://www.instagram.com/" target="_blank" title="Instagram">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>-->
+       
       </div>
 
     </div>

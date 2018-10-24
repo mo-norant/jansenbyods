@@ -2,12 +2,15 @@ import { OogstKaartItem } from "./../../Utils/Models/models";
 import { OogstkaartService } from "./../oogstkaart.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Utils } from "../../Utils/Util";
-import {} from "@types/googlemaps";
 import { Router } from "@angular/router";
+import { ScrollToService, ScrollToConfigOptions } from "@nicky-lenaers/ngx-scroll-to";
+
+
 import * as _ from "lodash";
 
-declare var google: any;
-declare var MarkerClusterer: any;
+declare var MarkerClusterer:any;
+
+
 @Component({
   selector: "app-shop",
   templateUrl: "./shop.component.html",
@@ -33,11 +36,19 @@ export class ShopComponent implements OnInit {
   map: google.maps.Map;
 
 
-  constructor(private service: OogstkaartService, private router : Router) {}
+
+  constructor(private service: OogstkaartService, private router : Router, private _scrollToService: ScrollToService) {}
 
   ngOnInit() {
+    var mapProp = {
+      center: new google.maps.LatLng(51.2627187555929, 4.5024117984374925),
+      zoom: 7,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+
     this.service.getOogstkaartItems().subscribe(data => {
-      this.items = _.uniqBy(data, "oogstkaartItemID");
+      this.items = _.uniqBy(data, "oogstkaartItemID").reverse();
       this.filtereditems = this.items;
       this.getcategories(this.items);
       this.setMarkers(this.items);
@@ -48,6 +59,7 @@ export class ShopComponent implements OnInit {
     }
 
   mapview(toggle: boolean) {
+    this.goToAppTop();
     this.isListview = toggle;
   }
 
@@ -58,36 +70,6 @@ export class ShopComponent implements OnInit {
       }
     });
   }
-
-
-  sort($event){
-    if(this.items.length > 0){
-      if(this.sorting === "alphabetic"){
-        this.items.sort((a: OogstKaartItem, b : OogstKaartItem) => {
-          if(a.artikelnaam < b.artikelnaam) return -1;
-          if(a.artikelnaam > b.artikelnaam) return 1;
-          return 0
-        });
-      }
-      else if(this.sorting === "popularity"){
-        this.items.sort((a: OogstKaartItem, b : OogstKaartItem) => {
-          return a.Views - b.Views;
-        });
-      } else if (this.sorting === 'price') {
-        this.items.sort((a: OogstKaartItem, b: OogstKaartItem) => {
-          return a.vraagPrijsTotaal - b.vraagPrijsTotaal;
-        });
-
-        this.items.reverse();
-      } else {
-        this.items.sort((a: OogstKaartItem, b: OogstKaartItem) => {
-          return this.getTime(a.createDate) - this.getTime(b.createDate);
-        });
-      }
-    }
-
-  }
-
   sortCategory($event) {
       if (this.catsortmodel === 'alles') {
         this.filtereditems = this.items;
@@ -146,6 +128,22 @@ export class ShopComponent implements OnInit {
 
   private getTime(date?: Date) {
     return date != null ? date.getTime() : 0;
+}
+
+goToLegend(){
+  const config: ScrollToConfigOptions = {
+    target: 'legend'
+  };
+
+  this._scrollToService.scrollTo(config);
+}
+
+goToAppTop(){
+  const config: ScrollToConfigOptions = {
+    target: 'apptop'
+  };
+  this._scrollToService.scrollTo(config);
+
 }
 
 }

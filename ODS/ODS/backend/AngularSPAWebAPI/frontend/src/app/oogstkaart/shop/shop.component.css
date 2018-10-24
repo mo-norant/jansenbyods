@@ -6,8 +6,6 @@ header{
   color: white;
 }
 
-
-
 .masthead {
   min-height: 30rem;
   position: relative;
@@ -21,6 +19,8 @@ header{
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+
 
 .masthead h1 {
   font-size: 4rem;

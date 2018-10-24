@@ -276,7 +276,7 @@ namespace AngularSPAWebAPI.Controllers
       if (user != null)
       {
         var item = await _context.OogstkaartItems.Where(i => i.OogstkaartItemID == id)
-          .Include(i => i.Gallery).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
+          .Include(i => i.Gallery).Include(i => i.Views).Include(i => i.Location).Include(i => i.Avatar).Include(i => i.Files).Include(i => i.Views).Include(i => i.Requests).ThenInclude(i => i.Messages).Include(i => i.Specificaties).SingleAsync();
 
 
         var message = new EmailMessage();

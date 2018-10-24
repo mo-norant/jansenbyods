@@ -107,9 +107,26 @@ namespace AngularSPAWebAPI.Controllers
 
       return BadRequest();
     }
-      
 
-      [HttpPost("signout")]
+    [HttpGet("username")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SignOut([FromQuery] string usermail )
+    {
+      if (ModelState.IsValid)
+      {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == usermail);
+        if(user == null)
+        {
+          return Ok(false);
+        }
+        return Ok(true);
+      }
+
+      return BadRequest();
+    }
+
+
+    [HttpPost("signout")]
       public async Task<IActionResult> SignOut()
       {
         await _signInManager.SignOutAsync();
